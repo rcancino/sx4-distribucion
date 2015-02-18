@@ -1,8 +1,16 @@
 package com.luxsoft.sx4.distribucion
 
+//import org.springframework.security.access.annotation.Secured
+import grails.plugin.springsecurity.annotation.Secured
+
+@Secured(["hasAnyRole('ADMIN')"])
 class ImportadorController {
 
     def index() { }
+
+    def importarSurtido(){
+    	
+    }
 
 
     def importPedidoSql="""

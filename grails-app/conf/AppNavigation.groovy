@@ -10,7 +10,7 @@ def loggedOut = { ->
     !springSecurityService.isLoggedIn()
 }
 def isAdmin = { -> 
-    SpringSecurityUtils.ifAllGranted('ROLE_ADMIN')
+    SpringSecurityUtils.ifAllGranted('ADMIN')
 }
 
 
@@ -20,7 +20,7 @@ navigation={
 	user{
 		home(action:'index',titleText:'Inicio'){}
 		
-		surtido(){
+		surtido(controller:'surtido',action:'index'){
 			
 		}
 		corte(){
@@ -29,26 +29,22 @@ navigation={
 		embarque(){
 
 		}
-		reportes(controller:'report',action:'index'){
-			
-		}
-		
-
+		reportes(controller:'report',action:'index'){}
 		
 	}
 
-	admin{
-		salir(visible:loggedIn)
-		cambiarUsuario(visible:loggedIn)
-		usuarios(enabled:false)
-		sesiones()
-		configuracion(){
+	/*admin{
+		
+		salir(visible:loggedIn,controller:'logout',action:'index')
+		usuarios(visible:isAdmin)
+		sesiones(visible:isAdmin)
+		configuracion(visible:isAdmin){
 				catalogos(controller:'home'){
 				sucursales(controller:'tipoDeSocio',action:'index',enabled:SpringSecurityUtils.ifAllGranted('ADMINISTRACION'))
 				tipoDeCorpo(controller:'tipoDeCorporativo',action:'index',titleText:'Corporativos')
 			}
 		}
-		importacion()
-	}
+		importacion(visible:isAdmin)
+	}*/
 	
 }

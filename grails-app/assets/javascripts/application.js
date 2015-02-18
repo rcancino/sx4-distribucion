@@ -18,6 +18,10 @@ if (typeof jQuery !== 'undefined') {
 	})(jQuery);
 }
 
+$(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+})
+
 
 
 

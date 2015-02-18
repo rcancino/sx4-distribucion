@@ -10,12 +10,11 @@
 	<div class="container">
 
 		<div class="row">
-			<div class="col-md-12">
+			<div class="col-md-6">
 				<ul class="nav nav-tabs">
 					<li role="presentation" class="active"><a href="#">Pendientes</a></li>
-					<li role="presentation"><a href="#">Asignados</a></li>
-					<li role="presentation"><a href="#">Atendidos</a></li>
 					<li role="presentation"><a href="#">Parciales</a></li>
+					<li role="presentation"><a href="#">Atendidos</a></li>
 				</ul>
 			</div>
 		</div>
@@ -34,7 +33,7 @@
 					                    Operaciones <span class="caret"></span>
 									</button>
 					                <ul class="dropdown-menu">
-										<li><a href="#importarDialog" data-toggle="modal"> 
+										<li><a href="#importarDialog" data-toggle> 
 												<i class="fa fa-upload"></i> Importar
 											</a>
 					                	</li>
@@ -79,23 +78,8 @@
 								<td>${fieldValue(bean:row,field:"cliente")}</td>
 								<td>PENDIENTE</td>
 								<!-- <td><g:formatDate date="${row.fecha}" format="dd/MM/yyyy"/></td> -->
-							</tr>
+								
+	
 						</g:each>
-					</tbody>
-				</table>
-			</div>
-
-		</div> <!-- end .row 2-->
-
-		<g:render template="/importador/importarDialog"/>
-
-	</div><!-- end .container-->
-
-	<script type="text/javascript">
-		$(document).ready(function(){
-
-		}
-	</script>
-
-</body>
-
+					</tb
+		</div>

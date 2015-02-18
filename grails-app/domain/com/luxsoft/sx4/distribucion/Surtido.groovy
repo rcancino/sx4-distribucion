@@ -5,7 +5,7 @@ import groovy.transform.EqualsAndHashCode
 import org.grails.databinding.BindingFormat
 
 @ToString(includeNames=true,includePackage=false)
-@EqualsAndHashCode(includes='id,pedido')
+@EqualsAndHashCode(includes='sucursal,pedido')
 class Surtido {
 
 	String sucursal

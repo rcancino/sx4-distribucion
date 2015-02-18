@@ -4,7 +4,7 @@
     		<i class="glyphicon glyphicon-user"></i>
     		<sec:loggedInUserInfo field="username"/><b class="caret"></b>
 		</a>
-		%{-- <ul class="dropdown-menu" role="menu">
+		<ul class="dropdown-menu" role="menu">
 			<li>
 				<g:form controller="logout" class="navbar-form navbar-left" role="search">
   
@@ -22,9 +22,13 @@
 				<li>
 					<g:link controller="configuracion" action="index"><i class="fa fa-building-o"></i> Configuración</g:link>
 				</li>
+				<li>
+					<g:link controller="importador" action="index"><i class="fa fa-upload"></i> Importacion</g:link>
+				</li>
 			</sec:ifAllGranted>
-		</ul> --}%
-		<nav:menu class="dropdown-menu" scope="admin" custom="true">
+		</ul>
+
+		%{-- <nav:menu class="dropdown-menu" scope="admin" custom="true">
 			<li>
 				<p:callTag tag="g:link" attrs="${linkArgs + [class:active ? 'active' : '']}">
 		           <span>
@@ -32,6 +36,7 @@
 		           </span>
 				</p:callTag>
 			</li>
-		</nav:menu>
+		</nav:menu> --}%
+
 	</sec:ifLoggedIn>
 </li>

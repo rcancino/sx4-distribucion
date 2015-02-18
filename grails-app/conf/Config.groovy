@@ -1,7 +1,7 @@
 // locations to search for config files that get merged into the main config;
 // config files can be ConfigSlurper scripts, Java properties files, or classes
 // in the classpath in ConfigSlurper format
-
+grails.config.locations=["file:${userHome}/.grails/${appName}-config.groovy"] 
 // grails.config.locations = [ "classpath:${appName}-config.properties",
 //                             "classpath:${appName}-config.groovy",
 //                             "file:${userHome}/.grails/${appName}-config.properties",
@@ -114,6 +114,26 @@ log4j.main = {
            'org.springframework',
            'org.hibernate',
            'net.sf.ehcache.hibernate'
+
+        environments{
+            
+          development{
+            info 'grails.app.controllers.com.luxsoft.kyo'
+            info 'grails.app.services.com.luxsoft.sx4.distribucion'
+            //debug 'grails.app.services.com.luxsoft.kyo.SocioService'
+            //info 'com.luxsoft.cfdi'
+            //info 'grails.app.jobs'
+            //info luxorFileAppender: 'grails.apps.jobs'
+          }
+            
+          produccion{
+            error 'grails.app.services'
+            error 'grails.app.controllers'
+            error 'grails.app.services.com.luxsoft.sx4.distribucion'
+            error 'grails.app.jobs'    
+          }
+            
+        }
 }
 
 
@@ -129,23 +149,26 @@ grails.plugin.springsecurity.controllerAnnotations.staticRules = [
 	'/**/js/**':                      ['permitAll'],
 	'/**/css/**':                     ['permitAll'],
 	'/**/images/**':                  ['permitAll'],
-	'/**/favicon.ico':                ['permitAll']
+	'/**/favicon.ico':                ['permitAll'],
+    "/console/**":                    ["hasAnyRole('ADMIN')"],
+    "/plugins/console*/**":           ["hasAnyRole('ADMIN')"],
+    "/jasper/**":                     ['IS_AUTHENTICATED_REMEMBERED'],
+    "/logout/**":['permitAll']
 ]
 
+grails.plugin.springsecurity.roleHierarchy = '''
+   ADMIN > GERENTE 
+   GERENTE > SURTIDOR
+   GERENTE > EMPACADOR
+   GERENTE > CORTADOR
+   GERENTE > EMBARQUE
+'''
 
 
-// Added by the Spring Security Core plugin:
-grails.plugin.springsecurity.userLookup.userDomainClassName = 'com.luxsoft.sx4.sec.Usuario'
-grails.plugin.springsecurity.userLookup.authorityJoinClassName = 'com.luxsoft.sx4.sec.UsuarioRole'
-grails.plugin.springsecurity.authority.className = 'com.luxsoft.sx4.sec.Role'
-grails.plugin.springsecurity.controllerAnnotations.staticRules = [
-	'/':                              ['permitAll'],
-	'/index':                         ['permitAll'],
-	'/index.gsp':                     ['permitAll'],
-	'/assets/**':                     ['permitAll'],
-	'/**/js/**':                      ['permitAll'],
-	'/**/css/**':                     ['permitAll'],
-	'/**/images/**':                  ['permitAll'],
-	'/**/favicon.ico':                ['permitAll']
-]
+luxor{
+    sx4{
+      sucursal="PENDIENTE"
+    }
+}
+
 
