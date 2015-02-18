@@ -13,6 +13,8 @@ class Surtido {
 	Long pedido
 
 	String cliente
+
+	String nombre
 	
 	String tipo
 	
@@ -35,11 +37,18 @@ class Surtido {
 	Date facturado
 	String origen
 
+	List partidas
+
 	Date dateCreated
 	Date lastUpdated
 
+	static hasMany = [partidas: SurtidoDet]
+
 
     static constraints = {
+    	cliente maxSize:20
+    	nombre()
+    	sucursal maxSize:20
     	tipo inList:['ORDINARIO','PARCIAL']
     	asignado nullable:true,maxSize:50
     	iniciado nullable:true

@@ -4,21 +4,12 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="layout" content="application"/>
-	<title>Surtido de pedidos</title>
+	<title>Cortes pendientes</title>
 </head>
 <body>
 	<div class="container">
 
-		<div class="row">
-			<div class="col-md-12">
-				<ul class="nav nav-tabs">
-					<li role="presentation" class="active"><a href="#">Pendientes</a></li>
-					<li role="presentation"><a href="#">Asignados</a></li>
-					<li role="presentation"><a href="#">Atendidos</a></li>
-					<li role="presentation"><a href="#">Parciales</a></li>
-				</ul>
-			</div>
-		</div>
+		
 
 		<div class="row">
 				
@@ -63,26 +54,26 @@
 						<tr>
 							<th>Pedido</th>
 							<th>T</th>
-							<th>Cliente</th>
 							<th>Alta</th>
-							<th>Partidas</th>
+							<th>Producto</th>
+							<th>Descripcion</th>
+							<th>Cortes</th>
 						</tr>
 					</thead>
 					<tbody>
-						<g:each in="${surtidoInstanceList}" var="row">
+						<g:each in="${corteInstanceList}" var="row">
 							<tr>
 								<td>
 									<a href="" data-toggle="modal" class="btn btn-info btn-lg btn-block"
 										data-target="#exampleModal" data-whatever="@PEDIDO">
 										<g:formatNumber number="${row.pedido}" format="####"/>
 									</a>
-									%{-- <g:link action="show" id="${row.id}" class="btn btn-info btn-lg btn-block">
-									</g:link> --}%
 								</td>
 								<td>${fieldValue(bean:row,field:"tipo")[0..0]}</td>
-								<td>${fieldValue(bean:row,field:"cliente")}</td>
-								<td><g:formatDate date="${row.pedidoCreado}" format="hh:mm (dd-MM)"/></td>
-								<td><g:formatNumber number="${row.partidas.size()}" format="####"/></td>
+								<td>${fieldValue(bean:row,field:"producto")}</td>
+								<td>${fieldValue(bean:row,field:"descripcion")}</td>
+								<td><g:formatDate date="${row.dateCreated}" format="hh:mm (dd-MM)"/></td>
+								<td><g:formatNumber number="${row.cortes}" format="####"/></td>
 								
 								
 							</tr>
@@ -93,7 +84,7 @@
 
 		</div> <!-- end .row 2-->
 
-		<g:render template="/importador/importarDialog"/>
+		<g:render template="importarCortesDialog"/>
 
 		<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 		  <div class="modal-dialog">

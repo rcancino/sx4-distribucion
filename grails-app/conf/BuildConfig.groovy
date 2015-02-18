@@ -76,7 +76,8 @@ grails.project.dependency.resolution = {
 
         compile ":font-awesome-resources:4.2.0.0"
         compile ":platform-core:1.0.0"
-        runtime ":twitter-bootstrap:3.2.0.2"
+        //runtime ":twitter-bootstrap:3.2.0.2"
+        compile ":twitter-bootstrap:3.3.2.1"
         compile ":fields:1.4"
 
 

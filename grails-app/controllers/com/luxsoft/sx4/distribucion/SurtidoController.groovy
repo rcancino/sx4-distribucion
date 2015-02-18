@@ -14,7 +14,10 @@ class SurtidoController {
 
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
-        respond Surtido.list(params), model:[surtidoInstanceCount: Surtido.count()]
+        params.sort='pedidoCreado'
+        params.order='asc'
+        def query=Surtido.where{asignado==null}
+        respond query.list(params), model:[surtidoInstanceCount:query.count()]
     }
 
     @Transactional

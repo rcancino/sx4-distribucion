@@ -23,7 +23,7 @@ navigation={
 		surtido(controller:'surtido',action:'index'){
 			
 		}
-		corte(){
+		corte(controller:'corte',action:'pendientes'){
 
 		}
 		embarque(){

@@ -1,41 +1,31 @@
 package com.luxsoft.sx4.distribucion
 
-class Corte {
+import groovy.transform.EqualsAndHashCode
+import groovy.transform.ToString
+
+
+@EqualsAndHashCode(includes='producto,origen')
+@ToString(includes='producto,descripcion,cantidad,entregado,pendiente',includeNames=true,includePackage=false)
+class SurtidoDet {
 
 	String producto
 	String descripcion
-	String sucursal
-	Long pedido
-	Surtido surtido
-	String tipo
-
 	BigDecimal cantidad
 	BigDecimal entregado=0 //? confunde no es necesaria
 	BigDecimal pendiente=0 //? confunde no es necesaria
-	BigDecimal percioCorte
-	Integer cortes
+	
+	Date fechaHora
 
-	String instruccion
+	String origen
 
-	Date inicio
-	Date fin
-
-	String asignado
-
-	Date dateCreated
-	Date lastUpdated
-
+	static belongsTo = [venta: Surtido]
 
     static constraints = {
     	producto maxSize:20
     	descripcion maxSize:250
-    	sucursal maxSize:20
-    	tipo inList:['ORDINARIO','PARCIAL']
-    	asignado nullable:true
-    	inicio nullable:true
-    	fin nullable:true
     	cantidad scale:4
     	entregado scale:4
     	pendiente scale:4
+    	fechaHora nullable:true
     }
 }
