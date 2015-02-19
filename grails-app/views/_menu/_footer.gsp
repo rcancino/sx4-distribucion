@@ -9,6 +9,13 @@
 				<g:else>PRODUCCION</g:else>
 			</a>
 		</p>
+		
+		<g:if test="${flash.brodcast}">
+			<p class="navbar-text navbar-center"> 
+				<a href="#" class="navbar-link">${flash.brodcast}</a>
+			</p>
+		</g:if>
+
 		<p class="navbar-text navbar-right">Sucursal: 
 			<a href="#" class="navbar-link">${grailsApplication.config.luxor.sx4.sucursal}</a>
 		</p>

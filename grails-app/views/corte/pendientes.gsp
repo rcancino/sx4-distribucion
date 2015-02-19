@@ -8,73 +8,58 @@
 </head>
 <body>
 	<div class="container">
-
-		
-
-		<div class="row">
-				
-				<div class="col-md-6 ">
-					<div class="btn-group">
-						<input type='text' class="form-control" id="filtro" placeholder="Filtrar"  autofocus="on">
-					</div>
-					
-					<div class="btn-group toolbar-panel">
-					                <button type="button" name="operaciones"
-					                	class="btn btn-default dropdown-toggle" data-toggle="dropdown"
-					                    role="menu">
-					                    Operaciones <span class="caret"></span>
-									</button>
-					                <ul class="dropdown-menu">
-										<li><a href="#importarDialog" data-toggle="modal"> 
-												<i class="fa fa-upload"></i> Importar
-											</a>
-					                	</li>
-									</ul>
-					</div>
-					<div class="btn-group">
-					    <button type="button" name="reportes"
-					            class="btn btn-default dropdown-toggle" data-toggle="dropdown"
-					            role="menu">
-					            Reportes <span class="caret"></span>
-					    </button>
-
-					    <ul class="dropdown-menu">
-					        
-					    </ul>
-					</div>
-				</div>
-			
-		</div><!-- end .row toolbar -->
-		
 		<div class="row">
 			<div class="col-md-12">
-				%{-- <g:render template="grid"/> --}%
+				
 				<table class="table table-striped table-bordered table-condensed">
 					<thead>
 						<tr>
 							<th>Pedido</th>
-							<th>T</th>
-							<th>Alta</th>
 							<th>Producto</th>
 							<th>Descripcion</th>
+							<th>Fecha</th>
 							<th>Cortes</th>
+							<th>Entregado</th>
+							<th>Liberacion</th>
 						</tr>
 					</thead>
 					<tbody>
 						<g:each in="${corteInstanceList}" var="row">
 							<tr>
 								<td>
-									<a href="" data-toggle="modal" class="btn btn-info btn-lg btn-block"
-										data-target="#exampleModal" data-whatever="@PEDIDO">
+									<a href="" data-toggle="modal" class="btn btn-default btn-lg btn-block">
 										<g:formatNumber number="${row.pedido}" format="####"/>
 									</a>
 								</td>
-								<td>${fieldValue(bean:row,field:"tipo")[0..0]}</td>
 								<td>${fieldValue(bean:row,field:"producto")}</td>
 								<td>${fieldValue(bean:row,field:"descripcion")}</td>
 								<td><g:formatDate date="${row.dateCreated}" format="hh:mm (dd-MM)"/></td>
 								<td><g:formatNumber number="${row.cortes}" format="####"/></td>
-								
+								<td>
+									<g:if test="${row.inicio}">
+										<g:formatDate date="${row.inicio}" format="hh:mm (dd-MM)"/>
+									</g:if>
+									<g:else>
+										<a href="" data-toggle="modal" class="btn btn-warning btn-lg btn-block"
+										data-target="#entregarModal"
+										 data-pedido="${row.pedido}" data-descripcion="${row.descripcion}"
+										 data-corte="${row.id}"
+										data-producto="${row.producto}" data-cantidad="${row.cantidad}"
+										data-cortes="${row.cortes}"
+										 data-instruccion="${row.instruccion}">
+										Entregar
+									</a>
+									</g:else>
+									
+								</td>
+								<td>
+									<g:if test="${row.asignado}">
+										<a href="" data-toggle="modal" class="btn btn-success btn-lg btn-block"
+										data-target="#exampleModal" data-whatever="${row.pedido}"> Cortado
+										</a>
+									</g:if>
+									
+								</td>
 								
 							</tr>
 						</g:each>
@@ -86,30 +71,53 @@
 
 		<g:render template="importarCortesDialog"/>
 
-		<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal fade" id="entregarModal" tabindex="-1" role="dialog" 
+			aria-labelledby="entregarModalLabel" aria-hidden="true">
 		  <div class="modal-dialog">
 		    <div class="modal-content">
 		      <div class="modal-header">
 		        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-		        <h4 class="modal-title" id="exampleModalLabel">New message</h4>
+		        <h4 class="modal-title" id="entregarModalLabel">New message</h4>
 		      </div>
+		      <g:form  action="asignar" >
 		      <div class="modal-body">
-		        <form>
+		        	<g:hiddenField id="corteField" name="id"/>
+		          <fieldset disabled>
 		          <div class="form-group">
-		            <label for="recipient-name" class="control-label">Recipient:</label>
-		            <input type="text" class="form-control" id="recipient-name">
+		            <label for="pedido" class="control-label">Pedido</label>
+		            <input name="pedido" type="text" class="form-control" >
+		          </div>
+
+		          <div class="form-group">
+		            <label for="descripcion" class="control-label">Descripcion</label>
+		            <input name="descripcion" type="text" class="form-control" >
 		          </div>
 		          <div class="form-group">
-		            <label for="message-text" class="control-label">Message:</label>
-		            <textarea class="form-control" id="message-text"></textarea>
+		            <label for="cantidad" class="control-label">Cantidad</label>
+		            <input name="cantidad" type="text" class="form-control" >
 		          </div>
-		        </form>
+		          <div class="form-group">
+		            <label for="cortes" class="control-label">Cortes</label>
+		            <input name="cortes" type="text" class="form-control" >
+		          </div>
+		          <div class="form-group">
+		            <label for="instruccion" class="control-label">Instrucción</label>
+		            <input name="instruccion" type="text" class="form-control" >
+		          </div>
+		          </fieldset>
+		          <div class="form-group">
+		            <label for="nip" class="control-label">Nip</label>
+		            <input name="nip" type="password" class="form-control" id="recipient-name" >
+		          </div>
+		        
 		      </div>
 		      <div class="modal-footer">
-		        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-		        <button type="button" class="btn btn-primary">Send message</button>
+		        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+		         <g:submitButton class="btn btn-primary" name="aceptar" value="Entregar" />
 		      </div>
 		    </div>
+		    </g:form>
+
 		  </div>
 		</div>
 
@@ -117,17 +125,27 @@
 
 	<script type="text/javascript">
 		$(document).ready(function(){
-			$('#exampleModal').on('show.bs.modal', function (event) {
-			  var button = $(event.relatedTarget) // Button that triggered the modal
-			  var recipient = button.data('whatever') // Extract info from data-* attributes
-			  // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
-			  // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
-			  var modal = $(this)
-			  modal.find('.modal-title').text('New message to ' + recipient)
-			  modal.find('.modal-body input').val(recipient)
-			})
+			$('#entregarModal').on('show.bs.modal', function (event) {
+			  var button = $(event.relatedTarget); // Button that triggered the modal
+			  var producto = button.data('producto');
+			  var cantidad=button.data('cantidad');
+			  var pedido=button.data('pedido');
+			  var modal = $(this);
+			  modal.find('.modal-title').text('Engregando : ' + producto);
+			  modal.find("[name='descripcion']").val(button.data('descripcion'));
+			  modal.find("[name='cantidad']").val(cantidad);
+			  modal.find("[name='pedido']").val(pedido);
+			  modal.find("[name='instruccion']").val(button.data('instruccion'));
+			  modal.find("[name='cortes']").val(button.data('cortes'));
 
-		}
+			  modal.find('#corteField').val(button.data('corte'));
+			});
+
+		});
+		$('body').on('shown.bs.modal', '.modal', function () {
+  				$('[id$=recipient-name]').focus();
+			});
+
 	</script>
 
 </body>

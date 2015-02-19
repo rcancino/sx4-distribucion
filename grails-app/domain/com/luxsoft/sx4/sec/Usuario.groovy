@@ -17,6 +17,7 @@ class Usuario {
 	String nombre
 	Integer numeroDeEmpleado
 	String email
+	String nip
 
 	static transients = ['springSecurityService']
 
@@ -32,6 +33,7 @@ class Usuario {
 		passwordExpired()
 		email nullable:true,email:true
 		numeroDeEmpleado nullable:true
+		nip minSize:6,maxSize:6,unique:true
 	}
 
 	static mapping = {

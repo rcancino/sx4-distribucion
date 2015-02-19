@@ -23,7 +23,9 @@ class BootStrap {
 				,apellidoMaterno:'admin'
 				,nombres:'admin'
 				,nombre:' ADMIN ADMIN'
-				,numeroDeEmpleado:'0000').save(flush:true,failOnError:true)
+				,numeroDeEmpleado:'0000'
+				,nip:'123456')
+			.save(flush:true,failOnError:true)
 			UsuarioRole.create(admin,usuarioRole,true)
 			UsuarioRole.create(admin,adminRole,true)
 		}
@@ -38,7 +40,8 @@ class BootStrap {
 						,apellidoMaterno:'surtidor'
 						,nombres:'surtidor'
 						,nombre:' surtidor surtidor'
-						,numeroDeEmpleado:'0000').save(flush:true,failOnError:true)
+						,numeroDeEmpleado:'0000'
+						,nip:'424000').save(flush:true,failOnError:true)
 					UsuarioRole.create(surtidor,usuarioRole,true)
 					UsuarioRole.create(surtidor,surtidorRole,true)
 				}

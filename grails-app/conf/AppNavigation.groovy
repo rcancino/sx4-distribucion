@@ -20,7 +20,7 @@ navigation={
 	user{
 		home(action:'index',titleText:'Inicio'){}
 		
-		surtido(controller:'surtido',action:'index'){
+		surtido(controller:'surtido',action:'pendientes'){
 			
 		}
 		corte(controller:'corte',action:'pendientes'){

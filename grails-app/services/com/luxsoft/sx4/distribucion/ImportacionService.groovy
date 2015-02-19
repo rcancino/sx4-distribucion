@@ -69,7 +69,7 @@ class ImportacionService {
 		def sql="""
 			select s.nombre as sucursal,p.clave as producto,p.descripcion,p.cantidad,p.cortes
 			,p.CORTES_INSTRUCCION as instruccion,p.CORTES_PRECIO as precioCorte,ped.folio as pedido,s.nombre
-			,v.DOCTO,ped.puesto,ped.FACTURAR,p.pedido_id as origen
+			,v.DOCTO,ped.puesto,ped.FACTURAR,p.pedidodet_id as origen
 			from sx_pedidosdet p 
 			join sx_pedidos ped on p.pedido_id=ped.pedido_id
 			join sx_ventas v on v.PEDIDO_ID=ped.PEDIDO_ID
@@ -78,7 +78,7 @@ class ImportacionService {
 			order by ped.creado asc
 		"""
 		def db = new Sql(dataSource_importacion)
-		db.eachRow( [sucursal:'TACUBA',fecha:Sql.DATE(new Date())],sql) { row->
+		db.eachRow( [sucursal:sucursal,fecha:Sql.DATE(fecha)],sql) { row->
 			def corte=Corte.findBySucursalAndOrigen(row.sucursal,row.origen)
 			if(!corte){
 				corte=new Corte(
