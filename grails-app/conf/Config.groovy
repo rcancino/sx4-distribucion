@@ -94,14 +94,15 @@ environments {
         // TODO: grails.serverURL = "http://www.changeme.com"
     }
 }
+grails.databinding.dateFormats = ['dd/MM/yyyy','yyyy-MM-dd','MMddyyyy', 'yyyy-MM-dd HH:mm:ss.S', "yyyy-MM-dd'T'hh:mm:ss'Z'"]
 
 // log4j configuration
 log4j.main = {
     // Example of changing the log pattern for the default console appender:
     //
-    //appenders {
-    //    console name:'stdout', layout:pattern(conversionPattern: '%c{2} %m%n')
-    //}
+    appenders {
+        console name:'stdout', layout:pattern(conversionPattern: '%c{2} %m%n')
+    }
 
     error  'org.codehaus.groovy.grails.web.servlet',        // controllers
            'org.codehaus.groovy.grails.web.pages',          // GSP
@@ -118,7 +119,8 @@ log4j.main = {
         environments{
             
           development{
-            info 'grails.app.controllers.com.luxsoft.kyo'
+            info 'grails.app.controllers'
+            info 'grails.app.controllers.com.luxsoft.sx4'
             info 'grails.app.services.com.luxsoft.sx4.distribucion'
             //debug 'grails.app.services.com.luxsoft.kyo.SocioService'
             //info 'com.luxsoft.cfdi'

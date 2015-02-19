@@ -45,7 +45,7 @@ class Usuario {
 	def beforeInsert() {
 		encodePassword()
 		capitalizarNombre()
-		logLectora()
+		
 	}
 
 	def beforeUpdate() {
@@ -57,7 +57,7 @@ class Usuario {
 			capitalizarNombre()
 			
 		}
-		logLectora()
+		
 		
 	}
 

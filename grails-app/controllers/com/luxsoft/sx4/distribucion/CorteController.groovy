@@ -17,7 +17,8 @@ class CorteController {
 
     @Transactional
     def importar(Date fecha){
-    	log.info 'Importando cortes :'+fecha
+    	log.info 'Importando cortes :'+fecha?.format('dd/MM/yyyy')
+        //log.info 'Params: '+params
     	if(!fecha)
     		fecha=new Date()
     	importacionService.importarCortes(fecha)
