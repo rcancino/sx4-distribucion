@@ -15,6 +15,7 @@ class CorteController {
 
     }
 
+    @Transactional
     def importar(Date fecha){
     	log.info 'Importando cortes :'+fecha
     	if(!fecha)

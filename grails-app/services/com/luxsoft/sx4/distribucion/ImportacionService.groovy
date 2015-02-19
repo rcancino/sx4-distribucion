@@ -65,9 +65,11 @@ class ImportacionService {
 	@NotTransactional
 	def importarCortes(Date fecha){
 		def sucursal=grailsApplication.config.luxor.sx4.sucursal
-		log.info "Importando surtidos de $sucursal  para el ${fecha.format('dd/MM/yyyy')}"
+		log.info "Importando cortres de $sucursal  - ${fecha.format('dd/MM/yyyy')}"
 		def sql="""
-			select p.clave as producto,p.descripcion,p.cantidad,p.cortes,p.CORTES_INSTRUCCION as instruccion,p.CORTES_PRECIO as precioCorte,ped.folio as pedido,s.nombre,v.DOCTO,ped.puesto,ped.FACTURAR
+			select s.nombre as sucursal,p.clave as producto,p.descripcion,p.cantidad,p.cortes
+			,p.CORTES_INSTRUCCION as instruccion,p.CORTES_PRECIO as precioCorte,ped.folio as pedido,s.nombre
+			,v.DOCTO,ped.puesto,ped.FACTURAR,p.pedido_id as origen
 			from sx_pedidosdet p 
 			join sx_pedidos ped on p.pedido_id=ped.pedido_id
 			join sx_ventas v on v.PEDIDO_ID=ped.PEDIDO_ID
@@ -76,8 +78,23 @@ class ImportacionService {
 			order by ped.creado asc
 		"""
 		def db = new Sql(dataSource_importacion)
-		db.eachRow( [sucursal:'TACUBA',fecha:Sql.DATE(new Date())],importarSurtidoSql) { row->
-			println 'Importando corte: '+row
+		db.eachRow( [sucursal:'TACUBA',fecha:Sql.DATE(new Date())],sql) { row->
+			def corte=Corte.findBySucursalAndOrigen(row.sucursal,row.origen)
+			if(!corte){
+				corte=new Corte(
+					sucursal:row.sucursal,
+					producto:row.producto,
+					descripcion:row.descripcion,
+					pedido:row.pedido,
+					tipo:"ORDINARIO",
+					cortes:row.cortes,
+					cantidad:row.cantidad,
+					origen:row.origen,
+					percioCorte:row.precioCorte?:0.0,
+					instruccion:row.instruccion?:'ND'
+					)
+				corte.save(flush:true,failOnError:true)
+			}
 		}
 	}
 	

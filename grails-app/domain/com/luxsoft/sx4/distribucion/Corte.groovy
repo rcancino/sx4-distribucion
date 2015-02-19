@@ -6,7 +6,7 @@ class Corte {
 	String descripcion
 	String sucursal
 	Long pedido
-	Surtido surtido
+	//Surtido surtido
 	String tipo
 
 	BigDecimal cantidad
@@ -22,6 +22,7 @@ class Corte {
 
 	String asignado
 
+	String origen
 	Date dateCreated
 	Date lastUpdated
 
