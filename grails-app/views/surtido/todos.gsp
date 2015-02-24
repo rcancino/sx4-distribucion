@@ -8,8 +8,6 @@
 </head>
 <body>
 	<div class="container">
-
-		
 		
 		<div class="row">
 			<div class="col-md-12">
@@ -39,30 +37,19 @@
 					<tbody>
 						<g:each in="${surtidoInstanceList}" var="row">
 							<tr class="text-center">
-								<td>
-									<g:if test="${row.status=='PENDIENTE'}">
-										<a href="" data-toggle="modal" class="btn btn-info btn-lg btn-block"
-											data-target="#exampleModal" 
-											data-whatever="${row.pedido}" 
-											data-surtido="${row.id}">
-											<g:formatNumber number="${row.pedido}" format="####"/>
-										</a>
-									</g:if>
-									<g:else>
-										<a href="" data-toggle="modal" class="btn btn-success btn-lg btn-block">
-											<g:formatNumber number="${row.pedido}" format="####"/>
-										</a>
-									</g:else>
-									%{-- <g:link action="show" id="${row.id}" class="btn btn-info btn-lg btn-block">
-									</g:link> --}%
+								<td class="">
+									<a href="" class="btn btn-warning btn-lg btn-block">
+										<g:formatNumber number="${row.pedido}" format="####"/>
+									</a>
 								</td>
 								<td>${fieldValue(bean:row,field:"tipo")[0..0]}</td>
 								<td>${fieldValue(bean:row,field:"cliente")}</td>
 								<td><g:formatDate date="${row.pedidoCreado}" format="hh:mm (dd-MM)"/></td>
 								<td><g:formatNumber number="${row.partidas.size()}" format="####"/></td>
 								<td><g:formatNumber number="${row.cortes}" format="####"/></td>
-								<td class="${row.status=='EN SURTIDO'?'success':'warning'}">
-									${fieldValue(bean:row,field:"status")}
+								<td class="text-center warning">
+									${row.status}
+									
 								</td>
 							</tr>
 						</g:each>
@@ -71,7 +58,6 @@
 			</div>
 
 		</div> <!-- end .row 2-->
-		<g:render template="atenderSurtidoDialog"/>
 		
 
 	</div><!-- end .container-->

@@ -21,7 +21,9 @@ navigation={
 		home(action:'index',titleText:'Inicio'){}
 		
 		surtido(controller:'surtido',action:'pendientes'){
-			
+			pendientes(){}
+			porEntregar(){}
+			entregados(){}
 		}
 		corte(controller:'corte',action:'pendientes'){
 
@@ -31,6 +33,13 @@ navigation={
 		}
 		tableros(controller:'tablero',action:'index'){}
 		
+	}
+
+	surtidor{
+		pendientes(controller:'surtido'){}
+		porEntregar(controller:'surtido'){}
+		entregados(controller:'surtido'){}
+		todos(controller:'surtido'){}
 	}
 
 	/*admin{

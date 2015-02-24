@@ -13,6 +13,7 @@ class SurtidoController {
 
     def importacionService
 
+    @Secured(['permitAll'])
     def index(Integer max) {
         params.max = Math.min(max ?: 20, 100)
         params.sort='pedidoCreado'
@@ -21,13 +22,32 @@ class SurtidoController {
     }
 
     @Secured(['permitAll'])
-    def pendientes() {
-        params.max = 100
+    def todos(Integer max) {
+        params.max = Math.min(max ?: 20, 100)
         params.sort='pedidoCreado'
         params.order='asc'
-        //def query=Surtido.where{asignado==null}
-        //respond query.list(params), model:[surtidoInstanceCount:query.count()]
         respond Surtido.list(params), model:[surtidoInstanceCount:Surtido.count()]
+    }
+    
+
+    @Secured(['permitAll'])
+    def pendientes() {
+        //params.max = 100
+        params.sort='pedidoCreado'
+        params.order='asc'
+        def query=Surtido.where{asignado==null}
+        respond query.list(params), model:[surtidoInstanceCount:query.count()]
+        //respond Surtido.list(params), model:[surtidoInstanceCount:Surtido.count()]
+    }
+
+    @Secured(['permitAll'])
+    def porEntregar() {
+        params.sort='pedidoCreado'
+        params.order='asc'
+        def list=Surtido.where{asignado!=null}.list(params)
+        def res=list.findAll{it.getStatus()=='POR ENTREGAR'}
+        respond res, model:[surtidoInstanceCount:res.size()]
+        //respond Surtido.list(params), model:[surtidoInstanceCount:Surtido.count()]
     }
 
     @Transactional
@@ -41,6 +61,7 @@ class SurtidoController {
        render view:'index'
     }
 
+    @Secured(['permitAll']) 
     @Transactional
     def asignar(Surtido surtido){
       String nip=params.nip
@@ -67,6 +88,38 @@ class SurtidoController {
       log.info "Surtido de pedido: $surtido.pedido asignado a  $user.nombre "
       flash.success="Surtido de pedido: $surtido.pedido asignado a  $user.nombre "
       redirect action:'pendientes'
+
+    }
+
+    
+    @Secured(['permitAll'])
+    @Transactional
+    def entregarSurtido(Surtido surtido){
+      assert surtido.status=='POR ENTREGAR','El surtido no esta listo para entregar Status: '+surtido.getStatus()
+      String nip=params.nip
+      if(!nip){
+        flash.error="Digite su NIP para proceder con operación"
+        redirect action:'porEntregar'
+        return
+      }
+      def surtidor=Usuario.findByNip(nip)
+      if(!surtidor){
+        flash.error="Operador no encontrado verifique su NIP "
+        redirect action:'porEntregar'
+        return 
+      }
+      if(!surtidor.getAuthorities().find{it.authority=='SURTIDOR'}){
+        flash.error="No tiene el ROL de SURTIDOR verifique su NIP "
+        redirect action:'porEntregar'
+        return 
+      }
+      surtido.entrego=surtidor.username
+      surtido.entregado=new Date()
+      surtido.save(flush:true)
+      event('surtidoEntregado',surtido.id)
+      log.info "Surtido de pedido: $surtido.pedido entregado por  $surtidor.nombre "
+      flash.success="Surtido de pedido: $surtido.pedido entregado por  $surtidor.nombre "
+      redirect action:'porEntregar'
 
     }
 

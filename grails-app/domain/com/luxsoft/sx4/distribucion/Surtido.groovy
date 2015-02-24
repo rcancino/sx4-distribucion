@@ -77,23 +77,24 @@ class Surtido {
     static transients = ['cortes','status','empacadoTerminado']
 
     def getCortes(){
-    	return partidas.sum{return it.corte?it.corte.cortes:0}
+    	return partidas.sum{return it.corte?1:0}
     }
 
     def getStatus(){
-    	if(entregado){
+        if(entregado){
     		return 'ENTREGADO'
     	}
-    	else if(getCortes()>0){
-    		if(corteFin)
+
+    	if(getCortes()>0){
+    		if(corteFin!=null)
     			return 'POR ENTREGAR'
-    		if(corteInicio)
+    		if(corteInicio!=null)
     			return 'EN CORTE'
-    	}
-    	if(asignado)
-    		return 'EN SURTIDO'
-    	else
-    		return 'PENDIENTE'
+            else
+                return 'PENDIENTE'
+    	}else{
+            return asignado?'POR ENTREGAR':'PENDIENTE'
+        }
     }
 
     def getEmpacadoTerminado(){

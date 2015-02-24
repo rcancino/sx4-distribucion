@@ -15,12 +15,29 @@
 				  <h2> <i class="fa fa-desktop"></i> Control y adminstración</h2>
 
 				  <p>
-				  	<g:link class="btn btn-primary btn-lg" action="tableros">
-				  		<i class="fa fa-tachometer"></i> Tableros
-				  	</g:link>	
+				  <!-- Split button -->
+				  <div class="btn-group">
+				    <button type="button" class="btn  btn-primary btn-lg"><i class="fa fa-tachometer"></i> Tableros</button>
+				    <button type="button" class="btn  btn-primary btn-lg dropdown-toggle" 
+				    	data-toggle="dropdown" aria-expanded="false">
+				      <span class="caret"></span>
+				      <span class="sr-only">Toggle Dropdown</span>
+				    </button>
+				    <ul class="dropdown-menu" role="menu">
+				      <li><a href="#">Global</a></li>
+				      <li><a href="#">Surtido</a></li>
+				      <li><a href="#">Corte</a></li>
+				      <li><a href="#">Empaque</a></li>
+				      <li><a href="#">Entregas</a></li>
+				      <li class="divider"></li>
+				      <li><a href="#">Global Embarques</a></li>
+				    </ul>
+				  </div>
+				  	
 				  	
 				</div>
 				</div>
+
 			</div>
 		</div>
 
