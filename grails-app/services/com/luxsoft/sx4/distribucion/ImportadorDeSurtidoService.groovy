@@ -38,7 +38,7 @@ class ImportadorDeSurtidoService {
     String SQL_SECTORES="""
     	select s.sector
     	from SX_SECTORDET D join SX_SECTOR S on(s.sector_id=d.sector_id)
-    	where s.clave=?
+    	where d.clave=?
     """
 
 	def importar(Date fecha){
@@ -57,6 +57,12 @@ class ImportadorDeSurtidoService {
 						,descripcion:det.descripcion
 						,cantidad:det.cantidad
 						,origen:det.origen)
+				}
+				surtido.partidas.each{ sdet->
+					//Buscar sectores
+					def sectores=db.rows(SQL_SECTORES,[sdet.producto])
+					sdet.sectores=sectores.collect{it.sector}.join(',')
+
 				}
 				surtido.save(flush:true,failOnError:true)
 				event('registroDeSurtido', surtido)

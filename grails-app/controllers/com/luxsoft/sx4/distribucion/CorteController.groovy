@@ -78,7 +78,7 @@ class CorteController {
     @Transactional
     def terminarCorte(Corte corte){
       assert corte, 'Corte nulo no puede ser terminado'
-      assert corte.status=='EN CORTE','Corte con estatus incorrecto'
+      assert corte.statusCorte=='EN CORTE','Corte con estatus incorrecto'
       
       String nip=params.nip
 
@@ -137,7 +137,7 @@ class CorteController {
       def cortador=getAuthenticatedUser()
       assert cortador,'No esta firmado al sistema'
       assert validarOperacionDeCortado(),'El sistema esta registrado sin rol de CORTADOR'
-      assert corte.status=='EN EMPACADO','Corte  no esta EN EMPACADO'
+      assert corte.statusEmpaque=='EN EMPACADO','Corte  no esta EN EMPACADO'
 
       String nip=params.nip
       if(!nip){
