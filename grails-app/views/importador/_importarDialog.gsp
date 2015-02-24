@@ -15,16 +15,9 @@
 				<div class="modal-body">
 
 					<div class="form-group">
-						<label for="fechaFinal" class="col-sm-3 control-label">Folio</label>
+						<label for="fechaFinal" class="col-sm-3 control-label">Fecha</label>
 						<div class="col-sm-9">
-							<g:field  type="text" name="folio" class="form-control" />
-						</div>
-					</div>
-
-					<div class="form-group">
-						<label for="todos" class="col-sm-3 control-label">Todos</label>
-						<div class="col-sm-9">
-							<g:checkBox name="todos" value="${true}" checked="true" class="fomr-control"/>
+							<g:field  type="date" name="fecha" class="form-control" />
 						</div>
 					</div>
 					

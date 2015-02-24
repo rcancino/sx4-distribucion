@@ -12,7 +12,7 @@
 		</div>
 		<sec:ifLoggedIn>
 			<div class="collapse navbar-collapse" id="mainMenu">
-				<nav:primary class="nav navbar-nav"/>
+				<nav:primary class="nav navbar-nav" scope="user"/>
 				<ul class="nav navbar-nav navbar-right">
 					<g:render template="/_menu/user"/> 
 				</ul>

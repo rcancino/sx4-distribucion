@@ -29,7 +29,7 @@ navigation={
 		embarque(){
 
 		}
-		reportes(controller:'report',action:'index'){}
+		tableros(controller:'tablero',action:'index'){}
 		
 	}
 

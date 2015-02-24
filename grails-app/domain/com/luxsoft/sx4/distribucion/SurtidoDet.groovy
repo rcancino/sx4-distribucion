@@ -18,7 +18,11 @@ class SurtidoDet {
 
 	String origen
 
-	static belongsTo = [venta: Surtido]
+	String sectores
+
+	static belongsTo = [surtido: Surtido]
+
+	static hasOne = [corte: Corte]
 
     static constraints = {
     	producto maxSize:20
@@ -27,5 +31,7 @@ class SurtidoDet {
     	entregado scale:4
     	pendiente scale:4
     	fechaHora nullable:true
+    	corte nullable:true
+    	sectores nullable:true
     }
 }

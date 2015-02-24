@@ -2,6 +2,8 @@ package com.luxsoft.sx4.distribucion
 
 class Corte {
 
+	SurtidoDet surtidoDet
+
 	String producto
 	String descripcion
 	String sucursal
@@ -12,7 +14,7 @@ class Corte {
 	BigDecimal cantidad
 	BigDecimal entregado=0 //? confunde no es necesaria
 	BigDecimal pendiente=0 //? confunde no es necesaria
-	BigDecimal percioCorte
+	BigDecimal precioCorte
 	Integer cortes
 
 	String instruccion
@@ -22,9 +24,18 @@ class Corte {
 
 	String asignado
 
+	Date empacadoInicio
+	Date empacadoFin
+	String empacador
+
 	String origen
 	Date dateCreated
 	Date lastUpdated
+
+    /** Transiente properties ***/
+    String status
+    String statusCorte
+    String statusEmpaque
 
 
     static constraints = {
@@ -38,5 +49,49 @@ class Corte {
     	cantidad scale:4
     	entregado scale:4
     	pendiente scale:4
+    	precioCorte scale:4,nullable:true
+    	surtidoDet unique:true
+    	empacadoInicio nullable:true
+    	empacadoFin nullable:true
+    	empacador nullable:true
+    }
+
+    static transients = ['status','surtidor','statusCorte','statusEmpaque']
+
+
+    def getStatus(){
+    	if(empacadoFin)
+    		return 'EMPACADO'
+    	else if(empacadoInicio)
+    		return 'EN EMPACADO'
+        else if(fin)
+            return 'CORTADO'
+    	else if(asignado)
+    		return 'EN CORTE'
+    	else 
+    		return 'PENDIENTE'
+    	
+    }
+
+    def getSurtidor(){
+    	return surtidoDet.surtido.asignado
+    }
+
+    def getStatusCorte(){
+        if(fin){
+            return 'TERMINADO'
+        }else if(inicio){
+            return 'EN CORTE'
+        }else
+            return 'PENDIENTE'
+    }
+
+    def getStatusEmpaque(){
+        if(empacadoFin)
+            return 'EMPACADO'
+        else if(empacadoInicio)
+            return 'EN EMPACADO'
+        else
+            return 'PENDIENTE'
     }
 }

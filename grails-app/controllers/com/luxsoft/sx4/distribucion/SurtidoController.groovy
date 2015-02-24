@@ -25,13 +25,18 @@ class SurtidoController {
         params.max = 100
         params.sort='pedidoCreado'
         params.order='asc'
-        def query=Surtido.where{asignado==null}
-        respond query.list(params), model:[surtidoInstanceCount:query.count()]
+        //def query=Surtido.where{asignado==null}
+        //respond query.list(params), model:[surtidoInstanceCount:query.count()]
+        respond Surtido.list(params), model:[surtidoInstanceCount:Surtido.count()]
     }
 
     @Transactional
-    def importar() {
-       def fecha=new Date()
+    def importar(ImportadorPorFechaCommand cmd) {
+       if(!cmd.isValid()){
+          flash.message="Se requiere una fecha valida para importar entidads por fecha"
+          return
+       }
+       log.info 'Importando '+cmd
        importacionService.importarSurtido(fecha)
        render view:'index'
     }
@@ -40,24 +45,32 @@ class SurtidoController {
     def asignar(Surtido surtido){
       String nip=params.nip
       if(!nip){
-        flash.brodcast="Digite su NIP para asignar pedido $surtido.pedido"
+        flash.error="Digite su NIP para asignar pedido $surtido.pedido"
         redirect action:'pendientes'
         return
       }
       def user=Usuario.findByNip(nip)
       if(!user){
-        flash.brodcast="Operador no encontrado verifique su NIP "
+        flash.error="Operador no encontrado verifique su NIP "
         redirect action:'pendientes'
         return 
       }
-      surtido.asignado=user.nombre
+      if(!user.getAuthorities().find{it.authority=='SURTIDOR'}){
+        flash.error="No tiene el ROL de SURTIDOR verifique su NIP "
+        redirect action:'pendientes'
+        return 
+      }
+
+      surtido.asignado=user.username
       surtido.iniciado=new Date()
       surtido.save(flush:true,failOnError:true)
       log.info "Surtido de pedido: $surtido.pedido asignado a  $user.nombre "
-      flash.brodcast="Surtido de pedido: $surtido.pedido asignado a  $user.nombre "
+      flash.success="Surtido de pedido: $surtido.pedido asignado a  $user.nombre "
       redirect action:'pendientes'
 
     }
 
     
 }
+
+

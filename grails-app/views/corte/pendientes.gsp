@@ -9,8 +9,19 @@
 <body>
 	<div class="container">
 		<div class="row">
+			
+			
 			<div class="col-md-12">
-				
+				<g:if test="${flash.error}">
+					<div class="alert alert-danger">
+						<h4 class="text-center">${flash.error}</h4>
+					</div>
+				</g:if>
+				<g:if test="${flash.success}">
+					<div class="alert alert-success">
+						<h4 class="text-center">${flash.success}</h4>
+					</div>
+				</g:if>
 				<table class="table table-striped table-bordered table-condensed">
 					<thead>
 						<tr>
@@ -19,8 +30,9 @@
 							<th>Descripcion</th>
 							<th>Fecha</th>
 							<th>Cortes</th>
-							<th>Entregado</th>
-							<th>Liberacion</th>
+							<th class="text-center">Estatus</th>
+							<th class="text-center">Empacado</th>
+							%{-- <th>Liberacion</th> --}%
 						</tr>
 					</thead>
 					<tbody>
@@ -36,26 +48,43 @@
 								<td><g:formatDate date="${row.dateCreated}" format="hh:mm (dd-MM)"/></td>
 								<td><g:formatNumber number="${row.cortes}" format="####"/></td>
 								<td>
-									<g:if test="${row.inicio}">
-										<g:formatDate date="${row.inicio}" format="hh:mm (dd-MM)"/>
-									</g:if>
-									<g:else>
-										<a href="" data-toggle="modal" class="btn btn-warning btn-lg btn-block"
-										data-target="#entregarModal"
-										 data-pedido="${row.pedido}" data-descripcion="${row.descripcion}"
-										 data-corte="${row.id}"
-										data-producto="${row.producto}" data-cantidad="${row.cantidad}"
-										data-cortes="${row.cortes}"
-										 data-instruccion="${row.instruccion}">
-										Entregar
+									<a href="" data-toggle="modal" 
+										class="btn btn-warning btn-lg btn-block"
+										data-target="#corteModal"
+										data-pedido="${row.pedido}" 
+										data-descripcion="${row.descripcion}"
+										data-corte="${row.id}"
+										data-producto="${row.producto}" 
+										data-cantidad="${row.cantidad}"
+										data-cortes="${row.cortes}" 
+										data-surtidor="${row.surtidor}"
+										data-instruccion="${row.instruccion}"
+										data-cortador="${row.asignado}"
+										data-empacador="${row.empacador}"
+										data-status="${row.statusCorte}">
+										${row.statusCorte}
 									</a>
-									</g:else>
 									
 								</td>
-								<td>
+								<td class="text-center">
 									<g:if test="${row.asignado}">
-										<a href="" data-toggle="modal" class="btn btn-success btn-lg btn-block"
-										data-target="#exampleModal" data-whatever="${row.pedido}"> Cortado
+										<a href="" data-toggle="modal" class="btn btn-warning btn-lg btn-block"
+											data-target="#empaqueModal"
+											data-pedido="${row.pedido}" 
+											data-descripcion="${row.descripcion}"
+											data-corte="${row.id}"
+											data-producto="${row.producto}" 
+											data-cantidad="${row.cantidad}"
+											data-cortes="${row.cortes}" 
+											data-surtidor="${row.surtidor}"
+											data-instruccion="${row.instruccion}"
+											data-cortador="${row.asignado}"
+											data-empacador="${row.empacador}"
+											data-statusEmpaque="${row.status}"
+											data-empacadoInicio="${row.empacadoInicio}"
+											data-empacadoFin="${row.empacadoFin}"
+											data-status="${row.statusEmpaque}">
+											${row.statusEmpaque}
 										</a>
 									</g:if>
 									
@@ -69,84 +98,14 @@
 
 		</div> <!-- end .row 2-->
 
-		<g:render template="importarCortesDialog"/>
+		<g:render template="corteDialog"/>
+		<g:render template="empaqueDialog"/>
 
-		<div class="modal fade" id="entregarModal" tabindex="-1" role="dialog" 
-			aria-labelledby="entregarModalLabel" aria-hidden="true">
-		  <div class="modal-dialog">
-		    <div class="modal-content">
-		      <div class="modal-header">
-		        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-		        <h4 class="modal-title" id="entregarModalLabel">New message</h4>
-		      </div>
-		      <g:form  action="asignar" >
-		      <div class="modal-body">
-		        	<g:hiddenField id="corteField" name="id"/>
-		          <fieldset disabled>
-		          <div class="form-group">
-		            <label for="pedido" class="control-label">Pedido</label>
-		            <input name="pedido" type="text" class="form-control" >
-		          </div>
-
-		          <div class="form-group">
-		            <label for="descripcion" class="control-label">Descripcion</label>
-		            <input name="descripcion" type="text" class="form-control" >
-		          </div>
-		          <div class="form-group">
-		            <label for="cantidad" class="control-label">Cantidad</label>
-		            <input name="cantidad" type="text" class="form-control" >
-		          </div>
-		          <div class="form-group">
-		            <label for="cortes" class="control-label">Cortes</label>
-		            <input name="cortes" type="text" class="form-control" >
-		          </div>
-		          <div class="form-group">
-		            <label for="instruccion" class="control-label">Instrucción</label>
-		            <input name="instruccion" type="text" class="form-control" >
-		          </div>
-		          </fieldset>
-		          <div class="form-group">
-		            <label for="nip" class="control-label">Nip</label>
-		            <input name="nip" type="password" class="form-control" id="recipient-name" >
-		          </div>
-		        
-		      </div>
-		      <div class="modal-footer">
-		        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-		         <g:submitButton class="btn btn-primary" name="aceptar" value="Entregar" />
-		      </div>
-		    </div>
-		    </g:form>
-
-		  </div>
-		</div>
+		
 
 	</div><!-- end .container-->
 
-	<script type="text/javascript">
-		$(document).ready(function(){
-			$('#entregarModal').on('show.bs.modal', function (event) {
-			  var button = $(event.relatedTarget); // Button that triggered the modal
-			  var producto = button.data('producto');
-			  var cantidad=button.data('cantidad');
-			  var pedido=button.data('pedido');
-			  var modal = $(this);
-			  modal.find('.modal-title').text('Engregando : ' + producto);
-			  modal.find("[name='descripcion']").val(button.data('descripcion'));
-			  modal.find("[name='cantidad']").val(cantidad);
-			  modal.find("[name='pedido']").val(pedido);
-			  modal.find("[name='instruccion']").val(button.data('instruccion'));
-			  modal.find("[name='cortes']").val(button.data('cortes'));
-
-			  modal.find('#corteField').val(button.data('corte'));
-			});
-
-		});
-		$('body').on('shown.bs.modal', '.modal', function () {
-  				$('[id$=recipient-name]').focus();
-			});
-
-	</script>
+	
 
 </body>
 

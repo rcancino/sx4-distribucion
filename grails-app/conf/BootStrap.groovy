@@ -45,6 +45,34 @@ class BootStrap {
 					UsuarioRole.create(surtidor,usuarioRole,true)
 					UsuarioRole.create(surtidor,surtidorRole,true)
 				}
+
+				def cortador1=Usuario.findByUsername('cortador1')
+				if(!cortador1){
+					cortador1=new Usuario(username:'cortador1'
+						,password:'cortador1'
+						,apellidoPaterno:'cortador1'
+						,apellidoMaterno:'cortador1'
+						,nombres:'cortador1'
+						,nombre:' cortador1 cortador1'
+						,numeroDeEmpleado:'0000'
+						,nip:'433000').save(flush:true,failOnError:true)
+					UsuarioRole.create(cortador1,usuarioRole,true)
+					UsuarioRole.create(cortador1,cortadorRole,true)
+				}
+
+				def empacador1=Usuario.findByUsername('empacador1')
+				if(!empacador1){
+					empacador1=new Usuario(username:'empacador1'
+						,password:'empacador1'
+						,apellidoPaterno:'empacador1'
+						,apellidoMaterno:'empacador1'
+						,nombres:'empacador1'
+						,nombre:' empacador1 empacador1'
+						,numeroDeEmpleado:'0000'
+						,nip:'533000').save(flush:true,failOnError:true)
+					UsuarioRole.create(empacador1,usuarioRole,true)
+					UsuarioRole.create(empacador1,empacadorRole,true)
+				}
 			}
 		}
 

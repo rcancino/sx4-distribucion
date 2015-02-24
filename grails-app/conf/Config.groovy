@@ -160,10 +160,7 @@ grails.plugin.springsecurity.controllerAnnotations.staticRules = [
 
 grails.plugin.springsecurity.roleHierarchy = '''
    ADMIN > GERENTE 
-   GERENTE > SURTIDOR
-   GERENTE > EMPACADOR
-   GERENTE > CORTADOR
-   GERENTE > EMBARQUE
+   
 '''
 
 
