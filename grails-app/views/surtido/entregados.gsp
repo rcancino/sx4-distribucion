@@ -40,8 +40,9 @@
 							<th>Cortador</th>
 							<th>Cortes</th>
 
-							<th>Entregado</th>
+							
 							<th>Entregó</th>
+							<th>Entregado</th>
 							<th>T. Total</th>
 
 							
@@ -65,24 +66,43 @@
 									<g:if test="${row.cortes}"><i class="fa fa-scissors"></i></g:if>
 								</td>
 								<td>
-									<g:formatDate date="${row.iniciado}" format="HH:MM"/>
+									<g:if test="${row.cortes}">
+										<g:formatNumber number="${((row.corteInicio.getTime()-row.iniciado.getTime()) /1000)/60}" format="#### min"/>
+										
+									</g:if>
+									%{-- <g:formatDate date="${row.iniciado}" format="HH:mm"/> --}%
 								</td>
 								<td>${fieldValue(bean:row,field:"asignado")}</td>
 
 								<td>
 									<g:if test="${row.cortes}">
-										<g:formatDate date="${row.corteInicio}" format="HH:MM"/>
+										<g:formatNumber number="${	((row.corteFin.getTime()-row.corteInicio.getTime()) /1000)/60}" format="#### min"/>
 									</g:if>
 									<g:else>
 										0
 									</g:else>
 								</td>
-								<td>PEND</td>
+								<td>
+									<g:if test="${row.cortes}">
+										${row.partidas.findAll{it.corte!=null}.first().corte.asignado}
+									</g:if>
+								</td>
 								<td><g:formatNumber number="${row.cortes}" format="####"/></td>
 
 								<td>${fieldValue(bean:row,field:"entrego")}</td>
-								<td><g:formatDate date="${row.entregado}" format="hh:MM (dd/MM)"/></td>
-								<td>PEND</td>
+								<td>
+									<g:if test="${row.cortes}">
+										<g:formatNumber 
+											number="${((row.entregado.getTime()-row.corteFin.getTime()) /1000)/60}" 
+											format="#### min"/>
+										
+									</g:if>
+								</td>
+								<td>
+									<g:formatNumber 
+										number="${((row.entregado.getTime()-row.iniciado.getTime()) /1000)/60}" 
+										format="#### min"/>
+								</td>
 								
 							</tr>
 						</g:each>

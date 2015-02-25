@@ -11,6 +11,8 @@ class ImportadorController {
 
     def importadorDeSurtidoService
 
+    def importadorDeProductoService
+
     def index(Integer max) {
       params.max = Math.min(max ?: 20, 100)
       params.sort='pedidoCreado'
@@ -29,6 +31,11 @@ class ImportadorController {
        log.info 'Importando '+cmd
        importadorDeSurtidoService.importar(cmd.fecha)
        redirect view:'index'
+    }
+
+    def importarProductos(){
+      importadorDeProductoService.importarTodos()
+      redirect action:'index'
     }
 
    

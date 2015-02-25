@@ -19,21 +19,24 @@
 						<h4 class="text-center">${flash.error}</h4>
 					</div>
 				</g:if>
-				<g:if test="${flash.success}">
+				%{-- <g:if test="${flash.success}">
 					<div class="alert alert-success">
 						<h4 class="text-center">${flash.success}</h4>
 					</div>
-				</g:if>
+				</g:if> --}%
+				
 				<table class="table table-striped table-bordered table-condensed ">
 					<thead>
 						<tr >
 							<th class="text-center">Pedido</th>
 							<th>T</th>
 							<th>Cliente</th>
-							<th>Alta</th>
+							<th>Hora</th>
 							<th>Partidas</th>
 							<th>Cortes</th>
-							<th  class="text-center">Status</th>
+							<th>Surtidor</th>
+							<th  class="text-center"></th>
+							
 						</tr>
 					</thead>
 					<tbody>
@@ -46,9 +49,10 @@
 								</td>
 								<td>${fieldValue(bean:row,field:"tipo")[0..0]}</td>
 								<td>${fieldValue(bean:row,field:"cliente")}</td>
-								<td><g:formatDate date="${row.pedidoCreado}" format="hh:mm (dd-MM)"/></td>
+								<td><g:formatDate date="${row.dateCreated}" format="hh:mm (dd/MM)"/></td>
 								<td><g:formatNumber number="${row.partidas.size()}" format="####"/></td>
 								<td><g:formatNumber number="${row.cortes}" format="####"/></td>
+								<td>${fieldValue(bean:row,field:"asignado")}</td>
 								<td>
 									<g:if test="${row.status=='POR ENTREGAR'}">
 										<a href="" data-toggle="modal" class="btn btn-success btn-lg btn-block"
@@ -60,6 +64,7 @@
 										</a> 
 									</g:if>
 								</td>
+
 							</tr>
 						</g:each>
 					</tbody>

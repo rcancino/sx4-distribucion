@@ -12,4 +12,9 @@ class HomeController {
     def administracion(){
     	
     }
+
+    @Secured(['permitAll'])
+    def pruebas(){
+    	
+    }
 }

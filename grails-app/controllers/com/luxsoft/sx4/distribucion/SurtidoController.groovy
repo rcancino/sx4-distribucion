@@ -28,6 +28,15 @@ class SurtidoController {
         params.order='asc'
         respond Surtido.list(params), model:[surtidoInstanceCount:Surtido.count()]
     }
+
+    @Secured(['permitAll'])
+    def entregados(Integer max) {
+        params.max = Math.min(max ?: 20, 100)
+        params.sort='pedidoCreado'
+        params.order='asc'
+        def query=Surtido.where{entregado!=null}
+        respond query.list(params), model:[surtidoInstanceCount:query.count()]
+    }
     
 
     @Secured(['permitAll'])

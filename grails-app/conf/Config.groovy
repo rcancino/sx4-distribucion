@@ -168,6 +168,11 @@ luxor{
     sx4{
       sucursal="PENDIENTE"
     }
+    empleadosDb{
+      url = 'jdbc:mysql://localhost:3306/rh'
+      username = "root"
+      password = "sys"
+    }
 }
 
 

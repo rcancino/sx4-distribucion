@@ -102,3 +102,6 @@ span.summary.ng-valid {
   -webkit-filter: blur(10px);
   width: 100%
 }
+.ui-autocomplete-loading {
+  background: url(../images/spinner.gif) right center no-repeat;
+}
