@@ -128,7 +128,7 @@ log4j.main = {
             //info luxorFileAppender: 'grails.apps.jobs'
           }
             
-          produccion{
+          production{
             error 'grails.app.services'
             error 'grails.app.controllers'
             error 'grails.app.services.com.luxsoft.sx4.distribucion'
@@ -177,7 +177,7 @@ environments{
     }
   }
     
-  produccion{
+  production{
     luxor{
         sx4{
           sucursal="TACUBA"
