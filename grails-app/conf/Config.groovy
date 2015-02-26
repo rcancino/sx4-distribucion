@@ -162,17 +162,36 @@ grails.plugin.springsecurity.roleHierarchy = '''
    ADMIN > GERENTE 
    
 '''
-
-
-luxor{
-    sx4{
-      sucursal="PENDIENTE"
+environments{
+    
+  development{
+    luxor{
+        sx4{
+          sucursal="TACUBA"
+        }
+        empleadosDb{
+          url = 'jdbc:mysql://10.10.1.228:3306/rh'
+          username = "root"
+          password = "sys"
+        }
     }
-    empleadosDb{
-      url = 'jdbc:mysql://localhost:3306/rh'
-      username = "root"
-      password = "sys"
+  }
+    
+  produccion{
+    luxor{
+        sx4{
+          sucursal="TACUBA"
+        }
+        empleadosDb{
+          url = 'jdbc:mysql://10.10.1.228:3306/rh'
+          username = "root"
+          password = "sys"
+        }
     }
+  }
+    
 }
+
+
 
 

@@ -64,7 +64,7 @@ environments {
        dataSource {
               pooled = true
               dbCreate="update"
-              //url="jdbc:mysql://localhost/sx4?autoReconnect=true"
+              url="jdbc:mysql://10.10.1.228/sx4?autoReconnect=true"
               driverClassName = "com.mysql.jdbc.Driver"
               dialect = org.hibernate.dialect.MySQL5InnoDBDialect
               username = "root"
