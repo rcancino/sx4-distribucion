@@ -11,7 +11,9 @@ class CorteController {
 
 	def importacionService
 
-    def index() { }
+    @Secured(["hasAnyRole('GERENTE')"])
+    def index() { 
+    }
 
     def pendientes(int max){
     	params.max = Math.min(max ?: 10, 100)

@@ -18,14 +18,14 @@ def isAdmin = { ->
 
 navigation={
 	user{
-		home(action:'index',titleText:'Inicio'){}
 		
-		surtido(controller:'surtido',action:'pendientes'){
+		
+		surtido(controller:'surtido',action:'index'){
 			pendientes(){}
 			porEntregar(){}
 			entregados(){}
 		}
-		corte(controller:'corte',action:'pendientes'){
+		corte(controller:'corte',action:'index'){
 
 		}
 		embarque(){

@@ -7,7 +7,7 @@
 	<title>Surtido de pedidos</title>
 </head>
 <body>
-	<div class="container">
+	<div class="container-fluid">
 
 		
 		
@@ -25,18 +25,18 @@
 					</div>
 				</g:if>
 				<table class="table table-striped table-bordered table-condensed ">
-					<thead>
+					<thead class="text-center">
 						<tr >
 							<th class="text-center">Pedido</th>
 							<th>T</th>
 							<th>Cliente</th>
-							<th>Alta</th>
+							<th>Hora</th>
 							<th>Partidas</th>
 							<th>Cortes</th>
 							<th  class="text-center">Status</th>
 						</tr>
 					</thead>
-					<tbody>
+					<tbody >
 						<g:each in="${surtidoInstanceList}" var="row">
 							<tr class="text-center">
 								<td>

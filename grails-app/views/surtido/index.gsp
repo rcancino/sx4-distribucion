@@ -8,82 +8,81 @@
 </head>
 <body>
 	<div class="container">
-
-		<div class="row">
-			<div class="col-md-12">
-				<ul class="nav nav-tabs">
-					<li role="presentation" class="active"><a href="#">Pendientes</a></li>
-					<li role="presentation"><a href="#">Asignados</a></li>
-					<li role="presentation"><a href="#">Atendidos</a></li>
-					<li role="presentation"><a href="#">Parciales</a></li>
-				</ul>
-			</div>
-		</div>
-
-		<div class="row">
-				
-				<div class="col-md-6 ">
-					<div class="btn-group">
-						<input type='text' class="form-control" id="filtro" placeholder="Filtrar"  autofocus="on">
-					</div>
-					
-					<div class="btn-group toolbar-panel">
-					                <button type="button" name="operaciones"
-					                	class="btn btn-default dropdown-toggle" data-toggle="dropdown"
-					                    role="menu">
-					                    Operaciones <span class="caret"></span>
-									</button>
-					                <ul class="dropdown-menu">
-										<li><a href="#importarDialog" data-toggle="modal"> 
-												<i class="fa fa-upload"></i> Importar
-											</a>
-					                	</li>
-									</ul>
-					</div>
-					<div class="btn-group">
-					    <button type="button" name="reportes"
-					            class="btn btn-default dropdown-toggle" data-toggle="dropdown"
-					            role="menu">
-					            Reportes <span class="caret"></span>
-					    </button>
-
-					    <ul class="dropdown-menu">
-					        
-					    </ul>
-					</div>
-				</div>
-			
-		</div><!-- end .row toolbar -->
 		
 		<div class="row">
 			<div class="col-md-12">
-				%{-- <g:render template="grid"/> --}%
-				<table class="table table-striped table-bordered table-condensed">
+
+				<g:if test="${flash.error}">
+					<div class="alert alert-danger">
+						<h4 class="text-center">${flash.error}</h4>
+					</div>
+				</g:if>
+				<g:if test="${flash.success}">
+					<div class="alert alert-success">
+						<h4 class="text-center">${flash.success}</h4>
+					</div>
+				</g:if>
+				<table class="table table-striped table-bordered table-condensed ">
 					<thead>
-						<tr>
-							<th>Pedido</th>
+						<tr >
+							<th class="text-center">Tipo</th>
+							<th class="text-center">Cliente</th>
+							<th class="text-center">Pedido</th>
+							<th class="text-center">Fecha</th>
+							<th class="text-center">Venta</th>
 							<th>T</th>
-							<th>Cliente</th>
-							<th>Alta</th>
 							<th>Partidas</th>
+							<th>Corte</th>
+							<th>T Surtido</th>
+							<th>Surtio</th>
+
+							<th>T Corte</th>
+							<th>Cortador</th>
+							<th>Cortes</th>
+
+							<th>Entregado</th>
+							<th>Entregó</th>
+							<th>T. Total</th>
+
+							
 						</tr>
 					</thead>
 					<tbody>
 						<g:each in="${surtidoInstanceList}" var="row">
-							<tr>
+							<tr >
+								<td>${fieldValue(bean:row,field:"tipoDeVenta")}</td>
 								<td>
-									<a href="" data-toggle="modal" class="btn btn-info btn-lg btn-block"
-										data-target="#exampleModal" data-whatever="@PEDIDO">
-										<g:formatNumber number="${row.pedido}" format="####"/>
-									</a>
-									%{-- <g:link action="show" id="${row.id}" class="btn btn-info btn-lg btn-block">
-									</g:link> --}%
+									<abbr title="${row.nombre}">
+									${org.apache.commons.lang.StringUtils.substring(row.nombre,0,20)}
+									</abbr>
 								</td>
+								<td><g:formatNumber number="${row.pedido}" format="####"/></td>
+								<td><g:formatDate date="${row.fecha}" format="dd/MM"/></td>
+								<td>${fieldValue(bean:row,field:"venta")}</td>
 								<td>${fieldValue(bean:row,field:"tipo")[0..0]}</td>
-								<td>${fieldValue(bean:row,field:"cliente")}</td>
-								<td><g:formatDate date="${row.pedidoCreado}" format="hh:mm (dd-MM)"/></td>
 								<td><g:formatNumber number="${row.partidas.size()}" format="####"/></td>
-								
+								<td>
+									<g:if test="${row.cortes}"><i class="fa fa-scissors"></i></g:if>
+								</td>
+								<td>
+									<g:formatDate date="${row.iniciado}" format="HH:MM"/>
+								</td>
+								<td>${fieldValue(bean:row,field:"asignado")}</td>
+
+								<td>
+									<g:if test="${row.cortes}">
+										<g:formatDate date="${row.corteInicio}" format="HH:MM"/>
+									</g:if>
+									<g:else>
+										0
+									</g:else>
+								</td>
+								<td>PEND</td>
+								<td><g:formatNumber number="${row.cortes}" format="####"/></td>
+
+								<td>${fieldValue(bean:row,field:"entrego")}</td>
+								<td><g:formatDate date="${row.entregado}" format="hh:MM (dd/MM)"/></td>
+								<td>PEND</td>
 								
 							</tr>
 						</g:each>
@@ -92,52 +91,11 @@
 			</div>
 
 		</div> <!-- end .row 2-->
-
-		<g:render template="/importador/importarDialog"/>
-
-		<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-		  <div class="modal-dialog">
-		    <div class="modal-content">
-		      <div class="modal-header">
-		        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-		        <h4 class="modal-title" id="exampleModalLabel">New message</h4>
-		      </div>
-		      <div class="modal-body">
-		        <form>
-		          <div class="form-group">
-		            <label for="recipient-name" class="control-label">Recipient:</label>
-		            <input type="text" class="form-control" id="recipient-name">
-		          </div>
-		          <div class="form-group">
-		            <label for="message-text" class="control-label">Message:</label>
-		            <textarea class="form-control" id="message-text"></textarea>
-		          </div>
-		        </form>
-		      </div>
-		      <div class="modal-footer">
-		        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-		        <button type="button" class="btn btn-primary">Send message</button>
-		      </div>
-		    </div>
-		  </div>
-		</div>
+		
 
 	</div><!-- end .container-->
 
-	<script type="text/javascript">
-		$(document).ready(function(){
-			$('#exampleModal').on('show.bs.modal', function (event) {
-			  var button = $(event.relatedTarget) // Button that triggered the modal
-			  var recipient = button.data('whatever') // Extract info from data-* attributes
-			  // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
-			  // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
-			  var modal = $(this)
-			  modal.find('.modal-title').text('New message to ' + recipient)
-			  modal.find('.modal-body input').val(recipient)
-			})
-
-		}
-	</script>
+	
 
 </body>
 

@@ -14,9 +14,22 @@
     </head>
     
     <body>
-        <!-- Main navigation
-        ===============================================-->
+        
         <nav class="navbar navbar-default navbar-fixed-top navbar-inverse" role="navigation">
+            <div class="container-fluid">
+
+                <div class="navbar-header">
+                    <p class="navbar-text ">Surtido de pedidos: <a href="#" class="navbar-link">${new Date().format('dd/MM/yyyy')}</a></p>
+                </div>
+                
+            </div>
+        </nav>
+        
+        <g:layoutBody/>
+        
+        
+        
+        <nav class="navbar navbar-default navbar-fixed-bottom navbar-inverse" role="navigation">
             <div class="container">
                 <div class="navbar-header">
                     <button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#mainMenu">
@@ -24,19 +37,26 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <g:link controller="home" action="index" class="navbar-brand">
-                        <i class="fa fa-home fa-lg"></i> SX4  
-                    </g:link>
+                    <g:link action="index" controller="home" class="navbar-brand"><i class="fa fa-home fa-lg"></i> SX4 </g:link>
                 </div>
                 <div class="collapse navbar-collapse" id="mainMenu">
                     <nav:menu class="nav navbar-nav" scope="surtidor"/>
+                    <ul class="nav navbar-nav navbar-right">
+                        <p class="navbar-text navbar-left">DB:
+                            <a href="#" class="navbar-link navbar-right" data-toggle="tooltip" 
+                                title="${grailsApplication.config.dataSource.url?.replaceFirst('jdbc:mysql://','')}">
+                                <g:if env="development">PRUEBAS</g:if>
+                                <g:else>PRODUCCION</g:else>
+                            </a>
+                        </p>
+                        <p class="navbar-text navbar-right">Sucursal: 
+                            <a href="#" class="navbar-link">${grailsApplication.config.luxor.sx4.sucursal}</a>
+                        </p>
+                    </ul>
                 </div>
+                
             </div>
         </nav>
-        
-        <g:layoutBody/>
-        
-        <g:render template="/_menu/footer"/>
         
     </body>
 </html>
