@@ -43,8 +43,8 @@ class ImportadorDeSurtidoService {
 
 	def importar(Date fecha){
 		def sucursal=findSucursal()
-		log.info 'Importando surtidos para '+fecha.format('dd/MM/yyyy')+ " Sucursal: "+sucursal
-		log.info 'DataSource: '+dataSource_importacion
+		log.debug 'Importando surtidos para '+fecha.format('dd/MM/yyyy')+ " Sucursal: "+sucursal
+		
 		def db = new Sql(dataSource_importacion)
 		db.eachRow( [sucursal:sucursal,fecha:Sql.DATE(fecha)],SQL_MESTREO) { row->
 			println 'Procesando: '+row
