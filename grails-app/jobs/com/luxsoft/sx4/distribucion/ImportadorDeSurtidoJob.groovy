@@ -16,9 +16,10 @@ class ImportadorDeSurtidoJob {
 
     def execute() {
     	try {
-    		def time=new Date().format('dd/MM/yyyy HH:mm:ss')
+    		def fecha=new Date()
+    		def time=fecha.format('dd/MM/yyyy HH:mm:ss')
     		log.info "Importando surtidos $time"
-    		importadorDeSurtidoService.importar(time)
+    		importadorDeSurtidoService.importar(fecha)
     		//def res=socioService.suspender()
     		//log.info "Resultado de la suspencion automatica: $res Ejecutado: $time"
     	}catch(Exception e) {
