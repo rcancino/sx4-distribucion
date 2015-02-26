@@ -102,6 +102,14 @@ log4j.main = {
     //
     appenders {
         console name:'stdout', layout:pattern(conversionPattern: '%c{2} %m%n')
+        file name:'file', file:System.properties['user.home']  + '/.grails/sx4-distribucio.log',
+             layout: pattern(conversionPattern: '%-5p [%t] %c{1}: %m%n')
+        rollingFile name:'sx4FileAppender',
+                    maxFileSize:1024,
+                    file:System.properties['user.home']  + '/.grails/sx4-distribucio.log',
+                    maxBackupIndex:7,
+                    layout: pattern(conversionPattern: '%-5p [%t] %c{1}: %m%n')
+
     }
 
     error  'org.codehaus.groovy.grails.web.servlet',        // controllers
@@ -122,17 +130,16 @@ log4j.main = {
             info 'grails.app.controllers'
             info 'grails.app.controllers.com.luxsoft.sx4'
             info 'grails.app.services.com.luxsoft.sx4.distribucion'
-            //debug 'grails.app.services.com.luxsoft.kyo.SocioService'
-            //info 'com.luxsoft.cfdi'
+            
             //info 'grails.app.jobs'
-            //info luxorFileAppender: 'grails.apps.jobs'
+            info file: 'grails.apps.jobs'
           }
             
           production{
             error 'grails.app.services'
             error 'grails.app.controllers'
             error 'grails.app.services.com.luxsoft.sx4.distribucion'
-            error 'grails.app.jobs'    
+            info file: 'grails.apps.jobs'
           }
             
         }
