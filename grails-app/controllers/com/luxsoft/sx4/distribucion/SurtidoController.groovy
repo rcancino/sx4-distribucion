@@ -133,7 +133,9 @@ class SurtidoController {
         params.sort='pedidoCreado'
         params.order='asc'
         def query=Surtido.where{entregado==null}
-        respond query.list(params), model:[surtidoInstanceCount:query.count()]
+        def res=query.list(params).collect({new SurtidoAnalisis(surtido:it)})
+        //respond surtidores, model:[surtidoInstanceCount:query.count()]
+        [surtidoInstanceList:res]
     }
         
     @Secured(['permitAll'])

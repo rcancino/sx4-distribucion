@@ -57,26 +57,27 @@
 					<tbody>
 						<g:each in="${surtidoInstanceList}" var="row">
 							<tr >
-								<td>${fieldValue(bean:row,field:"tipoDeVenta")}</td>
+								<td>${fieldValue(bean:row,field:"surtido.tipoDeVenta")}</td>
 								<td>
-									<abbr title="${row.nombre}">
-									${org.apache.commons.lang.StringUtils.substring(row.nombre,0,20)}
+									<abbr title="${row.surtido.nombre}">
+									${org.apache.commons.lang.StringUtils.substring(row.surtido.nombre,0,20)}
 									</abbr>
 								</td>
-								<td><g:formatNumber number="${row.pedido}" format="####"/></td>
-								<td><g:formatDate date="${row.fecha}" format="dd/MM"/></td>
-								<td>${fieldValue(bean:row,field:"venta")}</td>
-								<td>${fieldValue(bean:row,field:"tipo")[0..0]}</td>
-								<td><g:formatNumber number="${row.partidas.size()}" format="####"/></td>
+								<td><g:formatNumber number="${row.surtido.pedido}" format="####"/></td>
+								<td><g:formatDate date="${row.surtido.fecha}" format="dd/MM"/></td>
+								<td>${fieldValue(bean:row,field:"surtido.venta")}</td>
+								<td>${fieldValue(bean:row,field:"surtido.tipo")[0..0]}</td>
+								<td><g:formatNumber number="${row.surtido.partidas.size()}" format="####"/></td>
 								<td>
-									<g:if test="${row.cortes}"><i class="fa fa-scissors"></i></g:if>
+									<g:if test="${row.surtido.cortes}"><i class="fa fa-scissors"></i></g:if>
 								</td>
-								<td><g:formatNumber number="${row.cortes}" format="####"/></td>
-
-								<td></td>
+								<td><g:formatNumber number="${row.surtido.cortes}" format="####"/></td>
+								<td>
+									${fieldValue(bean:row,field:"ultimoAsignado")}	
+								</td>
+								<td>${fieldValue(bean:row,field:"tiempoAcumulado")}</td>
 								
-								<td>PEND</td>
-								<td>${fieldValue(bean:row,field:'status')}</td>
+								<td>${fieldValue(bean:row,field:"status")}</td>
 								
 							</tr>
 						</g:each>
