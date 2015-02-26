@@ -41,6 +41,10 @@ navigation={
 		entregados(controller:'surtido'){}
 		todos(controller:'surtido'){}
 	}
+	cortador{
+		pendientes(controller:'corte',index:'pendientes'){}
+		
+	}
 
 	/*admin{
 		

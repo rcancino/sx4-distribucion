@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="layout" content="application"/>
+	<meta name="layout" content="corte"/>
 	<title>Cortes pendientes</title>
 </head>
 <body>
@@ -12,9 +12,7 @@
 			
 			
 			<div class="col-md-12">
-				<div class="alert alert-info">
-						<h4 class="text-center">Cortes (Productos en corte)</h4>
-				</div>
+				
 				<g:if test="${flash.error}">
 					<div class="alert alert-danger">
 						<h4 class="text-center">${flash.error}</h4>
