@@ -8,6 +8,19 @@
 </head>
 <body>
 	<div class="container">
+
+		<div class="row">
+			<div class="col-md-12">
+				<ul class="nav nav-tabs">
+					<li class="active">
+						<g:link action="porEntregarAnalisis" >Por Entregar</g:link>
+					</li>
+					<li>
+						<g:link action="entregados" >Entregados</g:link>
+					</li>
+				</ul>
+			</div>
+		</div>
 		
 		<div class="row">
 			<div class="col-md-12">

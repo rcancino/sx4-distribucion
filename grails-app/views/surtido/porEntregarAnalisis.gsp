@@ -10,17 +10,17 @@
 	<div class="container">
 
 		<div class="row">
-					<div class="col-md-12">
-						<ul class="nav nav-tabs">
-							<li class="active">
-								<g:link action="porEntregarAnalisis" >Por Entregar</g:link>
-							</li>
-							<li>
-								<g:link action="entregados" >Entregados</g:link>
-							</li>
-						</ul>
-					</div>
-				</div>
+			<div class="col-md-12">
+				<ul class="nav nav-tabs">
+					<li class="active">
+						<g:link action="porEntregarAnalisis" >Por Entregar</g:link>
+					</li>
+					<li>
+						<g:link action="entregados" >Entregados</g:link>
+					</li>
+				</ul>
+			</div>
+		</div>
 		
 		<div class="row">
 			<div class="col-md-12">
@@ -46,17 +46,10 @@
 							<th>T</th>
 							<th>Partidas</th>
 							<th>Corte</th>
-							<th>T Surtido</th>
-							<th>Surtio</th>
-
-							<th>T Corte</th>
-							<th>Cortador</th>
 							<th>Cortes</th>
-
-							
-							<th>Entregó</th>
-							<th>Entregado</th>
+							<th>Asignado</th>
 							<th>T. Total</th>
+							<th>Status</th>
 
 							
 						</tr>
@@ -78,44 +71,12 @@
 								<td>
 									<g:if test="${row.cortes}"><i class="fa fa-scissors"></i></g:if>
 								</td>
-								<td>
-									<g:if test="${row.cortes}">
-										<g:formatNumber number="${((row.corteInicio.getTime()-row.iniciado.getTime()) /1000)/60}" format="#### min"/>
-										
-									</g:if>
-									%{-- <g:formatDate date="${row.iniciado}" format="HH:mm"/> --}%
-								</td>
-								<td>${fieldValue(bean:row,field:"asignado")}</td>
-
-								<td>
-									<g:if test="${row.cortes}">
-										<g:formatNumber number="${	((row.corteFin.getTime()-row.corteInicio.getTime()) /1000)/60}" format="#### min"/>
-									</g:if>
-									<g:else>
-										0
-									</g:else>
-								</td>
-								<td>
-									<g:if test="${row.cortes}">
-										${row.partidas.findAll{it.corte!=null}.first().corte.asignado}
-									</g:if>
-								</td>
 								<td><g:formatNumber number="${row.cortes}" format="####"/></td>
 
-								<td>${fieldValue(bean:row,field:"entrego")}</td>
-								<td>
-									<g:if test="${row.cortes}">
-										<g:formatNumber 
-											number="${((row.entregado.getTime()-row.corteFin.getTime()) /1000)/60}" 
-											format="#### min"/>
-										
-									</g:if>
-								</td>
-								<td>
-									<g:formatNumber 
-										number="${((row.entregado.getTime()-row.iniciado.getTime()) /1000)/60}" 
-										format="#### min"/>
-								</td>
+								<td></td>
+								
+								<td>PEND</td>
+								<td>${fieldValue(bean:row,field:'status')}</td>
 								
 							</tr>
 						</g:each>

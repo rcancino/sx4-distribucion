@@ -20,7 +20,7 @@ navigation={
 	user{
 		
 		
-		surtido(controller:'surtido',action:'index'){
+		surtido(controller:'surtido',action:'porEntregarAnalisis'){
 			pendientes(){}
 			porEntregar(){}
 			entregados(){}
