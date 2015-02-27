@@ -31,6 +31,7 @@
 							<th class="text-center">Pedido</th>
 							<th>T</th>
 							<th>Cliente</th>
+							<th>Entrega</th>
 							<th>Hora</th>
 							<th>Partidas</th>
 							<th>Cortes</th>
@@ -49,6 +50,7 @@
 								</td>
 								<td>${fieldValue(bean:row,field:"tipo")[0..0]}</td>
 								<td>${fieldValue(bean:row,field:"cliente")}</td>
+								<td>${fieldValue(bean:row,field:"formaDeEntrega")}</td>
 								<td><g:formatDate date="${row.dateCreated}" format="hh:mm (dd/MM)"/></td>
 								<td><g:formatNumber number="${row.partidas.size()}" format="####"/></td>
 								<td><g:formatNumber number="${row.cortes}" format="####"/></td>

@@ -40,6 +40,7 @@ class Surtido {
 	Date facturado
     String venta
     String tipoDeVenta
+    String formaDeEntrega
 
 	String origen
 
@@ -68,6 +69,7 @@ class Surtido {
     	entregado nullable:true
         venta nullable:true,maxSize:20
         tipoDeVenta nullable:true,maxSize:10
+        formaDeEntrega nullable:true,maxSize:10
     }
 
     static mapping = {

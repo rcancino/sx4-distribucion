@@ -20,14 +20,15 @@ class ImportadorDeSurtidoService {
 
 	def SQL_MESTREO="""
     	select 
-		s.nombre as sucursal,p.folio as pedido,v.clave as cliente,v.nombre as nombre,date(p.fecha) as fecha
+		s.nombre as sucursal,p.folio as pedido,v.clave as cliente,v.nombre as nombre,date(v.creado) as fecha
 		,p.MODIFICADO_USR as vendedor,v.modificado as facturado,p.creado as pedidoCreado,p.PEDIDO_ID as origen
 		,'ORDINARIO' as tipo
+		,p.FENTREGA AS formaDeEntrega
 		,v.docto as venta,v.origen as tipoDeVenta
 		from sx_ventas v
 		join sx_pedidos p on v.pedido_id=p.pedido_id
 		join sw_sucursales s on v.SUCURSAL_ID=s.SUCURSAL_ID
-		where s.nombre=:sucursal and date(p.fecha)=:fecha
+		where s.nombre=:sucursal and date(v.fecha)=:fecha
     """
 
     String SQL_DETALLE="""

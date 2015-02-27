@@ -38,8 +38,7 @@ navigation={
 	surtidor{
 		pendientes(controller:'surtido'){}
 		porEntregar(controller:'surtido'){}
-		entregados(controller:'surtido'){}
-		todos(controller:'surtido'){}
+		
 	}
 	cortador{
 		pendientes(controller:'corte',index:'pendientes'){}
