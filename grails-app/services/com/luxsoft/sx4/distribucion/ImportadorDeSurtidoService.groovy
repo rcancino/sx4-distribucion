@@ -47,7 +47,7 @@ class ImportadorDeSurtidoService {
 		
 		def db = new Sql(dataSource_importacion)
 		db.eachRow( [sucursal:sucursal,fecha:Sql.DATE(fecha)],SQL_MESTREO) { row->
-			println 'Procesando: '+row
+			//println 'Procesando: '+row
 			def surtido=Surtido.findByOrigen(row.origen)
 			if(!surtido){
 				surtido=new Surtido(row.toRowResult())
