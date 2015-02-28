@@ -14,87 +14,79 @@ import org.apache.commons.lang.time.DateUtils
  * 
  */
 @ToString(includeNames=true,includePackage=false)
-@EqualsAndHashCode(includes='sucursal,documento')
+@EqualsAndHashCode(includes='folio')
 class Entrega {
 
-	Embarque embarque
 	
-	String venta
 
-	String tipoDeVenta
-	
 	String origen
+	String documento
+	String tipoDeDocumento
+	Date fechaDeDocumento
+	String documentoOrigen
 
-	boolean parcial=false
-
-	Long documento
-	//@Column(name = "FECHA_DOCTO", nullable = false)
-	Date fechaFactura 
-	//@Column(name="TOTAL_DOCTO",nullable=false)
-	BigDecimal totalFactura
+	Long folio
 	
+	BigDecimal totalDocumento=0.0
+	
+	Boolean parcial=false
 	String cliente
-
-	//@Column(name = "CLAVE", length = 7, nullable = false)
 	String nombre
-	
-	//@Column(name = "RECIBIO")
-	String recibio
 	
 	int paquetes = 0
 	BigDecimal kilos = 0
 	BigDecimal cantidad = 0
+
 	Date arribo
 	Date recepcion
+	String recibio
 
 	String comentario
-	BigDecimal valor
-	//@Column(name = "POR_COBRAR", nullable = false)
+
+	BigDecimal valor=0.0
 	BigDecimal porCobrar=0.0
 	BigDecimal comision=1.1
-	//@Column(name = "COMISION_IMP", nullable = false)
+	BigDecimal comisionPorTonelada=0.0
 	BigDecimal importeComision=0.0
-	//@Column(name="COMISION_FECHA",nullable=true)
 	Date fechaComision
-	//@Column(name="COMISION_COMENTARIO",nullable=true)
-	String comentarioComision
-	//@Column(name="COMISION_POR_TON",nullable=false)
-	BigDecimal comisionPorTonelada
+	String comentarioDeComision
+	
 
-	Date surtido=new Date()
-	String surtidor
-
+	Surtido surtido
+	Date recepcionDeSurtido
+	
 
 	static hasMany = [partidas: EntregaDet]
 
-	//private InstruccionDeEntrega instruccionDeEntrega;
+	static belongsTo = [embarque: Embarque]
 
     static constraints = {
-    	embarque()
-		venta()
-		tipoDeVenta maxSize:10
-		origen()
-		parcial()
-		documento()
-		fechaFactura() 
-		totalFactura scale:4
+    	
+    	documento maxSize:15
+    	documentoOrigen nullable:true
+		tipoDeDocumento maxSize:10
+		totalDocumento scale:4
 		cliente maxSize:20
-		nombre()
-		recibio()
-		paquetes()
 		kilos scale:4
 		cantidad scale:4
+
 		arribo(nullable:true)
 		recepcion(nullable:true)
+		recibio nullable:true
 		comentario nullable:true
 		valor(scale:4)
 		porCobrar scale:4
 		comision scale:4
-		importeComision()
-		fechaComision()
-		comentarioComision()
+		
+		fechaComision nullable:true
+		comentarioDeComision nullable:true
 		comisionPorTonelada scale:4
-		surtido(nullable:true)
+		surtido nullable:true
+		recepcionDeSurtido nullable:true
+	}
+
+	static mapping = {
+		partidas cascade: "all-delete-orphan"
 	}
 
 

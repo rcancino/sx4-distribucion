@@ -26,42 +26,60 @@ class Embarque {
 	String chofer
 	long kilometroInicial=0.0
 	long kilometroFinal=0.0
-	BigDecimal valor
+	BigDecimal valor=0.0
+	BigDecimal kilos=0.0
 
-	//Date recepcionDeSurtido
+	String origen
 
 
 	Date dateCreated
 	Date lastUpdated
 
 
+
 	static hasMany = [partidas: Entrega]
 
     static constraints = {
     	comentario blak:true
+    	kilos scale:4
+    	origen nullable:true
+    	comentario nullable:true
+    	cerrado nullable:true
+    	salida nullable:true
+    	regreso nullable:true
     }
 
+    
     static mapping = {
     	fecha type:'date'
-    }
+		partidas cascade: "all-delete-orphan"
+	}
+
 
     BigDecimal valorCalculado(){
     	return partidas.sum (0.0,{it.valor})
     }
 
-    BigDecimal kilos(){
+    BigDecimal kilosCalculados(){
     	return partidas.sum (0.0,{it.kilos})
     }
-    
 
 	def beforeInsert() {
-		valor=valorCalculado()
+		actualizar()
 	}
 
 	def beforeUpdate() {
-		valor=valorCalculado()
+		actualizar()
 	}
 
-	
+	def actualizar(){
+		if(partidas){
+			valor=valorCalculado()
+			kilos=kilosCalculados()
+			
+		}
+	}
 
 }
+
+

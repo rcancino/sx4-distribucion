@@ -131,7 +131,8 @@ log4j.main = {
             info 'grails.app.controllers.com.luxsoft.sx4'
             info 'grails.app.services.com.luxsoft.sx4.distribucion'
             
-            info 'grails.app.jobs'
+            debug 'grails.app.jobs.com.luxsoft.sx4.distribucion.ImportadorDeSurtidoJob'
+            info  'grails.app.jobs.com.luxsoft.sx4.distribucion.ImportadorDeEmbarquesJob'
             //info file: 'grails.apps.jobs'
           }
             
