@@ -105,6 +105,13 @@ class ImportadorDeEmbarquesService {
             
     }
 
+    def actualizar(Date fecha){
+        log.info 'Actualizando embarques ya importados'
+        def embarques=Embarque.findByFecha(fecha)
+        
+        //def embarqe
+    }
+
 
     	
     
