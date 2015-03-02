@@ -29,7 +29,12 @@ navigation={
 
 		}
 		embarque(controller:'embarque',action:'index'){
-
+			consultas(controller:'embarque'){
+				todos(controller:'embarque',action:'index')
+				pendientes()
+				transito()
+				atendidos()
+			}
 		}
 		tableros(controller:'tablero',action:'index'){
 			global(){}

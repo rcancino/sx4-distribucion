@@ -14,6 +14,8 @@ class ImportadorDeEmbarquesService {
 	def grailsApplication
     def dataSource_importacion
 
+    def grailsWebDataBinder
+
 	def SQL_MESTREO="""
         select e.embarque_id as origen
         ,e.fecha
@@ -23,12 +25,12 @@ class ImportadorDeEmbarquesService {
         ,e.documento
         ,e.creado
         ,e.modificado
+        ,e.cerrado
         ,e.regreso
         ,e.salida
         ,e.valor
         ,e.TRANSPORTE_ID
         ,t.DESCRIPCION as transporte
-        ,'TEST' as comentario
         from sx_embarques e
         join sx_transportes t on (e.TRANSPORTE_ID=t.TRANSPORTE_ID)
         where date(e.fecha)=:fecha
@@ -106,10 +108,44 @@ class ImportadorDeEmbarquesService {
     }
 
     def actualizar(Date fecha){
-        log.info 'Actualizando embarques ya importados'
-        def embarques=Embarque.findByFecha(fecha)
         
-        //def embarqe
+        def embarques=Embarque.findAllByFechaAndOrigenIsNotNull(fecha)
+        log.info "Actualizando $embarques.size embarques del ${fecha} (YA IMPORTADOS)"
+        def db = new Sql(dataSource_importacion)
+        embarques.each{embarque->
+            def row=db.firstRow(SQL_MESTREO_POR_ORIGEN,[embarque.origen])
+            if(row){
+                
+                actualizar(embarque,row)
+            }else{
+                log.info "El embarque $embarque.ir ha sido eliminado"
+                embarque.delete flush:true
+            }
+        }
+    }
+
+    @Transactional
+    def actualizar(Embarque embarque){
+        def db = new Sql(dataSource_importacion)
+        def row=db.firstRow(SQL_MESTREO_POR_ORIGEN,[embarque.origen])
+        if(row){
+                actualizar(embarque,row)
+        }else{
+            log.info "El embarque $embarque.ir ha sido eliminado"
+            embarque.delete flush:true
+        }
+    }
+
+    def actualizar(Embarque embarque,def data){
+            
+        try {
+            embarque.properties=data
+            embarque.save flush:true,failOnError:true
+            event('embarqueImportadoActualizado',embarque)
+        }
+        catch(Exception e) {
+            log.error e   
+        }
     }
 
 
@@ -119,4 +155,25 @@ class ImportadorDeEmbarquesService {
     String findSucursal(){
     	grailsApplication.config.luxor.sx4.sucursal
     }
+
+
+    def SQL_MESTREO_POR_ORIGEN="""
+        select e.embarque_id as origen
+        ,e.fecha
+        ,e.sucursal
+        ,e.chofer
+        ,e.comentario
+        ,e.documento
+        ,e.creado
+        ,e.modificado
+        ,e.cerrado
+        ,e.regreso
+        ,e.salida
+        ,e.valor
+        ,e.TRANSPORTE_ID
+        ,t.DESCRIPCION as transporte
+        from sx_embarques e
+        join sx_transportes t on (e.TRANSPORTE_ID=t.TRANSPORTE_ID)
+        where e.embarque_id=?
+    """
 }

@@ -9,96 +9,22 @@
 	<title>Embarques</title>
 </head>
 <body>
-	<div class="container">
-
-		%{-- <div class="row">
-			<div class="col-md-12">
-				<ul class="nav nav-tabs">
-					<li class="active">
-						<g:link action="porEntregarAnalisis" >Por Entregar</g:link>
-					</li>
-					<li>
-						<g:link action="entregados" >Entregados</g:link>
-					</li>
-				</ul>
-			</div>
-		</div> --}%
-		
+	<div class="container-fluid">
 		<div class="row">
-		
-			
-			
+
 			<div class="col-md-12">
-				<div class="well well-sm">
-					<h2>Embarques</h2>
-					<g:if test="${flash.error}">
-						<div class="alert alert-danger">
-							<h4 class="text-center">${flash.error}</h4>
-						</div>
-					</g:if>
+				<div class="page-header">
+				  <h2>Embarques <small>${title} (${periodo})</small></h2>
 				</div>
+			</div>
+
+			<div class="col-md-2">
+				<g:render template="sideBar"/>
+			</div>
+			
+			<div class="col-md-10">
 				
-				<div class="row">
-					
-						<div class="col-md-12 ">
-							<div class="btn-group">
-								<input type='text' class="form-control" id="filtro" placeholder="Filtrar"  autofocus="on">
-							</div>
-							
-							
-							<div class="btn-group toolbar-panel">
-				                <button type="button" name="operaciones"
-				                	class="btn btn-default dropdown-toggle" data-toggle="dropdown"
-				                    role="menu">
-				                    <i class="fa fa-upload"></i> Operaciones <span class="caret"></span>
-								</button>
-				                <ul class="dropdown-menu">
-									<li>
-								    	<g:link action="create" class="">
-											<span class="glyphicon glyphicon-plus"></span> Nuevo 
-										</g:link>
-				                	</li>
-								</ul>
-							</div>
-
-							<div class="btn-group">
-							    <button type="button" name="reportes"
-							            class="btn btn-default dropdown-toggle" data-toggle="dropdown"
-							            role="menu">
-							            Consultas <span class="caret"></span>
-							    </button>
-
-							    <ul class="dropdown-menu">
-							        
-							    </ul>
-							</div>
-
-							<div class="btn-group">
-							    <button type="button" name="reportes"
-							            class="btn btn-default dropdown-toggle" data-toggle="dropdown"
-							            role="menu">
-							            Tableros <span class="caret"></span>
-							    </button>
-
-							    <ul class="dropdown-menu">
-							        
-							    </ul>
-							</div>
-
-							<div class="btn-group">
-							    <button type="button" name="reportes"
-							            class="btn btn-default dropdown-toggle" data-toggle="dropdown"
-							            role="menu">
-							            Reportes <span class="caret"></span>
-							    </button>
-
-							    <ul class="dropdown-menu">
-							        
-							    </ul>
-							</div>
-						</div>
-					
-				</div><!-- end .row toolbar -->
+				
 				<table id="grid" class="table table-striped table-bordered table-condensed ">
 					<thead>
 						<tr class="text-center">
@@ -108,6 +34,7 @@
 							<td>Cierre</td>
 							<td>Salida</td>
 							<td>Regreso</td>
+							<td>Comentario</td>
 						</tr>
 					</thead>
 					<tbody>
@@ -116,9 +43,10 @@
 								<td>${fieldValue(bean:row,field:"documento")}</td>
 								<td>${fieldValue(bean:row,field:"chofer")}</td>
 								<td><g:formatDate date="${row.fecha}" format="dd/MM"/></td>
-								<td><g:formatDate date="${row.cerrado}" format="HH:MM (MM/dd)"/></td>
-								<td><g:formatDate date="${row.salida}" format="HH:MM (MM/dd)"/></td>
-								<td><g:formatDate date="${row.regreso}" format="HH:MM (MM/dd)"/></td>
+								<td><g:formatDate date="${row.cerrado}" format="HH:mm (MM/dd)"/></td>
+								<td><g:formatDate date="${row.salida}" format="HH:mm (MM/dd)"/></td>
+								<td><g:formatDate date="${row.regreso}" format="HH:mm (MM/dd)"/></td>
+								<td>${fieldValue(bean:row,field:"comentario")}</td>
 							</tr>
 						</g:each>
 					</tbody>

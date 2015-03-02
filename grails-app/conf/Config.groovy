@@ -133,7 +133,9 @@ log4j.main = {
             
             debug 'grails.app.jobs.com.luxsoft.sx4.distribucion.ImportadorDeSurtidoJob'
             info  'grails.app.jobs.com.luxsoft.sx4.distribucion.ImportadorDeEmbarquesJob'
+            info  'grails.app.jobs.com.luxsoft.sx4.distribucion.ActualizarEmbarquesJobJob'
             //info file: 'grails.apps.jobs'
+
           }
             
           production{
@@ -200,6 +202,6 @@ environments{
     
 }
 
-
+grails.plugins.twitterbootstrap.fixtaglib = true
 
 
