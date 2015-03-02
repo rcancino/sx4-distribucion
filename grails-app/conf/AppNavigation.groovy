@@ -18,8 +18,8 @@ def isAdmin = { ->
 
 navigation={
 	user{
-		
-		
+
+		home(action:'administracion'){}
 		surtido(controller:'surtido',action:'porEntregarAnalisis'){
 			pendientes(){}
 			porEntregar(){}
@@ -28,10 +28,17 @@ navigation={
 		corte(controller:'corte',action:'index'){
 
 		}
-		embarque(){
+		embarque(controller:'embarque',action:'index'){
 
 		}
-		tableros(controller:'tablero',action:'index'){}
+		tableros(controller:'tablero',action:'index'){
+			global(){}
+			surtido(){}
+			corte(){}
+			empaque(){}
+			entregas(){}
+			embarques(){}
+		}
 		
 	}
 

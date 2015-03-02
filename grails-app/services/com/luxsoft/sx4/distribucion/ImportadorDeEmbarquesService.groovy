@@ -6,7 +6,7 @@ import grails.transaction.NotTransactional
 import groovy.sql.Sql
 
 
-@Transactional
+
 class ImportadorDeEmbarquesService {
 
 	static transactional = false
@@ -81,7 +81,7 @@ class ImportadorDeEmbarquesService {
 
     """
 
-	@NotTransactional
+	
     def importar(Date fecha) {
         log.debug 'Importando embarques para '+fecha.format('dd/MM/yyyy')
         def db = new Sql(dataSource_importacion)
@@ -99,7 +99,7 @@ class ImportadorDeEmbarquesService {
                     embarque.addToPartidas(entrega)
                 }
                 embarque.save(flush:true,failOnError:true)
-                event('registroDeembarque', embarque)
+                event('altaDeEmbarque', embarque)
             }
         }
             

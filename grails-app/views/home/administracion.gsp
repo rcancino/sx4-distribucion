@@ -23,7 +23,8 @@
 				      <span class="caret"></span>
 				      <span class="sr-only">Toggle Dropdown</span>
 				    </button>
-				    <ul class="dropdown-menu" role="menu">
+				    <nav:primary class="dropdown-menu" scope="user/tableros"/>
+				    %{-- <ul class="dropdown-menu" role="menu">
 				      <li><a href="#">Global</a></li>
 				      <li><a href="#">Surtido</a></li>
 				      <li><a href="#">Corte</a></li>
@@ -31,7 +32,7 @@
 				      <li><a href="#">Entregas</a></li>
 				      <li class="divider"></li>
 				      <li><a href="#">Global Embarques</a></li>
-				    </ul>
+				    </ul> --}%
 				  </div>
 				  	
 				  	

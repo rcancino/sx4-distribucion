@@ -10,7 +10,7 @@ class ImportadorDeEmbarquesJob {
     
     
     static triggers = {
-      simple name: 'normalTrigger', startDelay: 60000, repeatInterval: 30000
+      simple name: 'normalTrigger', startDelay: 60000, repeatInterval: 60000*5
     }
 
     def group = "DistribucionGroup"

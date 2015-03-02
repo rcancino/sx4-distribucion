@@ -64,7 +64,7 @@
 									${org.apache.commons.lang.StringUtils.substring(row.surtido.nombre,0,20)}
 									</abbr>
 								</td>
-								<td>${fieldValue(bean:row,field:"formaDeEntrega")}</td>
+								<td>${fieldValue(bean:row,field:"surtido.formaDeEntrega")}</td>
 								<td><g:formatNumber number="${row.surtido.pedido}" format="####"/></td>
 								<td><g:formatDate date="${row.surtido.fecha}" format="dd/MM"/></td>
 								<td>${fieldValue(bean:row,field:"surtido.venta")}</td>
