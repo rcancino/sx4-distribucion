@@ -31,7 +31,7 @@
 							<td>Folio</td>
 							<td>Chofer</td>
 							<td>Fecha</td>
-							<td>Cierre</td>
+							%{-- <td>Cierre</td> --}%
 							<td>Salida</td>
 							<td>Regreso</td>
 							<td>Comentario</td>
@@ -43,7 +43,7 @@
 								<td>${fieldValue(bean:row,field:"documento")}</td>
 								<td>${fieldValue(bean:row,field:"chofer")}</td>
 								<td><g:formatDate date="${row.fecha}" format="dd/MM"/></td>
-								<td><g:formatDate date="${row.cerrado}" format="HH:mm (MM/dd)"/></td>
+								%{-- <td><g:formatDate date="${row.cerrado}" format="HH:mm (MM/dd)"/></td> --}%
 								<td><g:formatDate date="${row.salida}" format="HH:mm (MM/dd)"/></td>
 								<td><g:formatDate date="${row.regreso}" format="HH:mm (MM/dd)"/></td>
 								<td>${fieldValue(bean:row,field:"comentario")}</td>

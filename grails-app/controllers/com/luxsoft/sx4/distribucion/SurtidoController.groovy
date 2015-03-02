@@ -13,6 +13,11 @@ class SurtidoController {
 
     def importacionService
 
+    def afterInterceptor = { model ->
+        if(model.fechaDeSurtido==null)
+            model.fechaDeSurtido=new Date()
+    }
+
     @Secured(['permitAll'])
     def index(Integer max) {
         params.max = Math.min(max ?: 20, 100)
@@ -128,6 +133,8 @@ class SurtidoController {
     }
 
 
+
+
     @Secured(["hasAnyRole('GERENTE')"])
     def porEntregarAnalisis() {
         params.sort='pedidoCreado'
@@ -146,6 +153,25 @@ class SurtidoController {
         def query=Surtido.where{entregado!=null}
         respond query.list(params), model:[surtidoInstanceCount:query.count()]
     }
+
+     @Secured(["hasAnyRole('GERENTE')"])
+    def resumen(Date fecha) {
+        params.sort='pedidoCreado'
+        params.order='asc'
+        if(fecha==null) fecha=new Date()
+        [surtidoInstanceList:Surtido.findAllByFecha(fecha),surtidoInstanceCount:Surtido.countByFecha(fecha,params)]
+    }
+
+    @Secured(["hasAnyRole('GERENTE')"])
+    def porDia(Date fecha,Integer max){
+      params.max = Math.min(max ?: 20, 100)
+      params.sort='pedidoCreado'
+      params.order='asc'
+      fecha=Date.parse('dd/MM/yyyy','24/02/2015')
+      [surtidoInstanceList:Surtido.findAllByFecha(fecha),surtidoInstanceCount:Surtido.countByFecha(fecha,params)]
+    }
+
+
     
 }
 

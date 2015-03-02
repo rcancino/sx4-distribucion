@@ -1,4 +1,4 @@
-<div class="panel panel-success">
+<div class="panel panel-info">
   
 	<div class="panel-heading">
 		<h3 class="panel-title">Consultas</h3>
@@ -19,7 +19,7 @@
 </div>
 
 
-<div class="panel panel-warning">
+<div class="panel panel-info">
 	<div class="panel-heading">
 		<h3 class="panel-title">Operaciones</h3>
 	</div>

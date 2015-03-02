@@ -24,6 +24,12 @@ navigation={
 			pendientes(){}
 			porEntregar(){}
 			entregados(){}
+			consultas(controller:'surtido'){
+				resumen(action:'resumen',titleText:'General')
+				porDia()
+				porSurtidor()
+				porSucursal()
+			}
 		}
 		corte(controller:'corte',action:'index'){
 
@@ -50,6 +56,7 @@ navigation={
 	surtidor{
 		pendientes(controller:'surtido'){}
 		porEntregar(controller:'surtido'){}
+
 		
 	}
 	cortador{
