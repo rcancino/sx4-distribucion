@@ -21,7 +21,7 @@ class ImportadorDeSurtidoService {
 	
 
     String SQL_DETALLE="""
-		select clave as producto,descripcion,cantidad,pedidodet_id as origen from sx_pedidosdet p 
+		select clave as producto,descripcion,cantidad,factoru as factor,kilos,pedidodet_id as origen from sx_pedidosdet p
     	where p.pedido_id=? 
     """
 

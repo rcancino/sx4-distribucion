@@ -13,6 +13,8 @@ class SurtidoDet {
 	BigDecimal cantidad
 	BigDecimal entregado=0 //? confunde no es necesaria
 	BigDecimal pendiente=0 //? confunde no es necesaria
+	BigDecimal factor
+	BigDecimal kilos
 	
 	Date fechaHora
 
@@ -33,5 +35,7 @@ class SurtidoDet {
     	fechaHora nullable:true
     	corte nullable:true
     	sectores nullable:true
+    	factor nullable:true,scale:3
+    	kilos nullable:true,scale:3
     }
 }

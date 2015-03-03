@@ -53,6 +53,8 @@ class Surtido {
 
     Boolean empacadoTerminado
 
+    String clase
+
 	static hasMany = [partidas: SurtidoDet]
 
 
@@ -70,6 +72,7 @@ class Surtido {
         venta nullable:true,maxSize:20
         tipoDeVenta nullable:true,maxSize:10
         formaDeEntrega nullable:true,maxSize:10
+        clase nullable:true,maxSize:10
     }
 
     static mapping = {
