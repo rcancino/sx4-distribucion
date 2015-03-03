@@ -48,7 +48,7 @@ class ImportadorDeSurtidoService {
     def SQL_FACTURADOS="""
     	select 	'PFC' AS forma,s.nombre as sucursal,p.folio as pedido,v.clave as cliente,v.nombre as nombre,date(p.fecha) as fecha
 		,p.MODIFICADO_USR as vendedor,v.modificado as facturado,p.creado as pedidoCreado,p.PEDIDO_ID as origen
-		,'ORDINARIO' as tipo,p.fentrega as fechaEntrega,p.puesto,p.tpuesto as fechaPuesto,p.parcial
+		,'ORDINARIO' as tipo,p.fentrega as formaDeEntrega,p.puesto,p.tpuesto as fechaPuesto,p.parcial
 		,v.docto as venta,v.origen as tipoDeVenta
 		from sx_ventas v
 		join sx_pedidos p on v.pedido_id=p.pedido_id
@@ -59,7 +59,7 @@ class ImportadorDeSurtidoService {
     def SQL_PUESTOS="""
     	select 	'PST' AS forma,s.nombre as sucursal,p.folio as pedido,v.clave as cliente,v.nombre as nombre,date(p.fecha) as fecha
 		,p.MODIFICADO_USR as vendedor,v.modificado as facturado,p.creado as pedidoCreado,p.PEDIDO_ID as origen
-		,'ORDINARIO' as tipo,p.fentrega as fechaEntrega,p.puesto,p.tpuesto as fechaPuesto,p.parcial
+		,'ORDINARIO' as tipo,p.fentrega as formaDeEntrega,p.puesto,p.tpuesto as fechaPuesto,p.parcial
 		,v.docto as venta,v.origen as tipoDeVenta
 		from sx_pedidos p
 		left join sx_ventas v on v.pedido_id=p.pedido_id
