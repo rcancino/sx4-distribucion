@@ -75,7 +75,6 @@ class Surtido {
         venta nullable:true,maxSize:20
         tipoDeVenta nullable:true,maxSize:10
         forma nullable:true,maxSize:10
-        clase nullable:true,maxSize:10
         fechaPuesto nullable:true
 
     }
