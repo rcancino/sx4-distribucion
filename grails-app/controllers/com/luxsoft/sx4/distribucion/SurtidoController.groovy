@@ -6,6 +6,7 @@ import static org.springframework.http.HttpStatus.*
 import grails.transaction.Transactional
 import org.springframework.security.access.annotation.Secured
 import com.luxsoft.sx4.sec.Usuario
+import grails.converters.JSON
 
 @Transactional(readOnly = true)
 @Secured(['IS_AUTHENTICATED_REMEMBERED'])
@@ -170,6 +171,73 @@ class SurtidoController {
       fecha=Date.parse('dd/MM/yyyy','24/02/2015')
       [surtidoInstanceList:Surtido.findAllByFecha(fecha),surtidoInstanceCount:Surtido.countByFecha(fecha,params)]
     }
+
+    
+
+    def getResumenPorDiaAsJSON(){
+       def map=[:]
+       map['Pendientes']=5
+       map['Por Surtir']=5
+       map['Por Cortar']=3
+       map['En Corte']=8
+       def res= map as JSON
+       render res
+    }
+
+    def getStatusPorDiaAsJSON(){
+      def map=[:]
+      map['Pendientes']=5
+      map['Por Surtir']=5
+      map['Por Entregar']=3
+      def res= map as JSON
+      render res
+    }
+
+    def getStatusDeCorteAsJSON(){
+      log.info 'Calculando status de cortes '+params
+      def map=[:]
+      //map['Pendientes']=4
+      map['Cortando']=5
+      map['Por Empacar']=5
+      map['Por Entregar']=3
+      def res= map as JSON
+      render res
+    }
+
+    /*
+    def getClientesJSON() {
+
+      
+
+      def list=Cliente.findAllByNombreIlike("%"+params.term+"%",[max:10,sort:"nombre",order:"desc"])
+
+      
+      list=list.collect{ c->
+        def nombre="$c.nombre"
+        def direccion=[calle:c.direccion?.calle?:'']
+        direccion.numeroInterior=c.direccion?.numeroInterior?:''
+        direccion.numeroExterior=c.direccion?.numeroExterior?:''
+        direccion.colonia=c.direccion?.colonia?:''
+
+        def jsonDir=direccion as JSON
+        //println 'Direccion: '+jsonDir
+        jsonDir.toString()
+
+        [id:c.id,
+        label:nombre,
+        value:nombre,
+        nombre:nombre,
+        rfc:c.rfc,
+        //direccion:jsonDir,
+        emailCfdi:c.emailCfdi,
+        direccion:jsonDir
+        ]
+      }
+      def res=list as JSON
+      
+      render res
+    }
+    */
 
 
     
