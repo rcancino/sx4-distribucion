@@ -48,7 +48,7 @@ class ImportadorDeSurtidoService {
     def SQL_FACTURADOS="""
     	select 	'PFC' AS forma,s.nombre as sucursal,p.folio as pedido,v.clave as cliente,v.nombre as nombre,date(p.fecha) as fecha
 		,p.MODIFICADO_USR as vendedor,v.modificado as facturado,p.creado as pedidoCreado,p.PEDIDO_ID as origen
-		,'ORDINARIO' as tipo,p.fentrega,p.puesto,p.tpuesto,p.parcial
+		,'ORDINARIO' as tipo,p.fentrega as fechaEntrega,p.puesto,p.tpuesto as fechaPuesto,p.parcial
 		,v.docto as venta,v.origen as tipoDeVenta
 		from sx_ventas v
 		join sx_pedidos p on v.pedido_id=p.pedido_id
@@ -59,7 +59,7 @@ class ImportadorDeSurtidoService {
     def SQL_PUESTOS="""
     	select 	'PST' AS forma,s.nombre as sucursal,p.folio as pedido,v.clave as cliente,v.nombre as nombre,date(p.fecha) as fecha
 		,p.MODIFICADO_USR as vendedor,v.modificado as facturado,p.creado as pedidoCreado,p.PEDIDO_ID as origen
-		,'ORDINARIO' as tipo,p.fentrega,p.puesto,p.tpuesto,p.parcial
+		,'ORDINARIO' as tipo,p.fentrega as fechaEntrega,p.puesto,p.tpuesto as fechaPuesto,p.parcial
 		,v.docto as venta,v.origen as tipoDeVenta
 		from sx_pedidos p
 		left join sx_ventas v on v.pedido_id=p.pedido_id
@@ -70,7 +70,7 @@ class ImportadorDeSurtidoService {
     def SQL_TRASLADOS="""
     	select 	'TRD' AS forma,s.nombre as sucursal,p.documento as pedido,1 as cliente,p.MODIFICADO_USR as nombre,date(p.fecha) as fecha
 		,p.MODIFICADO_USR as vendedor,P.modificado as facturado,p.creado as pedidoCreado,p.TRASLADO_ID as origen
-		,'TRASLADO' as tipo,'ENVIO' as fentrega,true as puesto,p.fecha as tpuesto,false as parcial
+		,'TRASLADO' as tipo,'ENVIO' as fentrega as fechaEntrega,true as puesto,p.fecha as tpuesto,false as parcial
 		,p.DOCUMENTO as venta,'TRS' as tipoDeVenta
 		from sx_traslados p
 		join sw_sucursales s on P.SUCURSAL_ID=s.SUCURSAL_ID

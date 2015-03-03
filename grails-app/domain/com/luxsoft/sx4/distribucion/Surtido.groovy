@@ -53,7 +53,10 @@ class Surtido {
 
     Boolean empacadoTerminado
 
-    String clase
+    String forma
+
+    Boolean puesto
+    Date fechaPuesto
 
 	static hasMany = [partidas: SurtidoDet]
 
@@ -62,7 +65,7 @@ class Surtido {
     	cliente maxSize:20
     	nombre()
     	sucursal maxSize:20
-    	tipo inList:['ORDINARIO','PARCIAL']
+    	tipo inList:['ORDINARIO','PARCIAL','TRASLADO']
     	asignado nullable:true,maxSize:50
     	iniciado nullable:true
     	corteInicio nullable:true
@@ -71,8 +74,10 @@ class Surtido {
     	entregado nullable:true
         venta nullable:true,maxSize:20
         tipoDeVenta nullable:true,maxSize:10
-        formaDeEntrega nullable:true,maxSize:10
+        forma nullable:true,maxSize:10
         clase nullable:true,maxSize:10
+        fechaPuesto nullable:true
+
     }
 
     static mapping = {
