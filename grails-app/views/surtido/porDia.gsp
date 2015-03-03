@@ -4,6 +4,8 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="layout" content="application"/>
+	<asset:stylesheet src="datatables/dataTables.css"/>
+	<asset:javascript src="datatables/dataTables.js"/> 
 	<title>Surtido de pedidos</title>
 </head>
 <body>
@@ -28,9 +30,14 @@
 			<div class="col-md-10">
 
 				
-				<table class="table table-striped table-bordered table-condensed ">
+				<table id="grid" class="table table-striped table-bordered table-condensed ">
 					<thead>
 						<tr >
+							<th colspan="7"></th>
+							<th colspan="3" class="text-center">Corte</th>
+							<th colspan="4" class="text-center">Surtido</th>
+						</tr>
+						<tr>
 							<th>Cliente</th>
 							<th>Pedido</th>
 							<th>Venta</th>
@@ -38,29 +45,16 @@
 							<th>T</th>
 							<th>Tipo</th>
 							<th>Creado</th>
-							<th>Iniciado</th>
-							<th colspan="3" class="text-center">Corte</th>
-							
-							<th colspan="4" class="text-center">Surtido</th>
+							<th>Inicio</th>
+							<th>Fin</th>
+							<th>Entregado</th>
+							<th>Id</th>
+							<th>Partidas</th>
+							<th>Kilos</th>
+							<th>Cortes</th>
 						</tr>
 					</thead>
-					<thead>
-						<th></th>
-						<th></th>
-						<th></th>
-						<th></th>
-						<th></th>
-						<th></th>
-						<th></th>
-						<th></th>
-						<th>Corte Inicio</th>
-						<th>Corte Fin</th>
-						<th>Enregado</th>
-						<th>Id</th>
-						<th>Partidas</th>
-						<th>Kilos</th>
-						<th>Cortes</th>
-					</thead>
+					
 					<tbody>
 						<g:each in="${surtidoInstanceList}" var="row">
 							<tr >
@@ -74,7 +68,8 @@
 								<td><g:formatDate date="${row.fecha}" format="dd/MM/yyyy"/></td>
 								<td>${fieldValue(bean:row,field:"tipoDeVenta")}</td>
 								<td>${fieldValue(bean:row,field:"tipo")[0..0]}</td>
-								<td><g:formatDate date="${row.fecha}" format="HH:mm"/></td>
+
+								
 								<td><g:formatDate date="${row.iniciado}" format="HH:mm"/></td>
 								<td><g:formatDate date="${row.corteInicio}" format="HH:mm"/></td>
 								<td><g:formatDate date="${row.corteFin}" format="HH:mm"/></td>
@@ -82,42 +77,10 @@
 
 								<td><g:formatNumber number="${row.id}" format="####"/></td>
 								<td><g:formatNumber number="${row.partidas.size()}" format="####"/></td>
-								<td><g:formatNumber number="${0}" format="####"/></td>
+								<td>0</td>
 								<td><g:formatNumber number="${row.getCortes()}" format="####"/></td>
 
 								
-								%{-- <td>
-									<abbr title="${row.nombre}">
-									${org.apache.commons.lang.StringUtils.substring(row.nombre,0,20)}
-									</abbr>
-								</td>
-								
-								
-								
-								
-								<td><g:formatNumber number="${row.partidas.size()}" format="####"/></td>
-								<td>
-									<g:if test="${row.cortes}"><i class="fa fa-scissors"></i></g:if>
-								</td>
-								<td>
-									<g:formatDate date="${row.iniciado}" format="HH:MM"/>
-								</td>
-								<td>${fieldValue(bean:row,field:"asignado")}</td>
-
-								<td>
-									<g:if test="${row.cortes}">
-										<g:formatDate date="${row.corteInicio}" format="HH:MM"/>
-									</g:if>
-									<g:else>
-										0
-									</g:else>
-								</td>
-								<td>PEND</td>
-								<td><g:formatNumber number="${row.cortes}" format="####"/></td>
-
-								<td>${fieldValue(bean:row,field:"entrego")}</td>
-								<td><g:formatDate date="${row.entregado}" format="hh:MM (dd/MM)"/></td>
-								<td>PEND</td> --}%
 								
 							</tr>
 						</g:each>
@@ -133,7 +96,36 @@
 
 	</div><!-- end .container-->
 
-	
+	<script type="text/javascript">
+		$(function(){
+
+	    	$('#grid').dataTable( {
+	        	"paging":   false,
+	        	"ordering": false,
+	        	"info":     false
+	        	,"dom": '<"toolbar col-md-4">rt<"bottom"lp>'
+	    	} );
+	    	var table = $('#grid').DataTable();
+	    	$("#filtro").on('keyup',function(e){
+	    		$('#grid').DataTable().search($(this).val()).draw();
+	    	});
+	    	/*
+			$("#nombreField").autocomplete({
+				source:'<g:createLink controller="socio" action="getSociosJSON"/>',
+				minLength:3,
+				select:function(e,ui){
+					console.log('Valor seleccionado: '+ui.item.id);
+					$("#nombreField").val(ui.item.id);
+					$("#id").val(ui.item.id);
+					var button=$("#buscarBtn");
+	    			button.removeAttr('disabled');
+				}
+			});
+			*/
+			
+			
+		});
+	</script>
 
 </body>
 

@@ -70,7 +70,7 @@
 	        	,"dom": '<"toolbar col-md-4">rt<"bottom"lp>'
 	    	} );
 	    	var table = $('#grid').DataTable();
-	    	$("#filterField").on('keyup',function(e){
+	    	$("#filtro").on('keyup',function(e){
 	    		$('#grid').DataTable().search($(this).val()).draw();
 	    	});
 	    	/*
