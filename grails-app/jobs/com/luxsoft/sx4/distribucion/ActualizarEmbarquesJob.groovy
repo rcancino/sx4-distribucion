@@ -10,22 +10,32 @@ class ActualizarEmbarquesJob {
     def importadorDeEmbarquesService
     
     static triggers = {
-      simple name: 'normalTrigger', startDelay: 60000, repeatInterval: 300000
+      //simple name: 'normalTrigger', startDelay: 60000, repeatInterval: 300000
+      cron cronExpression:"0 0/5 8-17 ? * MON-SAT"
     }
 
-    def group = "Embarques"
+    def group = "sx4-importadores"
+
   	def description = "Actualiza embarques importados desde SIIPAP SW2"
   	def concurrent = false
 
-    def execute(JobExecutionContext context) {
-    	try {
-    		def fecha=new Date()
-    		def time=fecha.format('dd/MM/yyyy HH:mm:ss')
-    		log.info "Actualizando embarques JOB :$time"
-    		importadorDeEmbarquesService.actualizar(fecha)
-    	}catch(Exception e) {
-    		log.error e
-    	}
+    def execute(context) {
+        try {
+            println 'Actualizando embarqes .......'
+            def counter = context.jobDetail.jobDataMap['counter'] ?: 0
+            counter++
+            def fecha=new Date()
+            def time=fecha.format('dd/MM/yyyy HH:mm:ss')
+            log.info "Actualizando embarques ($counter)  $time las time: "+context.jobDetail.jobDataMap['lastJob']
+            importadorDeEmbarquesService.actualizar(fecha)
+            context.jobDetail.jobDataMap['counter'] = counter
+            def end=new Date()
+            context.jobDetail.jobDataMap['lastJob'] = end
+            log.info "Actualizacion terminada $end"
+        }catch(Exception e) {
+            e.printStackTrace()
+            log.error e
+        }
         
     }
 

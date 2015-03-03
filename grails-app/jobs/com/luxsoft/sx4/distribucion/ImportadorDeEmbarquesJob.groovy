@@ -10,27 +10,33 @@ class ImportadorDeEmbarquesJob {
     
     
     static triggers = {
-      simple name: 'normalTrigger', startDelay: 60000, repeatInterval: 300000
+      //simple name: 'normalTrigger', startDelay: 60000, repeatInterval: 300000
+      cron cronExpression:"0 0/5 8-17 ? * MON-SAT"
     }
 
-    def group = "Embarques"
-  	def description = "Importa  embarques desde el Siipap SW2"
-  	def concurrent = false
+    def group = "sx4-importadores"
 
-    def execute(JobExecutionContext context) {
-    	try {
-    		def map = context.getJobDetail().getJobDataMap()
+  	def description = "Importa  embarques desde el Siipap SW2"
+  	
+    def concurrent = false
+
+    def execute(context) {
+
+        try {
+            def counter = context.jobDetail.jobDataMap['counter'] ?: 0
+            counter++
+            def fecha=new Date()
+            def time=fecha.format('dd/MM/yyyy HH:mm:ss')
+            log.info "Importando embarques ($counter)  $time las time: "+context.jobDetail.jobDataMap['lastJob']
+            importadorDeEmbarquesService.importar(fecha)
             
-            def count=map.count?:1
-    		def fecha=new Date()
-    		def time=fecha.format('dd/MM/yyyy HH:mm:ss')
-    		log.info "Importando Embarques $time ($count)"
-    		importadorDeEmbarquesService.importar(fecha)
-    		map.count=count++
-    		
-    	}catch(Exception e) {
-    		log.error e
-    	}
+            context.jobDetail.jobDataMap['counter'] = counter
+            def end=new Date()
+            context.jobDetail.jobDataMap['lastJob'] = end
+            log.info "Importacion terminada $end"
+        }catch(Exception e) {
+            log.error e
+        }
         
     }
 

@@ -18,7 +18,21 @@ class ImportadorDeSurtidoService {
 
 	def dataSource_importacion
 
-	def SQL_MESTREO="""
+	
+
+    String SQL_DETALLE="""
+		select clave as producto,descripcion,cantidad,pedidodet_id as origen from sx_pedidosdet p 
+    	where p.pedido_id=? 
+    """
+
+    String SQL_SECTORES="""
+    	select s.sector
+    	from SX_SECTORDET D join SX_SECTOR S on(s.sector_id=d.sector_id)
+    	where d.clave=?
+    """
+   
+
+    def SQL_MESTREO="""
     	select 
 		s.nombre as sucursal,p.folio as pedido,v.clave as cliente,v.nombre as nombre,date(v.creado) as fecha
 		,p.MODIFICADO_USR as vendedor,v.modificado as facturado,p.creado as pedidoCreado,p.PEDIDO_ID as origen
@@ -31,24 +45,49 @@ class ImportadorDeSurtidoService {
 		where s.nombre=:sucursal and date(v.fecha)=:fecha
     """
 
-    String SQL_DETALLE="""
-		select clave as producto,descripcion,cantidad,pedidodet_id as origen from sx_pedidosdet p 
-    	where p.pedido_id=? 
+    def SQL_FACTURADOS="""
+    	select 	'PFC' AS forma,s.nombre as sucursal,p.folio as pedido,v.clave as cliente,v.nombre as nombre,date(p.fecha) as fecha
+		,p.MODIFICADO_USR as vendedor,v.modificado as facturado,p.creado as pedidoCreado,p.PEDIDO_ID as origen
+		,'ORDINARIO' as tipo,p.fentrega,p.puesto,p.tpuesto,p.parcial
+		,v.docto as venta,v.origen as tipoDeVenta
+		from sx_ventas v
+		join sx_pedidos p on v.pedido_id=p.pedido_id
+		join sw_sucursales s on v.SUCURSAL_ID=s.SUCURSAL_ID
+		where s.nombre=:sucursal and date(v.fecha)=:fecha and p.puesto is false
     """
 
-    String SQL_SECTORES="""
-    	select s.sector
-    	from SX_SECTORDET D join SX_SECTOR S on(s.sector_id=d.sector_id)
-    	where d.clave=?
+    def SQL_PUESTOS="""
+    	select 	'PST' AS forma,s.nombre as sucursal,p.folio as pedido,v.clave as cliente,v.nombre as nombre,date(p.fecha) as fecha
+		,p.MODIFICADO_USR as vendedor,v.modificado as facturado,p.creado as pedidoCreado,p.PEDIDO_ID as origen
+		,'ORDINARIO' as tipo,p.fentrega,p.puesto,p.tpuesto,p.parcial
+		,v.docto as venta,v.origen as tipoDeVenta
+		from sx_pedidos p
+		left join sx_ventas v on v.pedido_id=p.pedido_id
+		join sw_sucursales s on p.SUCURSAL_ID=s.SUCURSAL_ID
+		where s.nombre=:sucursal and date(v.fecha)=:fecha and p.puesto is true
     """
 
-	def importar(Date fecha){
+    def SQL_TRASLADOS="""
+    	select 	'TRD' AS forma,s.nombre as sucursal,p.documento as pedido,1 as cliente,p.MODIFICADO_USR as nombre,date(p.fecha) as fecha
+		,p.MODIFICADO_USR as vendedor,P.modificado as facturado,p.creado as pedidoCreado,p.TRASLADO_ID as origen
+		,'TRASLADO' as tipo,'ENVIO' as fentrega,true as puesto,p.fecha as tpuesto,false as parcial
+		,p.DOCUMENTO as venta,'TRS' as tipoDeVenta
+		from sx_traslados p
+		join sw_sucursales s on P.SUCURSAL_ID=s.SUCURSAL_ID
+		where s.nombre=:sucursal and date(p.fecha)=:fecha
+    """
+
+
+    def importar(Date fecha){
+		importarFacturados fecha
+	}
+
+	def importarFacturados(Date fecha){
+		log.debug "Importando pedidos facturados del "+fecha.format('dd/MM/yyyy')
 		def sucursal=findSucursal()
-		log.debug 'Importando surtidos para '+fecha.format('dd/MM/yyyy')+ " Sucursal: "+sucursal
-		
+		assert sucursal,'No hay sucursal registrada'
 		def db = new Sql(dataSource_importacion)
-		db.eachRow( [sucursal:sucursal,fecha:Sql.DATE(fecha)],SQL_MESTREO) { row->
-			//println 'Procesando: '+row
+		db.eachRow( [sucursal:sucursal,fecha:Sql.DATE(fecha)],SQL_FACTURADOS) { row->
 			def surtido=Surtido.findByOrigen(row.origen)
 			if(!surtido){
 				surtido=new Surtido(row.toRowResult())
@@ -60,7 +99,6 @@ class ImportadorDeSurtidoService {
 						,origen:det.origen)
 				}
 				surtido.partidas.each{ sdet->
-					//Buscar sectores
 					def sectores=db.rows(SQL_SECTORES,[sdet.producto])
 					sdet.sectores=sectores.collect{it.sector}.join(',')
 
@@ -72,16 +110,11 @@ class ImportadorDeSurtidoService {
 				surtido.facturado=row.facturado
 				surtido.save(flush:true,failOnError:true)
 			}
-			
 		}
 
-		
 	}
 
-
-    
-
-    String findSucursal(){
+	 String findSucursal(){
     	grailsApplication.config.luxor.sx4.sucursal
     }
 
