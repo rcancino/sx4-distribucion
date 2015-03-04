@@ -80,6 +80,8 @@ class ImportadorDeSurtidoService {
 
     def importar(Date fecha){
 		importarFacturados fecha
+		importarPuestos fecha
+		importarTraslados fecha
 	}
 
 	def importarFacturados(Date fecha){
