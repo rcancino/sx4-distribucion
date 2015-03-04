@@ -11,7 +11,7 @@ class ActualizarEmbarquesJob {
     
     static triggers = {
       //simple name: 'normalTrigger', startDelay: 60000, repeatInterval: 300000
-      cron cronExpression:"0 0/5 8-17 ? * MON-SAT"
+      cron cronExpression:"0 0/5 8-19 ? * MON-SAT"
     }
 
     def group = "sx4-importadores"
@@ -26,12 +26,12 @@ class ActualizarEmbarquesJob {
             counter++
             def fecha=new Date()
             def time=fecha.format('dd/MM/yyyy HH:mm:ss')
-            log.info "Actualizando embarques ($counter)  $time las time: "+context.jobDetail.jobDataMap['lastJob']
+            log.debug "Actualizando embarques ($counter)  $time las time: "+context.jobDetail.jobDataMap['lastJob']
             importadorDeEmbarquesService.actualizar(fecha)
             context.jobDetail.jobDataMap['counter'] = counter
             def end=new Date()
             context.jobDetail.jobDataMap['lastJob'] = end
-            log.info "Actualizacion terminada $end"
+            //log.debug "Actualizacion terminada $end"
         }catch(Exception e) {
             e.printStackTrace()
             log.error e

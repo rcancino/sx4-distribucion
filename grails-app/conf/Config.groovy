@@ -1,3 +1,5 @@
+import org.apache.log4j.*
+
 // locations to search for config files that get merged into the main config;
 // config files can be ConfigSlurper scripts, Java properties files, or classes
 // in the classpath in ConfigSlurper format
@@ -101,16 +103,17 @@ log4j.main = {
     // Example of changing the log pattern for the default console appender:
     //
     appenders {
-        console name:'stdout', layout:pattern(conversionPattern: '%c{2} %m%n')
-        file name:'file', file:System.properties['user.home']  + '/.grails/sx4-distribucio.log',
+        console name:'stdout', layout:pattern(conversionPattern: '%-5p [%c{1}] %m%n')
+        file name:'file', file:System.properties['user.home']  + '/.grails/sx4-distribucion.log',
              layout: pattern(conversionPattern: '%-5p [%t] %c{1}: %m%n')
-        rollingFile name:'sx4FileAppender',
-                    maxFileSize:1024,
-                    file:System.properties['user.home']  + '/.grails/sx4-distribucio.log',
+        rollingFile name:'importacionLog',
+                    maxFileSize:'1MB',
+                    file:System.properties['user.home']  + '/.grails/sx4-importadores.log',
                     maxBackupIndex:7,
-                    layout: pattern(conversionPattern: '%-5p [%t] %c{1}: %m%n')
+                    layout: pattern(conversionPattern: '%-5p %d{DATE} [%c{1}] %m%n')
 
     }
+    
 
     error  'org.codehaus.groovy.grails.web.servlet',        // controllers
            'org.codehaus.groovy.grails.web.pages',          // GSP
@@ -129,12 +132,16 @@ log4j.main = {
           development{
             info 'grails.app.controllers'
             info 'grails.app.controllers.com.luxsoft.sx4'
+            
             info 'grails.app.services.com.luxsoft.sx4.distribucion'
             
-            info  'grails.app.jobs.com.luxsoft.sx4.distribucion.ImportadorDeSurtidoJob'
-            info  'grails.app.jobs.com.luxsoft.sx4.distribucion.ImportadorDeEmbarquesJob'
-            info  'grails.app.jobs.com.luxsoft.sx4.distribucion.ActualizarEmbarquesJob'
-            //info file: 'grails.apps.jobs'
+            debug  importacionLog:'grails.app.services.com.luxsoft.sx4.distribucion.ImportadorDeSurtidoService'
+            debug  importacionLog:'grails.app.services.com.luxsoft.sx4.distribucion.ImportadorDeEmbarquesService'
+            debug  'grails.app.jobs.com.luxsoft.sx4.distribucion.ImportadorDeSurtidoJob'
+            debug  'grails.app.jobs.com.luxsoft.sx4.distribucion.ImportadorDeEmbarquesJob'
+            debug  'grails.app.jobs.com.luxsoft.sx4.distribucion.ActualizarEmbarquesJob'
+            debug  importacionLog:'grails.app.jobs.com.luxsoft.sx4.distribucion'
+            
 
           }
             
@@ -142,7 +149,9 @@ log4j.main = {
             error 'grails.app.services'
             error 'grails.app.controllers'
             error 'grails.app.services.com.luxsoft.sx4.distribucion'
-            info file: 'grails.apps.jobs'
+            error importacionLog: 'grails.app.services.com.luxsoft.sx4.distribucion.ImportadorDeSurtidoService'
+            error importacionLog: 'grails.app.services.com.luxsoft.sx4.distribucion.ImportadorDeEmbarquesService'
+            debug importacionLog:'grails.apps.jobs'
           }
             
         }

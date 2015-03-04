@@ -110,7 +110,7 @@ class ImportadorDeEmbarquesService {
     def actualizar(Date fecha){
         
         def embarques=Embarque.findAllByFechaAndOrigenIsNotNull(fecha)
-        log.info "Actualizando $embarques.size embarques del ${fecha} (YA IMPORTADOS)"
+        log.debug "Actualizando $embarques.size embarques del ${fecha} (YA IMPORTADOS)"
         def db = new Sql(dataSource_importacion)
         embarques.each{embarque->
             def row=db.firstRow(SQL_MESTREO_POR_ORIGEN,[embarque.origen])
@@ -118,7 +118,7 @@ class ImportadorDeEmbarquesService {
                 
                 actualizar(embarque,row)
             }else{
-                log.info "El embarque $embarque.ir ha sido eliminado"
+                log.debug "El embarque $embarque.ir ha sido eliminado"
                 embarque.delete flush:true
             }
         }
@@ -131,7 +131,7 @@ class ImportadorDeEmbarquesService {
         if(row){
                 actualizar(embarque,row)
         }else{
-            log.info "El embarque $embarque.ir ha sido eliminado"
+            log.debug "El embarque $embarque.ir ha sido eliminado"
             embarque.delete flush:true
         }
     }

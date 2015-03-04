@@ -8,6 +8,7 @@ import groovy.sql.Sql
 //import org.springframework.jdbc.core.SqlParameterValue
 //import java.sql.Types
 
+import org.apache.commons.lang.exception.ExceptionUtils
 
 @Transactional
 class ImportadorDeSurtidoService {
@@ -79,9 +80,19 @@ class ImportadorDeSurtidoService {
 
 
     def importar(Date fecha){
-		importarFacturados fecha
-		importarPuestos fecha
-		importarTraslados fecha
+    	importarFacturados fecha
+    	importarPuestos fecha
+    	importarTraslados fecha
+    	// try {
+    		
+    	// }
+    	// catch(Exception e) {
+    	// 	def msg=ExceptionUtils.getRootCauseMessage(e)
+    	// 	log.error "Error al importar surtidos causa: "+msg
+    	// 	throw new RuntimeException(msg,e)
+    	// }
+    	
+		
 	}
 
 	def importarFacturados(Date fecha){

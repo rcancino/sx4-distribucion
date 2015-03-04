@@ -74,8 +74,8 @@
 			"path": "web-app"
 		},
 		{	
-			"name":"Jobs",
-			"path":"grails-app/jobs"
+			"name":"Jobs (sx4)",
+			"path":"grails-app/jobs/com/luxsoft/sx4/"
 
 		},
 		{
