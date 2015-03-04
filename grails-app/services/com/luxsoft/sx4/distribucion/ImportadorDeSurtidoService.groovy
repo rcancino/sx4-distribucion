@@ -46,7 +46,7 @@ class ImportadorDeSurtidoService {
     """
 
     def SQL_FACTURADOS="""
-    	select 	'PFC' AS forma,s.nombre as sucursal,p.folio as pedido,v.clave as cliente,v.nombre as nombre,date(p.fecha) as fecha
+    	select 	'FAC' AS forma,s.nombre as sucursal,p.folio as pedido,v.clave as cliente,v.nombre as nombre,date(p.fecha) as fecha
 		,p.MODIFICADO_USR as vendedor,v.modificado as facturado,p.creado as pedidoCreado,p.PEDIDO_ID as origen
 		,'ORDINARIO' as tipo,p.fentrega as formaDeEntrega,p.puesto,p.tpuesto as fechaPuesto,p.parcial
 		,v.docto as venta,v.origen as tipoDeVenta
@@ -68,9 +68,9 @@ class ImportadorDeSurtidoService {
     """
 
     def SQL_TRASLADOS="""
-    	select 	'TRD' AS forma,s.nombre as sucursal,p.documento as pedido,1 as cliente,p.MODIFICADO_USR as nombre,date(p.fecha) as fecha
+    	select 	'TRD' AS forma,s.nombre as sucursal,p.documento as pedido,'1' as cliente,p.MODIFICADO_USR as nombre,date(p.fecha) as fecha
 		,p.MODIFICADO_USR as vendedor,P.modificado as facturado,p.creado as pedidoCreado,p.TRASLADO_ID as origen
-		,'TRASLADO' as tipo,'ENVIO' as fentrega as fechaEntrega,true as puesto,p.fecha as tpuesto,false as parcial
+		,'TRASLADO' as tipo,'ENVIO' as  formaDeEntrega,p.fecha as tpuesto,false as parcial
 		,p.DOCUMENTO as venta,'TRS' as tipoDeVenta
 		from sx_traslados p
 		join sw_sucursales s on P.SUCURSAL_ID=s.SUCURSAL_ID
@@ -91,12 +91,10 @@ class ImportadorDeSurtidoService {
 			def surtido=Surtido.findByOrigen(row.origen)
 			if(!surtido){
 				surtido=new Surtido(row.toRowResult())
+
 				db.eachRow(SQL_DETALLE,[row.origen]){ det->
-					surtido.addToPartidas(
-						producto:det.producto
-						,descripcion:det.descripcion
-						,cantidad:det.cantidad
-						,origen:det.origen)
+					def sdet=new SurtidoDet(det.toRowResult())
+					surtido.addToPartidas(sdet)
 				}
 				surtido.partidas.each{ sdet->
 					def sectores=db.rows(SQL_SECTORES,[sdet.producto])
@@ -109,6 +107,59 @@ class ImportadorDeSurtidoService {
 			if(!surtido.facturado && row.facturado){
 				surtido.facturado=row.facturado
 				surtido.save(flush:true,failOnError:true)
+			}
+		}
+
+	}
+
+	def importarPuestos(Date fecha){
+		log.debug "Importando pedidos puestos del "+fecha.format('dd/MM/yyyy')
+		def sucursal=findSucursal()
+		assert sucursal,'No hay sucursal registrada'
+		def db = new Sql(dataSource_importacion)
+		db.eachRow( [sucursal:sucursal,fecha:Sql.DATE(fecha)],SQL_PUESTOS) { row->
+			def surtido=Surtido.findByOrigen(row.origen)
+			if(!surtido){
+				surtido=new Surtido(row.toRowResult())
+
+				db.eachRow(SQL_DETALLE,[row.origen]){ det->
+					def sdet=new SurtidoDet(det.toRowResult())
+					surtido.addToPartidas(sdet)
+				}
+				surtido.partidas.each{ sdet->
+					def sectores=db.rows(SQL_SECTORES,[sdet.producto])
+					sdet.sectores=sectores.collect{it.sector}.join(',')
+
+				}
+				surtido.save(flush:true,failOnError:true)
+				event('registroDeSurtido', surtido)
+			}
+		}
+	}
+
+	def importarTraslados(Date fecha){
+		log.debug "Importando surtido de traslados fecha:"+fecha.format('dd/MM/yyyy')
+		def sucursal=findSucursal()
+		assert sucursal,'No hay sucursal registrada'
+		def db = new Sql(dataSource_importacion)
+		db.eachRow( [sucursal:sucursal,fecha:Sql.DATE(fecha)],SQL_TRASLADOS) { row->
+			def surtido=Surtido.findByOrigen(row.origen)
+			if(!surtido){
+				surtido=new Surtido(row.toRowResult())
+				surtido.puesto=true
+				/*
+				db.eachRow(SQL_DETALLE,[row.origen]){ det->
+					def sdet=new SurtidoDet(det.toRowResult())
+					surtido.addToPartidas(sdet)
+				}
+				surtido.partidas.each{ sdet->
+					def sectores=db.rows(SQL_SECTORES,[sdet.producto])
+					sdet.sectores=sectores.collect{it.sector}.join(',')
+
+				}
+				*/
+				surtido.save(flush:true,failOnError:true)
+				//event('registroDeSurtido', surtido)
 			}
 		}
 
