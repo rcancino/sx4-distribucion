@@ -63,7 +63,7 @@
 								<td>${fieldValue(bean:row,field:"cliente")}</td>
 								<td>${fieldValue(bean:row,field:"forma")}</td>
 								<td>${fieldValue(bean:row,field:"formaDeEntrega")}</td>
-								<td><g:formatDate date="${row.fecha}" format="hh:mm (dd-MM)"/></td>
+								<td><g:formatDate date="${row.pedidoCreado}" format="HH:mm (dd/MM)"/></td>
 								<td><g:formatNumber number="${row.partidas.size()}" format="####"/></td>
 								<td><g:formatNumber number="${row.cortes}" format="####"/></td>
 								<td class="${row.status=='EN SURTIDO'?'success':'warning'}">

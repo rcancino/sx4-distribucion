@@ -84,6 +84,19 @@ environments {
               }
               
       }
+      dataSource_importacion{
+        url = 'jdbc:mysql://10.10.1.101/produccion'
+        dialect = org.hibernate.dialect.MySQL5InnoDBDialect
+        driverClassName = 'com.mysql.jdbc.Driver'
+        username = 'root'
+        password = 'sys'
+        dbCreate = ''
+        readOnly=true
+        pooled = false
+        properties {
+          
+        }
+      }
   }
 
 } //End enviroments

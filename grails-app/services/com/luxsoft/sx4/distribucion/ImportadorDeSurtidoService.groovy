@@ -19,6 +19,8 @@ class ImportadorDeSurtidoService {
 
 	def dataSource_importacion
 
+	def importadorDeCorteService
+
 	
 
     String SQL_DETALLE="""
@@ -48,7 +50,7 @@ class ImportadorDeSurtidoService {
 
     def SQL_FACTURADOS="""
     	select 	'FAC' AS forma,s.nombre as sucursal,p.folio as pedido,v.clave as cliente,v.nombre as nombre,date(p.fecha) as fecha
-		,p.MODIFICADO_USR as vendedor,v.modificado as facturado,p.creado as pedidoCreado,p.PEDIDO_ID as origen
+		,p.MODIFICADO_USR as vendedor,v.modificado as facturado,v.creado as pedidoCreado,p.PEDIDO_ID as origen
 		,'ORDINARIO' as tipo,p.fentrega as formaDeEntrega,p.puesto,p.tpuesto as fechaPuesto,p.parcial
 		,v.docto as venta,v.origen as tipoDeVenta
 		from sx_ventas v
@@ -59,8 +61,8 @@ class ImportadorDeSurtidoService {
 
 
     def SQL_PUESTOS="""
-    	select 	'PST' AS forma,s.nombre as sucursal,p.folio as pedido,v.clave as cliente,v.nombre as nombre,date(p.fecha) as fecha
-		,p.MODIFICADO_USR as vendedor,v.modificado as facturado,p.creado as pedidoCreado,p.PEDIDO_ID as origen
+    	select 	'PST' AS forma,s.nombre as sucursal,p.folio as pedido,p.clave as cliente,p.nombre as nombre,date(p.fecha) as fecha
+		,p.MODIFICADO_USR as vendedor,v.modificado as facturado,p.tpuesto as pedidoCreado,p.PEDIDO_ID as origen
 		,'ORDINARIO' as tipo,p.fentrega as formaDeEntrega,p.puesto,p.tpuesto as fechaPuesto,p.parcial
 		,v.docto as venta,v.origen as tipoDeVenta
 		from sx_pedidos p
@@ -73,7 +75,7 @@ class ImportadorDeSurtidoService {
     	select 	'PST' AS forma,s.nombre as sucursal,p.folio as pedido,p.clave as cliente,p.nombre as nombre,date(p.fecha) as fecha
 		,p.MODIFICADO_USR as vendedor,v.modificado as facturado,p.creado as pedidoCreado,p.PEDIDO_ID as origen
 		,'ORDINARIO' as tipo,p.fentrega as formaDeEntrega,p.puesto,p.tpuesto as fechaPuesto,p.parcial
-		,v.docto as venta,p.origen as tipoDeVenta
+		,v.docto as venta,v.origen as tipoDeVenta
 		from sx_pedidos p
 		left join sx_ventas v on v.pedido_id=p.pedido_id
 		join sw_sucursales s on p.SUCURSAL_ID=s.SUCURSAL_ID
@@ -84,14 +86,20 @@ class ImportadorDeSurtidoService {
     	select 	'TRD' AS forma,s.nombre as sucursal,p.documento as pedido,'1' as cliente,p.MODIFICADO_USR as nombre,date(p.fecha) as fecha
 		,p.MODIFICADO_USR as vendedor,P.modificado as facturado,p.creado as pedidoCreado,p.TRASLADO_ID as origen
 		,'TRASLADO' as tipo,'ENVIO' as  formaDeEntrega,p.fecha as tpuesto,false as parcial
-		,p.DOCUMENTO as venta,'TRS' as tipoDeVenta
+		,p.DOCUMENTO as venta,'TPS' as tipoDeVenta
 		from sx_traslados p
 		join sw_sucursales s on P.SUCURSAL_ID=s.SUCURSAL_ID
-		where s.nombre=:sucursal and date(p.fecha)=:fecha
+		where s.nombre=:sucursal and date(p.fecha)=:fecha and p.tipo='TPS'
+    """
+
+    def SQL_TRASLADOS_DET="""
+    	select clave as producto,descripcion,cantidad,factoru as factor,kilos,inventario_id as origen from sx_inventario_trd p
+    	where p.traslado_id=?
     """
 
 
     def importar(Date fecha){
+    	actualizarSurtidosPuestos fecha
     	importarFacturados fecha
     	importarPuestos fecha
     	importarTraslados fecha
@@ -127,6 +135,7 @@ class ImportadorDeSurtidoService {
 
 				}
 				surtido.save(flush:true,failOnError:true)
+				importadorDeCorteService.importar(surtido)
 				event('registroDeSurtido', surtido)
 			}
 			if(!surtido.facturado && row.facturado){
@@ -157,6 +166,7 @@ class ImportadorDeSurtidoService {
 
 				}
 				surtido.save(flush:true,failOnError:true)
+				importadorDeCorteService.importar(surtido)
 				event('registroDeSurtido', surtido)
 			}
 		}
@@ -172,8 +182,8 @@ class ImportadorDeSurtidoService {
 			if(!surtido){
 				surtido=new Surtido(row.toRowResult())
 				surtido.puesto=true
-				/*
-				db.eachRow(SQL_DETALLE,[row.origen]){ det->
+				
+				db.eachRow(SQL_TRASLADOS_DET,[row.origen]){ det->
 					def sdet=new SurtidoDet(det.toRowResult())
 					surtido.addToPartidas(sdet)
 				}
@@ -182,9 +192,9 @@ class ImportadorDeSurtidoService {
 					sdet.sectores=sectores.collect{it.sector}.join(',')
 
 				}
-				*/
 				surtido.save(flush:true,failOnError:true)
-				//event('registroDeSurtido', surtido)
+				//importadorDeCorteService.importar(surtido)
+				event('registroDeSurtido', surtido)
 			}
 		}
 
@@ -199,6 +209,7 @@ class ImportadorDeSurtidoService {
 				if(row.venta){
 					surtido.venta=row.venta
 					surtido.facturado=row.facturado
+					surtido.tipoVenta=row.tipoVenta
 					surtido.save()
 				}
 				db.eachRow(SQL_DETALLE,[row.origen]){ det->
@@ -212,6 +223,7 @@ class ImportadorDeSurtidoService {
 					sdet.sectores=sectores.collect{it.sector}.join(',')
 				}
 				surtido.save(flush:true,failOnError:true)
+				importadorDeCorteService.importar(surtido)
 				event('registroDeSurtido', surtido)
 
 			}

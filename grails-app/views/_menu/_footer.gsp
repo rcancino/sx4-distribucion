@@ -4,7 +4,8 @@
 		
 		<p class="navbar-text navbar-left">DB:
 			<a href="#" class="navbar-link" data-toggle="tooltip" 
-				title="${grailsApplication.config.dataSource.url?.replaceFirst('jdbc:mysql://','')}">
+				title="${grailsApplication.config.dataSource.url?.replaceFirst('jdbc:mysql://','')}"
+				>
 				<g:if env="development">PRUEBAS</g:if>
 				<g:else>PRODUCCION</g:else>
 			</a>
@@ -17,7 +18,9 @@
 		</g:if>
 
 		<p class="navbar-text navbar-right">Sucursal: 
-			<a href="#" class="navbar-link">${grailsApplication.config.luxor.sx4.sucursal}</a>
+			<a href="#" class="navbar-link">
+				${grailsApplication.config.luxor.sx4.sucursal}
+			</a>
 		</p>
 	</div>
 </nav>

@@ -52,8 +52,8 @@ class Entrega {
 	String comentarioDeComision
 	
 
-	Surtido surtido
-	Date recepcionDeSurtido
+	//Surtido surtido
+	//Date recepcionDeSurtido
 	
 
 	static hasMany = [partidas: EntregaDet]
@@ -81,8 +81,8 @@ class Entrega {
 		fechaComision nullable:true
 		comentarioDeComision nullable:true
 		comisionPorTonelada scale:4
-		surtido nullable:true
-		recepcionDeSurtido nullable:true
+		//surtido nullable:true
+		//recepcionDeSurtido nullable:true
 	}
 
 	static mapping = {

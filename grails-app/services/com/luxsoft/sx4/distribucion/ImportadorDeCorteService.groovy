@@ -29,8 +29,18 @@ class ImportadorDeCorteService {
 		,p.pedidodet_id as origen
 		from sx_pedidosdet p 
 		join sx_pedidos ped on p.pedido_id=ped.pedido_id
-		join sw_sucursales s on p.SUCURSAL_ID=s.SUCURSAL_ID
+		join sw_sucursales s on ped.SUCURSAL_ID=s.SUCURSAL_ID
 		where cortes>0 and  ped.pedido_id=:pedido and p.pedidodet_id=:origen
+    """
+
+    def SQL_CORTES="""
+    	select s.nombre as sucursal,p.clave as producto,p.descripcion,p.cantidad,p.cortes
+		,p.CORTES_INSTRUCCION as instruccion,0 as precioCorte,ped.documento as pedido,s.nombre
+		,p.documento,false as puesto,true  as FACTURAR ,p.inventario_id as origen
+		from sx_inventario_trd p 
+		join sx_traslados ped on p.traslado_id=ped.traslado_id
+		join sw_sucursales s on p.SUCURSAL_ID=s.SUCURSAL_ID
+		where p.cortes>0 and  p.traslado_id=:origen
     """
 
     def importar(Surtido surtido){
@@ -38,10 +48,10 @@ class ImportadorDeCorteService {
 		//log.info "Importando instrucciones de corte para el  pedido $surtido.pedido ($surtido.sucursal)"
 		def db = new Sql(dataSource_importacion)
 		surtido.partidas.each{det->
-			//log.info "Buscando instruccion de corte para $surtido.pedido $det.origen"
+			log.info "Buscando instruccion de corte para $surtido.pedido $det.origen"
 			def select=SQL_MESTREO
 			if(surtido.forma=='TRD')
-				select="PENDIENTE"
+				select=SQL_CORTES
 			db.eachRow( [pedido:surtido.origen,origen:det.origen as Integer],select) { row->
 				
 				
@@ -58,30 +68,19 @@ class ImportadorDeCorteService {
 					
 					log.debug "Importando instruccion  corte: "+corte.instruccion
 					det.corte=corte
-					corte.validate()
-					if(corte.hasErrors()){
-						log.debug 'Errores al registrar corte: '+corte.errors+' SurtidoDet:'+det.id
-					}else{
-						det.save(flush:true,failOnError:true)
-					}
+					det.save(flush:true,failOnError:true)
+						
 					
 				}
-				/*
-				if(!corte){
-					corte=new Corte(row.toRowResult())
-					det.corte=corte
-					det.save(flush:true,failOnError:true)
-				}
-				*/
+				
 			}
 			
 		}
-		
-		
-		
 	}
 
-	@grails.events.Listener(topic="registroDeSurtido")
+
+
+	//@grails.events.Listener(topic="registroDeSurtido")
 	def registroDeSurtido(Surtido surtido){
 		//println 'Surtido importado registrar posibles cortes'
 		importar(surtido)

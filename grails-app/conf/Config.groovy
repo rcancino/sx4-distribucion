@@ -134,6 +134,7 @@ log4j.main = {
             info 'grails.app.controllers.com.luxsoft.sx4'
             
             info 'grails.app.services.com.luxsoft.sx4.distribucion'
+            debug 'grails.app.services.com.luxsoft.sx4.distribucion.ImportadorDeCorteService'
             
             debug  importacionLog:'grails.app.services.com.luxsoft.sx4.distribucion.ImportadorDeSurtidoService'
             debug  importacionLog:'grails.app.services.com.luxsoft.sx4.distribucion.ImportadorDeEmbarquesService'
