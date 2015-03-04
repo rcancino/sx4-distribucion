@@ -30,17 +30,17 @@ class ImportadorDeCorteService {
 		from sx_pedidosdet p 
 		join sx_pedidos ped on p.pedido_id=ped.pedido_id
 		join sw_sucursales s on ped.SUCURSAL_ID=s.SUCURSAL_ID
-		where cortes>0 and  ped.pedido_id=:pedido and p.pedidodet_id=:origen
+		where p.CORTES_INSTRUCCION is not null and p.CORTES_INSTRUCCION <>'' and  ped.pedido_id=:pedido and p.pedidodet_id=:origen
     """
 
-    def SQL_CORTES="""
+    def SQL_CORTES_TRS="""
     	select s.nombre as sucursal,p.clave as producto,p.descripcion,p.cantidad,p.cortes
 		,p.CORTES_INSTRUCCION as instruccion,0 as precioCorte,ped.documento as pedido,s.nombre
 		,p.documento,false as puesto,true  as FACTURAR ,p.inventario_id as origen
 		from sx_inventario_trd p 
 		join sx_traslados ped on p.traslado_id=ped.traslado_id
 		join sw_sucursales s on p.SUCURSAL_ID=s.SUCURSAL_ID
-		where p.cortes>0 and  p.traslado_id=:origen
+		where p.CORTES_INSTRUCCION is not null and p.CORTES_INSTRUCCION <>'' and  p.traslado_id=:origen
     """
 
     def importar(Surtido surtido){
@@ -51,7 +51,7 @@ class ImportadorDeCorteService {
 			log.info "Buscando instruccion de corte para $surtido.pedido $det.origen"
 			def select=SQL_MESTREO
 			if(surtido.forma=='TRD')
-				select=SQL_CORTES
+				select=SQL_CORTES_TRS
 			db.eachRow( [pedido:surtido.origen,origen:det.origen as Integer],select) { row->
 				
 				
@@ -59,6 +59,7 @@ class ImportadorDeCorteService {
 				if(corte){
 					log.debug 'Corte ya importado'
 				}else{
+
 					corte=new Corte(row.toRowResult())
 					corte.tipo=det.surtido.tipo
 					corte.surtidoDet=det
@@ -68,7 +69,15 @@ class ImportadorDeCorteService {
 					
 					log.debug "Importando instruccion  corte: "+corte.instruccion
 					det.corte=corte
-					det.save(flush:true,failOnError:true)
+					try {
+						det.save(flush:true,failOnError:true)
+					}
+					catch(Exception e) {
+						
+						throw new RuntimeException(e)
+					}
+					
+					
 						
 					
 				}

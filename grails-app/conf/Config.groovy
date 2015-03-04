@@ -94,6 +94,7 @@ environments {
     production {
         grails.logging.jul.usebridge = false
         // TODO: grails.serverURL = "http://www.changeme.com"
+        grails.plugin.console.enabled= true
     }
 }
 grails.databinding.dateFormats = ['dd/MM/yyyy','yyyy-MM-dd','MMddyyyy', 'yyyy-MM-dd HH:mm:ss.S', "yyyy-MM-dd'T'hh:mm:ss'Z'"]

@@ -103,16 +103,6 @@ class ImportadorDeSurtidoService {
     	importarFacturados fecha
     	importarPuestos fecha
     	importarTraslados fecha
-    	// try {
-    		
-    	// }
-    	// catch(Exception e) {
-    	// 	def msg=ExceptionUtils.getRootCauseMessage(e)
-    	// 	log.error "Error al importar surtidos causa: "+msg
-    	// 	throw new RuntimeException(msg,e)
-    	// }
-    	
-		
 	}
 
 	def importarFacturados(Date fecha){
