@@ -19,6 +19,8 @@ class SurtidoController {
             model.fechaDeSurtido=new Date()
     }
 
+    
+
     @Secured(['permitAll'])
     def index(Integer max) {
         params.max = Math.min(max ?: 20, 100)
@@ -164,12 +166,17 @@ class SurtidoController {
     }
 
     @Secured(["hasAnyRole('GERENTE')"])
-    def porDia(Date fecha,Integer max){
+    def porDia(Integer max){
+      
       params.max = Math.min(max ?: 20, 100)
       params.sort='pedidoCreado'
       params.order='asc'
-      fecha=Date.parse('dd/MM/yyyy','24/02/2015')
-      [surtidoInstanceList:Surtido.findAllByFecha(fecha),surtidoInstanceCount:Surtido.countByFecha(fecha,params)]
+      def fecha=params.date('fecha',['dd/MM/yyyy'])
+      
+      def surtidosMap=Surtido.findAllByFecha(fecha).groupBy{it.asignado?:'PENDIENTE'}
+     
+      [fechaDeSurtido:fecha
+        ,surtidosMap:surtidosMap]
     }
 
     

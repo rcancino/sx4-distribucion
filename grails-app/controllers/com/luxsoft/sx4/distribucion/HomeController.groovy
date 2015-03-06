@@ -17,4 +17,11 @@ class HomeController {
     def pruebas(){
     	
     }
+
+    // def cambiarPeriodo(Periodo command){
+    //     def origin=request.getHeader('referer')
+    //     session.periodo=command
+    //     redirect(uri: request.getHeader('referer') )
+        
+    // }
 }

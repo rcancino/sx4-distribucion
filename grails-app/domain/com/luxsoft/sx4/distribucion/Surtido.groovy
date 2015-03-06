@@ -58,6 +58,8 @@ class Surtido {
     Boolean puesto
     Date fechaPuesto
 
+    SurtidoAnalisis analisis
+
 	static hasMany = [partidas: SurtidoDet]
 
 
@@ -85,7 +87,7 @@ class Surtido {
     	fecha type:'date'
     }
 
-    static transients = ['cortes','status','empacadoTerminado']
+    static transients = ['cortes','status','empacadoTerminado','analisis']
 
     def getCortes(){
     	return partidas.sum{return it.corte?1:0}
@@ -121,6 +123,13 @@ class Surtido {
         }
         return true
         
+    }
+
+    def getAnalisis(){
+        if(analisis==null){
+            analisis=new SurtidoAnalisis()
+        }
+        return analisis
     }
     
 

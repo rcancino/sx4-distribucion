@@ -68,7 +68,29 @@ class SurtidoAnalisis {
 		return "$dias $horas $minutos"
 	}
 
+	def getMinutosAcumulados(){
+		if(surtido.entregado){
+			return TimeCategory.minus(surtido.entregado, surtido.iniciado)
+		}
 
+		def start = surtido.iniciado?:surtido.pedidoCreado
+		def stop = new Date() 
+		if(surtido.cortes){
+			if(surtido.corteFin) 
+				start=surtido.corteFin
+			else if(surtido.corteInicio) 
+				start=surtido.corteInicio
+		}else if(surtido.asignado){
+			start=surtido.iniciado
+		}
+		
+		TimeDuration duration = TimeCategory.minus(stop, start)
+		return duration.toMilliseconds()/(1000*60)
+	}
+
+	def getKilos(){
+		return surtido.partidas.sum 0.0,{it.kilos}
+	}
 
 	
 }

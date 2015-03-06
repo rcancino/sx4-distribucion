@@ -20,14 +20,15 @@ navigation={
 	user{
 
 		home(action:'administracion'){}
-		surtido(controller:'surtido',action:'porEntregarAnalisis'){
+		surtido(controller:'surtido',action:'resumen'){
 			pendientes(){}
 			porEntregar(){}
 			entregados(){}
 			consultas(controller:'surtido'){
 				resumen(action:'resumen',titleText:'General')
 				porDia()
-				porSurtidor()
+				porEntregar(action:'porEntregarAnalisis')
+				entregados(action:'entregados')
 				porSucursal()
 			}
 		}
