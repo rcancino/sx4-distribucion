@@ -30,7 +30,7 @@ class ImportadorDeCorteService {
 		from sx_pedidosdet p 
 		join sx_pedidos ped on p.pedido_id=ped.pedido_id
 		join sw_sucursales s on ped.SUCURSAL_ID=s.SUCURSAL_ID
-		where p.CORTES_INSTRUCCION is not null and p.CORTES_INSTRUCCION <>'' and  ped.pedido_id=:pedido and p.pedidodet_id=:origen
+		where p.CORTES_INSTRUCCION is not null and p.CORTES_INSTRUCCION <>'' and p.cortes>0 and  ped.pedido_id=:pedido and p.pedidodet_id=:origen
     """
 
     def SQL_CORTES_TRS="""

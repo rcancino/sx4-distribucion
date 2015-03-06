@@ -139,7 +139,7 @@ log4j.main = {
             
             debug  importacionLog:'grails.app.services.com.luxsoft.sx4.distribucion.ImportadorDeSurtidoService'
             debug  importacionLog:'grails.app.services.com.luxsoft.sx4.distribucion.ImportadorDeEmbarquesService'
-            debug  'grails.app.jobs.com.luxsoft.sx4.distribucion.ImportadorDeSurtidoJob'
+            info  'grails.app.jobs.com.luxsoft.sx4.distribucion.ImportadorDeSurtidoJob'
             debug  'grails.app.jobs.com.luxsoft.sx4.distribucion.ImportadorDeEmbarquesJob'
             debug  'grails.app.jobs.com.luxsoft.sx4.distribucion.ActualizarEmbarquesJob'
             debug  importacionLog:'grails.app.jobs.com.luxsoft.sx4.distribucion'

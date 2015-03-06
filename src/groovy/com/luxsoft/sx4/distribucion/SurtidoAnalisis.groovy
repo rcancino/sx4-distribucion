@@ -89,7 +89,7 @@ class SurtidoAnalisis {
 	}
 
 	def getKilos(){
-		return surtido.partidas.sum 0.0,{it.kilos}
+		return surtido.partidas.sum (0.0) {it.kilos}
 	}
 
 	

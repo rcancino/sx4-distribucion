@@ -69,6 +69,7 @@ class CorteController {
 
       corte.asignado=cortador.username
       corte.inicio=new Date()
+      corte.empacadoInicio=corte.inicio
       corte.save(flush:true)
       event('corteAsignado', corte)
       log.info "Producto  $corte.producto entregado  a  $cortador.username "
@@ -158,11 +159,14 @@ class CorteController {
         redirect action:'pendientes'
         return 
       }
+      /*
       if(empacador.username!=corte.empacador){
           flash.error="Este corte solo puede ser terminado el empaque por $corte.empacador"
           redirect action:'pendientes'
           return 
         }
+        */
+      corte.empacador=empacador.username
       corte.empacadoFin=new Date()
       corte.save(flush:true)
       event('empacadoTerminado', corte.surtidoDet.surtido.id)

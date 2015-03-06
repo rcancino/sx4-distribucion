@@ -31,6 +31,7 @@
 							<th>Descripcion</th>
 							<th>Fecha</th>
 							<th>Cortes</th>
+							<th>Asignado</th>
 							<th class="text-center">Estatus</th>
 							<th class="text-center">Empacado</th>
 							%{-- <th>Liberacion</th> --}%
@@ -43,32 +44,47 @@
 									<a href="" data-toggle="modal" class="btn btn-default btn-lg btn-block">
 										<g:formatNumber number="${row.pedido}" format="####"/>
 									</a>
+									
 								</td>
 								<td>${fieldValue(bean:row,field:"producto")}</td>
 								<td>${fieldValue(bean:row,field:"descripcion")}</td>
 								<td><g:formatDate date="${row.dateCreated}" format="hh:mm (dd-MM)"/></td>
 								<td><g:formatNumber number="${row.cortes}" format="####"/></td>
 								<td>
-									<a href="" data-toggle="modal" 
-										class="btn btn-warning btn-lg btn-block"
-										data-target="#corteModal"
-										data-pedido="${row.pedido}" 
-										data-descripcion="${row.descripcion}"
-										data-corte="${row.id}"
-										data-producto="${row.producto}" 
-										data-cantidad="${row.cantidad}"
-										data-cortes="${row.cortes}" 
-										data-surtidor="${row.surtidor}"
-										data-instruccion="${row.instruccion}"
-										data-cortador="${row.asignado}"
-										data-empacador="${row.empacador}"
-										data-status="${row.statusCorte}">
-										${row.statusCorte}
-									</a>
+									<g:if test="${row.asignado}">
+										${fieldValue(bean:row,field:"asignado")}
+									</g:if>
+									<g:else>
+										${fieldValue(bean:row,field:"surtidoDet.surtido.asignado")}
+									</g:else>
+								</td>
+								<td class="text-center ${row.fin?'success':''}">
+									<g:if test="${!row.fin}">
+
+										<a href="" data-toggle="modal" 
+											class="btn btn-warning btn-lg btn-block"
+											data-target="#corteModal"
+											data-pedido="${row.pedido}" 
+											data-descripcion="${row.descripcion}"
+											data-corte="${row.id}"
+											data-producto="${row.producto}" 
+											data-cantidad="${row.cantidad}"
+											data-cortes="${row.cortes}" 
+											data-surtidor="${row.surtidor}"
+											data-instruccion="${row.instruccion}"
+											data-cortador="${row.asignado}"
+											data-empacador="${row.empacador}"
+											data-status="${row.statusCorte}">
+											${row.statusCorte}
+										</a>
+									</g:if>
+									<g:else>
+										<g:formatDate date="${row.fin}" format="hh:mm (dd-MM)"/>
+									</g:else>
 									
 								</td>
 								<td class="text-center">
-									<g:if test="${row.asignado}">
+									<g:if test="${row.fin}">
 										<a href="" data-toggle="modal" class="btn btn-warning btn-lg btn-block"
 											data-target="#empaqueModal"
 											data-pedido="${row.pedido}" 
@@ -88,6 +104,7 @@
 											${row.statusEmpaque}
 										</a>
 									</g:if>
+
 									
 								</td>
 								

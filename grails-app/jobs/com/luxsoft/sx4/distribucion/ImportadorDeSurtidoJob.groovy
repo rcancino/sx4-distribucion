@@ -8,7 +8,7 @@ class ImportadorDeSurtidoJob {
     
     static triggers = {
       //simple name: 'normalTrigger', startDelay: 60000, repeatInterval: 30000
-      cron cronExpression:"0/30 0 8-19 ? * MON-SAT"
+      cron cronExpression:"0/30 * 8-19 ? * MON-SAT"
     }
 
     def group = "sx4-importadores"
@@ -24,7 +24,8 @@ class ImportadorDeSurtidoJob {
     		def fecha=new Date() 
     		def time=fecha.format('dd/MM/yyyy HH:mm:ss')
     		log.debug "Importando surtidos ($counter)  $time las time: "+context.jobDetail.jobDataMap['lastJob']
-    		//importadorDeSurtidoService.importar(fecha)
+            //print "Importando surtidos ($counter)  $time las time: "+context.jobDetail.jobDataMap['lastJob']
+    		importadorDeSurtidoService.importar(fecha)
             context.jobDetail.jobDataMap['counter'] = counter
             def end=new Date()
             context.jobDetail.jobDataMap['lastJob'] = end
