@@ -211,40 +211,55 @@ class SurtidoController {
       render res
     }
 
-    /*
-    def getClientesJSON() {
 
-      
+    @Secured(['permitAll'])  
+    def enProceso(Integer max){
+      params.max = Math.min(max ?: 10, 100)
+      params.sort='pedidoCreado'
+      params.order='asc'
+      def query=Surtido.where{asignado!=null && entregado==null}
+      [surtidoInstanceList:query.list(params),surtidoInstanceCount:query.count()]
+      //respond query.list(params), model:[surtidoInstanceCount:query.count(params)]
 
-      def list=Cliente.findAllByNombreIlike("%"+params.term+"%",[max:10,sort:"nombre",order:"desc"])
-
-      
-      list=list.collect{ c->
-        def nombre="$c.nombre"
-        def direccion=[calle:c.direccion?.calle?:'']
-        direccion.numeroInterior=c.direccion?.numeroInterior?:''
-        direccion.numeroExterior=c.direccion?.numeroExterior?:''
-        direccion.colonia=c.direccion?.colonia?:''
-
-        def jsonDir=direccion as JSON
-        //println 'Direccion: '+jsonDir
-        jsonDir.toString()
-
-        [id:c.id,
-        label:nombre,
-        value:nombre,
-        nombre:nombre,
-        rfc:c.rfc,
-        //direccion:jsonDir,
-        emailCfdi:c.emailCfdi,
-        direccion:jsonDir
-        ]
-      }
-      def res=list as JSON
-      
-      render res
     }
-    */
+
+    @Secured(['permitAll']) 
+    @Transactional
+    def agregarAuxiliar(Surtido surtido){
+      String nip=params.nip
+      if(!nip){
+        flash.error="Digite su NIP para agregar un auxiliar de surtido para el pedido $surtido.pedido"
+        redirect action:'enProceso'
+        return
+      }
+      def surtidor=Usuario.findByNip(nip)
+      if(!surtidor){
+        flash.error="Operador no encontrado verifique su NIP "
+        redirect action:'enProceso'
+        return 
+      }
+      if(!surtidor.getAuthorities().find{it.authority=='SURTIDOR'}){
+        flash.error="No tiene el ROL de SURTIDOR verifique su NIP "
+        redirect action:'enProceso'
+        return 
+      }
+      if(surtidor.username==surtido.asignado){
+        flash.error="El surtido ya esta asignado a: ($surtidor.username) no puede ser auxiliar"
+        redirect action:'enProceso'
+        return 
+      }
+      if(surtido.auxiliares.find{it.nombre==surtidor.username}){
+        flash.error="Auxiliar ya asignado al pedido $pedido ($surtidor.username) "
+        redirect action:'enProceso'
+        return 
+      }
+      surtido.addToAuxiliares(nombre:surtidor.username)
+      surtido.save(flush:true,failOnError:true)
+      log.info "Surtido auxiliar $surtidor.username asignado al  pedido: $surtido.pedido   "
+      flash.success="Surtido auxiliar $surtidor.username asignado al  pedido: $surtido.pedido   "
+      redirect action:'enProceso'
+
+    }
 
 
     

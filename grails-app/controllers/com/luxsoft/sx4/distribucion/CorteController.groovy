@@ -175,6 +175,61 @@ class CorteController {
       redirect action:'pendientes'
     }
 
+    def enProceso(Integer max){
+      params.max = Math.min(max ?: 10, 100)
+      params.sort='pedido'
+      params.order='asc'
+      
+      def query=Corte.where{asignado!=null }
+      query=query.where{surtidoDet.surtido.entregado==null}
+      [corteInstanceList:query.list(params),corteInstanceCount:query.count()]
+      //def list=Corte.findAll("from Corte c where c.empacadoFin=null and c.surtidoDet.surtido.asignado!=null")
+      //respond list, model:[corteInstanceCount:list.size()]
+    }
+
+    @Transactional
+    def agregarAuxiliar(){
+      Corte corte=Corte.get(params.id)
+      assert corte,'No existe el corte '+params.id
+      String tipo=params.tipo
+      assert tipo,'Auxiliar sin tipo no se puede generar'
+      String nip=params.nip
+      if(!nip){
+        flash.error="Digite su NIP para agregar un auxiliar $tipo para el pedido $corte.pedido"
+        redirect action:'enProceso'
+        return
+      }
+      def cortador=Usuario.findByNip(nip)
+      if(!cortador){
+        flash.error="Operador no encontrado verifique su NIP "
+        redirect action:'enProceso'
+        return 
+      }
+      def auth=tipo
+      if(!cortador.getAuthorities().find{it.authority==auth}){
+        flash.error="No tiene el ROL de CORTADOR verifique su NIP "
+        redirect action:'enProceso'
+        return 
+      }
+      if(cortador.username==corte.asignado){
+        flash.error="El corte ya esta asignado a: ($cortador.username) no puede ser auxiliar"
+        redirect action:'enProceso'
+        return 
+      }
+      if(corte.auxiliares.find{it.nombre==cortador.username && it.tipo==tipo}){
+        flash.error="Auxiliar $tipo ya asignado al pedido $corte.pedido ($cortador.username) "
+        redirect action:'enProceso'
+        return 
+      }
+      
+      corte.addToAuxiliares(nombre:cortador.username,tipo:tipo)
+      corte.save(flush:true,failOnError:true)
+      log.info "Cortador auxiliar $cortador.username asignado al  pedido: $corte.pedido   "
+      flash.success="Auxiliar $tipo $cortador.username asignado al  pedido: $corte.pedido   "
+      redirect action:'enProceso'
+
+    }
+
     private  boolean validarOperacionDeCortado(){
        return getAuthenticatedUser().getAuthorities().find{it.authority=='CORTADOR'}
     }

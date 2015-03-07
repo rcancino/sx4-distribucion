@@ -60,7 +60,10 @@ class Surtido {
 
     SurtidoAnalisis analisis
 
-	static hasMany = [partidas: SurtidoDet]
+
+
+
+	static hasMany = [partidas: SurtidoDet,auxiliares:AuxiliarDeSurtido]
 
 
     static constraints = {
@@ -85,6 +88,8 @@ class Surtido {
 
     static mapping = {
     	fecha type:'date'
+        partidas cascade: "all-delete-orphan"
+        auxiliares cascade: "all-delete-orphan"
     }
 
     static transients = ['cortes','status','empacadoTerminado','analisis']

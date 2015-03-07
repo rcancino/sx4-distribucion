@@ -56,13 +56,14 @@ navigation={
 
 	surtidor{
 		pendientes(controller:'surtido'){}
+		enProceso(controller:'surtido')
 		porEntregar(controller:'surtido'){}
 
 		
 	}
 	cortador{
 		pendientes(controller:'corte',index:'pendientes'){}
-		
+		enProceso(controller:'corte'){}
 	}
 
 	/*admin{

@@ -37,6 +37,8 @@ class Corte {
     String statusCorte
     String statusEmpaque
 
+    static hasMany = [auxiliares: AuxiliarDeCorte]
+
 
     static constraints = {
     	producto maxSize:20
@@ -57,6 +59,10 @@ class Corte {
     }
 
     static transients = ['status','surtidor','statusCorte','statusEmpaque']
+
+    static mapping = {
+        auxiliares cascade: "all-delete-orphan"
+    }
 
 
     def getStatus(){
