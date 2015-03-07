@@ -71,7 +71,7 @@
 									${fieldValue(bean:row,field:"asignado")}
 									<br>
 									<g:each in="${row?.auxiliares}" var="aux">
-										<span class="label label-primary">${aux.nombre}</span>
+										<span class="label label-primary">${aux.nombre}</span><br>
 										%{-- <ul class="text-center">${aux.nombre}</ul> --}%
 									</g:each>
 								</td>

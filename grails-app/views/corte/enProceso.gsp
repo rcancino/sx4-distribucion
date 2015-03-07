@@ -79,7 +79,7 @@
 									<br>
 									<g:each in="${row.auxiliares}" var="aux">
 										<g:if test="${aux.tipo=='EMPACADOR'}">
-											<span class="label label-primary">${aux.nombre}</span>
+											<span class="label label-primary">${aux.nombre}</span><br>
 										</g:if>
 									</g:each>
 								</td>
