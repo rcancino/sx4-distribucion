@@ -133,6 +133,7 @@ class Surtido {
     def getAnalisis(){
         if(analisis==null){
             analisis=new SurtidoAnalisis()
+            analisis.surtido=this
         }
         return analisis
     }

@@ -70,7 +70,8 @@ class SurtidoAnalisis {
 
 	def getMinutosAcumulados(){
 		if(surtido.entregado){
-			return TimeCategory.minus(surtido.entregado, surtido.iniciado)
+			def duration=TimeCategory.minus(surtido.entregado, surtido.iniciado)
+			return duration.toMilliseconds()/(1000*60)
 		}
 
 		def start = surtido.iniciado?:surtido.pedidoCreado

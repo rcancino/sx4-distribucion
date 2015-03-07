@@ -21,7 +21,7 @@ class ActualizarEmbarquesJob {
 
     def execute(context) {
         try {
-            println 'Actualizando embarqes .......'
+            
             def counter = context.jobDetail.jobDataMap['counter'] ?: 0
             counter++
             def fecha=new Date()

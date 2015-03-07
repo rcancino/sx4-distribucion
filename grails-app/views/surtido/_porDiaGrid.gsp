@@ -16,7 +16,7 @@
 			<th>Inicio</th>
 			<th>Fin</th>
 			<th>Entregado</th>
-			<th>Id</th>
+			<th>Minutos</th>
 			<th>Partidas</th>
 			<th>Kilos</th>
 			<th>Cortes</th>
@@ -50,9 +50,9 @@
 	<tfoot>
 		<th colspan="9"></th>
 		<th> Total</th>
-		<th>${surtidoInstanceList.sum 0.0 ,{it.getAnalisis().getMinutosAcumulados()}}</th>
-		<th>${surtidoInstanceList.sum 0.0 ,{it.partidas.size()}}</th>
-		<th>${surtidoInstanceList.sum 0.0 ,{it.getAnalisis().getKilos()}}</th>
-		<th>${surtidoInstanceList.sum 0.0 ,{it.partidas.getCortes()}}</th>
+		<th>${surtidoInstanceList.sum(0.0) {it.getAnalisis().getMinutosAcumulados()}}</th>
+		%{-- <th>${surtidoInstanceList.sum( 0.0 ),{it.partidas.size()}}</th>
+		<th>${surtidoInstanceList.sum (0.0 ),{it.getAnalisis().getKilos()}}</th>
+		<th>${surtidoInstanceList.sum (0.0) ,{it.partidas.getCortes()}}</th> --}%
 	</tfoot>
 </table>
