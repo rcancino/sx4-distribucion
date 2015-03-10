@@ -175,11 +175,15 @@ class CorteController {
       redirect action:'pendientes'
     }
 
-    def enProceso(Integer max){
+    def enProceso(Integer max,Usuario cortador){
       params.max = Math.min(max ?: 10, 100)
       params.sort='pedido'
       params.order='asc'
-      
+      if(cortador==null){
+        flash.error="No ha cortador registrado"
+        [corteInstanceList:[],corteInstanceCount:0]
+        return
+      }
       def query=Corte.where{asignado!=null }
       query=query.where{surtidoDet.surtido.entregado==null}
       [corteInstanceList:query.list(params),corteInstanceCount:query.count()]

@@ -37,10 +37,13 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <g:link action="index" controller="home" class="navbar-brand"><i class="fa fa-home fa-lg"></i> SX4 </g:link>
+                    %{-- <g:link action="index" controller="home" class="navbar-brand"><i class="fa fa-home fa-lg"></i> SX4 </g:link> --}%
+                    <a href="" class="navbar-brand">
+                        SX4 Sistema de Empaque
+                    </a>
                 </div>
                 <div class="collapse navbar-collapse" id="mainMenu">
-                    <nav:menu class="nav navbar-nav" scope="cortador"/>
+                    %{-- <nav:menu class="nav navbar-nav" scope="cortador"/> --}%
                     <ul class="nav navbar-nav navbar-right">
                         <p class="navbar-text navbar-left">DB:
                             <a href="#" class="navbar-link navbar-right" data-toggle="tooltip" 
