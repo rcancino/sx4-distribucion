@@ -23,6 +23,19 @@
 						<h4 class="text-center">${flash.success}</h4>
 					</div>
 				</g:if>
+
+				<ul class="nav nav-pills">
+					<g:each in="${com.luxsoft.sx4.sec.UsuarioRole.executeQuery("select l.usuario from UsuarioRole l where l.role.authority='CORTADOR'")}" var="row">
+						<li class="${row.username==cortador?.username?'active':''}">
+							<g:link action="enProceso" id="${row.id}">
+								${row.username}
+							</g:link>
+						</li>
+					</g:each>
+				  %{-- <li role="presentation" class="active"><a href="#">Home</a></li>
+				  <li role="presentation"><a href="#">Profile</a></li>
+				  <li role="presentation"><a href="#">Messages</a></li> --}%
+				</ul>
 				<table class="table table-striped table-bordered table-condensed">
 					<thead>
 						<tr>

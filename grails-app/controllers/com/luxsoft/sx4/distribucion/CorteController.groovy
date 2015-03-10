@@ -3,7 +3,7 @@ package com.luxsoft.sx4.distribucion
 import grails.transaction.Transactional
 import grails.transaction.NotTransactional
 import org.springframework.security.access.annotation.Secured
-import com.luxsoft.sx4.sec.Usuario
+import com.luxsoft.sx4.sec.*
 
 @Transactional(readOnly = true)
 @Secured(["hasAnyRole('CORTADOR')"])
@@ -175,23 +175,32 @@ class CorteController {
       redirect action:'pendientes'
     }
 
+    @Secured(['permitAll'])
     def enProceso(Integer max,Usuario cortador){
       params.max = Math.min(max ?: 10, 100)
       params.sort='pedido'
       params.order='asc'
+
+      def cortadores=UsuarioRole.executeQuery("select l.usuario from UsuarioRole l where l.role.authority='CORTADOR'")
+
       if(cortador==null){
         flash.error="No ha cortador registrado"
-        [corteInstanceList:[],corteInstanceCount:0]
+
+        println 'Cortadores registrados: '+cortadores.size()
+        [corteInstanceList:[],corteInstanceCount:0,cortadores:cortadores]
         return
       }
-      def query=Corte.where{asignado!=null }
-      query=query.where{surtidoDet.surtido.entregado==null}
-      [corteInstanceList:query.list(params),corteInstanceCount:query.count()]
+      def query=Corte.where{asignado==cortador.username }
+      query=query.where{surtidoDet.surtido.entregado==null }
+      [corteInstanceList:query.list(params)
+        ,corteInstanceCount:query.count(),cortadores:cortadores
+        ,cortador:cortador]
       //def list=Corte.findAll("from Corte c where c.empacadoFin=null and c.surtidoDet.surtido.asignado!=null")
       //respond list, model:[corteInstanceCount:list.size()]
     }
 
     @Transactional
+    @Secured(['permitAll'])
     def agregarAuxiliar(){
       Corte corte=Corte.get(params.id)
       assert corte,'No existe el corte '+params.id
