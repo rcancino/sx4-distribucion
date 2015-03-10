@@ -23,7 +23,7 @@ class CorteController {
         def query=Corte.where{empacadoFin==null}
         respond query.list(params), model:[corteInstanceCount:query.count()]
         */
-        def list=Corte.findAll("from Corte c where c.empacadoFin=null and c.surtidoDet.surtido.asignado!=null")
+        def list=Corte.findAll("from Corte c where c.fin=null and c.surtidoDet.surtido.asignado!=null")
         respond list, model:[corteInstanceCount:list.size()]
     }
 
