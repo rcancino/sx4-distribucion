@@ -23,6 +23,11 @@
 						<h4 class="text-center">${flash.success}</h4>
 					</div>
 				</g:if>
+				<g:else>
+					<div class="alert alert-info">
+						<h4 class="text-center">Operador: ${cortador?.nombre}</h4>
+					</div>
+				</g:else>
 				
 				<div class="">
 					<div class="toolbar-panel">
