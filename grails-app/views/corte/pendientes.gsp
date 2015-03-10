@@ -104,8 +104,6 @@
 											${row.statusEmpaque}
 										</a>
 									</g:if>
-
-									
 								</td>
 								
 							</tr>

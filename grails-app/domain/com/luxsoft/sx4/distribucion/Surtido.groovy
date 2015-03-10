@@ -56,9 +56,12 @@ class Surtido {
     String forma
 
     Boolean puesto
+
     Date fechaPuesto
 
     SurtidoAnalisis analisis
+
+    String comentario
 
 
 
@@ -83,6 +86,7 @@ class Surtido {
         fechaPuesto nullable:true
         facturado nullable:true
         formaDeEntrega maxSize:20
+        comentario nullable:true
 
     }
 

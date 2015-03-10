@@ -36,7 +36,7 @@
 							<th>Hora</th>
 							<th>Partidas</th>
 							<th>Cortes</th>
-							<th  class="text-center">Status</th>
+							%{-- <th  class="text-center">Status</th> --}%
 						</tr>
 					</thead>
 					<tbody >
@@ -66,9 +66,9 @@
 								<td><g:formatDate date="${row.pedidoCreado}" format="HH:mm (dd/MM)"/></td>
 								<td><g:formatNumber number="${row.partidas.size()}" format="####"/></td>
 								<td><g:formatNumber number="${row.cortes}" format="####"/></td>
-								<td class="${row.status=='EN SURTIDO'?'success':'warning'}">
+								%{-- <td class="${row.status=='EN SURTIDO'?'success':'warning'}">
 									${fieldValue(bean:row,field:"status")}
-								</td>
+								</td> --}%
 							</tr>
 						</g:each>
 					</tbody>
