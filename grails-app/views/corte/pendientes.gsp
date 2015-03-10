@@ -33,7 +33,7 @@
 							<th>Cortes</th>
 							<th>Asignado</th>
 							<th class="text-center">Estatus</th>
-							<th class="text-center">Empacado</th>
+							%{-- <th class="text-center">Empacado</th> --}%
 							%{-- <th>Liberacion</th> --}%
 						</tr>
 					</thead>
@@ -83,7 +83,7 @@
 									</g:else>
 									
 								</td>
-								<td class="text-center">
+								%{-- <td class="text-center">
 									<g:if test="${row.fin}">
 										<a href="" data-toggle="modal" class="btn btn-warning btn-lg btn-block"
 											data-target="#empaqueModal"
@@ -104,7 +104,7 @@
 											${row.statusEmpaque}
 										</a>
 									</g:if>
-								</td>
+								</td> --}%
 								
 							</tr>
 						</g:each>
@@ -115,13 +115,30 @@
 		</div> <!-- end .row 2-->
 
 		<g:render template="corteDialog"/>
-		<g:render template="empaqueDialog"/>
+		%{-- <g:render template="empaqueDialog"/> --}%
 
 		
 
 	</div><!-- end .container-->
 
-	
+	<script type="text/javascript">
+		$(function(){
+			//
+			var count=0;
+
+			setInterval(function(){
+
+				if (!$('#corteModal').is(':visible')) {
+					//var loc=window.location
+    				console.log('Actualizar consulta...'+count);
+    				//console.log('Location: '+loc);
+    				window.location.reload();
+				}
+				count++;
+
+			},10000);
+		});
+	</script>	
 
 </body>
 

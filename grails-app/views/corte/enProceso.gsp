@@ -83,12 +83,34 @@
 										</g:if>
 									</g:each>
 								</td>
-								<td >
+								%{-- <td >
+
 									<a href="" data-toggle="modal" class="btn btn-warning btn-lg btn-block">
 										${row.status}
 									</a>
+								</td> --}%
+								<td class="text-center">
+									<g:if test="${row.fin}">
+										<a href="" data-toggle="modal" class="btn btn-warning btn-lg btn-block"
+											data-target="#empaqueModal"
+											data-pedido="${row.pedido}" 
+											data-descripcion="${row.descripcion}"
+											data-corte="${row.id}"
+											data-producto="${row.producto}" 
+											data-cantidad="${row.cantidad}"
+											data-cortes="${row.cortes}" 
+											data-surtidor="${row.surtidor}"
+											data-instruccion="${row.instruccion}"
+											data-cortador="${row.asignado}"
+											data-empacador="${row.empacador}"
+											data-statusEmpaque="${row.status}"
+											data-empacadoInicio="${row.empacadoInicio}"
+											data-empacadoFin="${row.empacadoFin}"
+											data-status="${row.statusEmpaque}">
+											${row.status}
+										</a>
+									</g:if>
 								</td>
-								
 								
 							</tr>
 						</g:each>
@@ -99,13 +121,32 @@
 		</div> <!-- end .row 2-->
 
 		<g:render template="agregarAuxiliarDeCorteDialog"/>
-		
 
-		
+		<g:render template="empaqueDialog"/>
 
 	</div><!-- end .container-->
 
-	
+	<script type="text/javascript">
+		$(function(){
+			//
+			var count=0;
+
+			setInterval(function(){
+
+				var empaqueModal=$('#empaqueModal');
+				var auxiliarModal=$('#agregarAuxiliarModal');
+
+				if (!empaqueModal.is(':visible') && !auxiliarModal.is(':visible')) {
+					//var loc=window.location
+    				console.log('Actualizar consulta...'+count);
+    				//console.log('Location: '+loc);
+    				window.location.reload();
+				}
+				count++;
+
+			},10000);
+		});
+	</script>		
 
 </body>
 
