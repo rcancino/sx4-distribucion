@@ -79,6 +79,24 @@
 
 	</div><!-- end .container-->
 
+		<script type="text/javascript">
+			$(function(){
+				//
+				var count=0;
+
+				setInterval(function(){
+
+					var modal=$('#entregaDeSurtidoModal');
+
+					if (!modal.is(':visible') ) {
+	    				console.log('Actualizar consulta...'+count);
+	    				window.location.reload();
+					}
+					count++;
+
+				},10000);
+			});
+		</script>
 	
 
 </body>
