@@ -32,7 +32,8 @@
 							<th>Fecha</th>
 							<th>Cortes</th>
 							<th>Asignado</th>
-							<th class="text-center">Estatus</th>
+							<th class="text-center">Corte</th>
+							<th class="text-center">Empacado</th>
 							%{-- <th class="text-center">Empacado</th> --}%
 							%{-- <th>Liberacion</th> --}%
 						</tr>
@@ -83,10 +84,11 @@
 									</g:else>
 									
 								</td>
-								%{-- <td class="text-center">
-									<g:if test="${row.fin}">
-										<a href="" data-toggle="modal" class="btn btn-warning btn-lg btn-block"
-											data-target="#empaqueModal"
+								<td class="text-center">
+									<g:if test="${row.asignado}">
+										<a href="" data-toggle="modal" 
+											class="btn btn-warning btn-lg btn-block"
+											data-target="#corteModal"
 											data-pedido="${row.pedido}" 
 											data-descripcion="${row.descripcion}"
 											data-corte="${row.id}"
@@ -97,14 +99,11 @@
 											data-instruccion="${row.instruccion}"
 											data-cortador="${row.asignado}"
 											data-empacador="${row.empacador}"
-											data-statusEmpaque="${row.status}"
-											data-empacadoInicio="${row.empacadoInicio}"
-											data-empacadoFin="${row.empacadoFin}"
-											data-status="${row.statusEmpaque}">
+											data-status="${row.statusCorte}">
 											${row.statusEmpaque}
 										</a>
 									</g:if>
-								</td> --}%
+								</td>
 								
 							</tr>
 						</g:each>
