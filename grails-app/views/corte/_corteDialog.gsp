@@ -91,10 +91,15 @@
 		  var cantidad=button.data('cantidad');
 		  var pedido=button.data('pedido');
 		  var modal = $(this);
+		  var cortador=button.data('cortador');
 		  
 		  if(button.data('status')=='PENDIENTE'){
 		  	modal.find('.modal-title').text('ENTREGANDO A  CORTE : ' + producto);
 		  	modal.find('form').get(0).setAttribute('action', 'entregarACorte'); //this works
+		  	if(cortador!==null){
+		  		modal.find('.modal-title').text('INICIAR  CORTE : ' + producto);
+		  		modal.find('form').get(0).setAttribute('action', 'iniciarCorte');
+		  	}
 		  }else{
 		  	modal.find('.modal-title').text('CORTE TERMINADO DE: ' + producto);
 		  	modal.find('form').get(0).setAttribute('action', 'terminarCorte'); //this works

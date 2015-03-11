@@ -25,34 +25,12 @@
 				</g:if>
 				<g:else>
 					<div class="alert alert-info">
+											
 						<h4 class="text-center">Operador: ${cortador?.nombre}</h4>
 					</div>
 				</g:else>
 				
-				<div class="">
-					<div class="toolbar-panel">
-						<div class="btn-group btn-group-justified"  >
-						  	<g:each in="${com.luxsoft.sx4.sec.UsuarioRole.executeQuery("select l.usuario from UsuarioRole l where l.role.authority='CORTADOR'")}" var="row">
-						  		
-						  		<g:link action="enProceso" id="${row.id}" 
-						  			class="btn ${row.username==cortador?.username?'btn-primary':'btn-default'} btn-block">
-						  				${row.username}
-						  		</g:link>
-						  	</g:each>
-						</div>
-					</div>
-					
-
-					%{-- <ul class="nav nav-pills">
-						<g:each in="${com.luxsoft.sx4.sec.UsuarioRole.executeQuery("select l.usuario from UsuarioRole l where l.role.authority='CORTADOR'")}" var="row">
-							<li class="${row.username==cortador?.username?'active':''}">
-								<g:link action="enProceso" id="${row.id}">
-									${row.username}
-								</g:link>
-							</li>
-						</g:each>
-					</ul> --}%
-				</div>
+				
 				
 				<table class="table table-striped table-bordered table-condensed">
 					<thead>

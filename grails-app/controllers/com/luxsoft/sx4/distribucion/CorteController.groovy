@@ -89,26 +89,19 @@ class CorteController {
         redirect action:'pendientes'
         return
       }
-      def surtidor=Usuario.findByNip(nip)
-      if(!surtidor){
-        flash.error="Operador no encontrado verifique su NIP "
+     
+
+      if(nip!=cortador.nip){
+        flash.error= "Esta partida solo la puede cortada por: $corte.asignado verifique su NIP"  
         redirect action:'pendientes'
         return 
       }
-
-      if(surtidor.username!=corte.surtidor){
-        flash.error= "Esta partida solo la puede entregar a corte: $corte.surtidor no por $surtidor.username"  
-        redirect action:'pendientes'
-        return 
-      }
-
-      corte.asignado=cortador.username
       corte.inicio=new Date()
       corte.empacadoInicio=corte.inicio
       corte.save(flush:true)
-      event('corteAsignado', corte)
-      log.info "Producto  $corte.producto entregado  a  $cortador.username "
-      flash.success= "Producto  $corte.producto entregado  a  $cortador.username "  
+      event('corteIniciado', corte)
+      log.info " Corte de producto  $corte.producto iniciado por:$cortador.username "
+      flash.success=  " Corte de producto  $corte.producto iniciado por:$cortador.username " 
       redirect action:'pendientes'
     }
 

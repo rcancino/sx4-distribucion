@@ -21,19 +21,25 @@
                 <div class="navbar-header">
                     <p class="navbar-text ">Ordenes de corte: <a href="#" class="navbar-link">${new Date().format('dd/MM/yyyy')}</a></p>
                 </div>
-               %{--  <div class="collapse navbar-collapse" id="mainMenu">
+               <div class="collapse navbar-collapse" id="mainMenu">
                     <ul class="nav navbar-nav">
                         <li class="dropdown">
                                   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Cortadores <span class="caret"></span> </a>
-                                  <ul class="dropdown-menu" role="menu">
-                                    <g:each in="${cortadores}" var="cortador">
-                                        <li><g:link action="enProceso" id="${cortador.id}">${cortador.nombre}</g:link></li>
-                                    </g:each>
-                                  </ul>
+                                 <ul class="dropdown-menu">
+                                                        <li>
+                                                            <g:each in="${com.luxsoft.sx4.sec.UsuarioRole.executeQuery("select l.usuario from UsuarioRole l where l.role.authority='CORTADOR'")}" var="row">
+                                                        
+                                                            <g:link action="enProceso" id="${row.id}">
+                                                                ${row.username}
+                                                            </g:link>
+                                                        </g:each>
+                                                        </li>
+                                                        
+                                                    </ul>
                                 </li>
                     </ul>
                     
-                </div> --}%
+                </div> 
             </div>
         </nav>
         

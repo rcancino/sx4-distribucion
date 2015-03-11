@@ -32,8 +32,8 @@
 							<th>Fecha</th>
 							<th>Cortes</th>
 							<th>Asignado</th>
+							<th class="text-center">Surtido</th>
 							<th class="text-center">Corte</th>
-							<th class="text-center">Empacado</th>
 							%{-- <th class="text-center">Empacado</th> --}%
 							%{-- <th>Liberacion</th> --}%
 						</tr>
@@ -43,7 +43,7 @@
 							<tr>
 								<td>
 									<a href="" data-toggle="modal" class="btn btn-default btn-lg btn-block">
-										<g:formatNumber number="${row.pedido}" format="####"/>
+										<g:formatNumber number="${row.pedido}" format="####"/> 
 									</a>
 									
 								</td>
@@ -60,7 +60,7 @@
 									</g:else>
 								</td>
 								<td class="text-center ${row.fin?'success':''}">
-									<g:if test="${!row.fin}">
+									<g:if test="${!row.asignado}">
 
 										<a href="" data-toggle="modal" 
 											class="btn btn-warning btn-lg btn-block"
@@ -79,9 +79,6 @@
 											${row.statusCorte}
 										</a>
 									</g:if>
-									<g:else>
-										<g:formatDate date="${row.fin}" format="hh:mm (dd-MM)"/>
-									</g:else>
 									
 								</td>
 								<td class="text-center">
@@ -100,7 +97,7 @@
 											data-cortador="${row.asignado}"
 											data-empacador="${row.empacador}"
 											data-status="${row.statusCorte}">
-											${row.statusEmpaque}
+											${row.statusCorte}
 										</a>
 									</g:if>
 								</td>
