@@ -93,10 +93,22 @@ class SurtidoController {
         redirect action:'pendientes'
         return 
       }
-
+      
       surtido.asignado=user.username
       surtido.iniciado=new Date()
       surtido.save(flush:true,failOnError:true)
+      
+      if(params.surtidos){
+        def adicionales=params.surtidos.findAll({it.toLong()!=surtido.id})
+        adicionales.each{
+          def s2=Surtido.get(it.toLong())
+          s2.asignado=user.username
+          s2.iniciado=new Date()
+          s2.save(flush:true,failOnError:true)
+
+        }
+        //print 'Surtidos adicionales: '+adicionales
+      }
       log.info "Surtido de pedido: $surtido.pedido asignado a  $user.nombre "
       flash.success="Surtido de pedido: $surtido.pedido asignado a  $user.nombre "
       redirect action:'pendientes'

@@ -28,6 +28,7 @@
 					<thead class="text-center">
 						<tr >
 							<th class="text-center">Pedido</th>
+							<th>S</th>
 							<th>T</th>
 							
 							<th>Cliente</th>
@@ -58,6 +59,12 @@
 									</g:else>
 									%{-- <g:link action="show" id="${row.id}" class="btn btn-info btn-lg btn-block">
 									</g:link> --}%
+								</td>
+								<td>
+									<g:if test="${row.status=='PENDIENTE'}">
+										<input class="seleccionMultiple" type="checkbox" name="pedidos" value="item1"
+											data-surtido="${row.id}" data-toggle="tooltip" title="Surtido: ${row.id}"> 
+									</g:if>
 								</td>
 								<td>${fieldValue(bean:row,field:"tipo")[0..0]}</td>
 								<td>${fieldValue(bean:row,field:"cliente")}</td>

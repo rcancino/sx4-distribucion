@@ -5,7 +5,7 @@
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <h4 class="modal-title" id="exampleModalLabel">New message</h4>
       </div>
-      <g:form  action="asignar" >
+      <g:form  name="asignarForm" action="asignar" >
 
       <div class="modal-body">
         	<g:hiddenField id="surtidoField" name="id"/>
@@ -44,11 +44,34 @@
        var surtido=button.data('surtido');
        modal.find('#surtidoField').val(surtido);
        
+       // $('input:checked').each(function(){
+       //    console.log('Seleccion: '+$(this).data('surtido'));
+       // });
 
       });
       
       $('body').on('shown.bs.modal', '.modal', function () {
           $('[id$=recipient-name]').focus();
+      });
+
+      $("form[name='asignarForm']").submit(function(e){
+          
+          //var data = $(this).serializeArray();
+          //var url = $(this).attr("action");
+          //console.log('Submit form.....'+url);
+          var form=this;
+
+          $('input:checked').each(function(i){
+              var surtido=$(this).data('surtido')
+              console.log('Anexando surtido: '+surtido);
+              $('<input />').attr('type', 'hidden')
+                .attr('name', "surtidos")
+              .attr('value', surtido)
+              .appendTo(form);
+           });
+
+          
+          //e.preventDefault(); //STOP default action
       });
 
     });
