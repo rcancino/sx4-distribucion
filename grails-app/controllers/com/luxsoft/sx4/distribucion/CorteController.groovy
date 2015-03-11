@@ -41,6 +41,41 @@ class CorteController {
     }
 
     @NotTransactional
+    def entregarACorte(Corte corte){
+      
+      def cortador=getAuthenticatedUser()
+      assert cortador,'No esta firmado al sistema'
+      assert validarOperacionDeCortado(),'El sistema esta registrado sin rol de CORTADOR'
+      assert corte.statusCorte=='PENDIENTE'
+
+      String nip=params.nip
+      if(!nip){
+        flash.error="Digite su NIP para proceder con operación"
+        redirect action:'pendientes'
+        return
+      }
+      def surtidor=Usuario.findByNip(nip)
+      if(!surtidor){
+        flash.error="Operador no encontrado verifique su NIP "
+        redirect action:'pendientes'
+        return 
+      }
+
+      if(surtidor.username!=corte.surtidor){
+        flash.error= "Esta partida solo la puede entregar a corte: $corte.surtidor no por $surtidor.username"  
+        redirect action:'pendientes'
+        return 
+      }
+
+      corte.asignado=cortador.username
+      corte.save(flush:true)
+      event('surtidoEntregadoACorte', corte)
+      log.info "Producto  $corte.producto entregado  a  $cortador.username "
+      flash.success= "Producto  $corte.producto entregado  a  $cortador.username "  
+      redirect action:'pendientes'
+    }
+
+    @NotTransactional
     def iniciarCorte(Corte corte){
       
       def cortador=getAuthenticatedUser()

@@ -94,7 +94,7 @@
 		  
 		  if(button.data('status')=='PENDIENTE'){
 		  	modal.find('.modal-title').text('ENTREGANDO A  CORTE : ' + producto);
-		  	modal.find('form').get(0).setAttribute('action', 'iniciarCorte'); //this works
+		  	modal.find('form').get(0).setAttribute('action', 'entregarACorte'); //this works
 		  }else{
 		  	modal.find('.modal-title').text('CORTE TERMINADO DE: ' + producto);
 		  	modal.find('form').get(0).setAttribute('action', 'terminarCorte'); //this works
