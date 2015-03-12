@@ -40,7 +40,7 @@ class CorteController {
     	redirect action:'pendientes'
     }
 
-    @NotTransactional
+    @Transactional
     def entregarACorte(Corte corte){
       
       def cortador=getAuthenticatedUser()
@@ -70,12 +70,25 @@ class CorteController {
       corte.asignado=cortador.username
       corte.save(flush:true)
       event('surtidoEntregadoACorte', corte)
+
+      if(params.cortes){
+        def adicionales=params.cortes.findAll({it.toLong()!=corte.id})
+        adicionales.each{
+          def ca=Corte.get(it)
+          if(ca.surtidor==corte.surtidor ){
+              ca.asignado=cortador.username
+              ca.save(flush:true)
+              event('surtidoEntregadoACorte', ca)
+          }
+        }
+        //print 'Surtidos adicionales: '+adicionales
+      }
       log.info "Producto  $corte.producto entregado  a  $cortador.username "
       flash.success= "Producto  $corte.producto entregado  a  $cortador.username "  
       redirect action:'pendientes'
     }
 
-    @NotTransactional
+    @Transactional
     def iniciarCorte(Corte corte){
       
       def cortador=getAuthenticatedUser()
@@ -100,6 +113,21 @@ class CorteController {
       corte.empacadoInicio=corte.inicio
       corte.save(flush:true)
       event('corteIniciado', corte)
+      
+      if(params.cortes){
+        def adicionales=params.cortes.findAll({it.toLong()!=corte.id})
+        adicionales.each{
+          def ca=Corte.get(it)
+          if(ca.asignado==corte.asignado && (ca.inicio==null) ){
+              ca.inicio=new Date()
+              ca.empacadoInicio=corte.inicio
+              ca.save(flush:true)
+              event('corteIniciado', ca)
+          }
+        }
+        //print 'Surtidos adicionales: '+adicionales
+      }
+      
       log.info " Corte de producto  $corte.producto iniciado por:$cortador.username "
       flash.success=  " Corte de producto  $corte.producto iniciado por:$cortador.username " 
       redirect action:'pendientes'
@@ -123,8 +151,22 @@ class CorteController {
       if(cortador.nip==nip){
           corte.fin=new Date()
           corte.save(flush:true)
+          event('corteTerminado', corte)
           log.info "Corte terminado para  $corte.producto entregado por:  $cortador.nombre "
           flash.success= "Corte terminado para  $corte.producto. Entregado por:  $cortador.nombre " 
+
+          if(params.cortes){
+            def adicionales=params.cortes.findAll({it.toLong()!=corte.id})
+              adicionales.each{
+              def ca=Corte.get(it)
+              if(ca.asignado==corte.asignado && (ca.fin==null) ){
+                  ca.fin=new Date()
+                  ca.save(flush:true)
+                  event('corteTerminado', ca)
+              }
+            }
+            //print 'Surtidos adicionales: '+adicionales
+          }
       }else{
           flash.error="NIP incorrecto"
       }

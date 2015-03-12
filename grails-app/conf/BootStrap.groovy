@@ -12,6 +12,8 @@ class BootStrap {
 		def cortadorRole=Role.findOrSaveWhere(authority:'CORTADOR')
 		def embarqueRole=Role.findOrSaveWhere(authority:'EMBARQUE')
 		def gerenteRole=Role.findOrSaveWhere(authority:'GERENTE')
+		def supervisorSurtidoRole=Role.findOrSaveWhere(authority:'SUPERVISOR_SURTIDO')
+
 
 
 

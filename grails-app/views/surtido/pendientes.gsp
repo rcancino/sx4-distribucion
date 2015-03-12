@@ -67,7 +67,18 @@
 									</g:if>
 								</td>
 								<td>${fieldValue(bean:row,field:"tipo")[0..0]}</td>
-								<td>${fieldValue(bean:row,field:"cliente")}</td>
+								<td>
+									<g:if test="${row.status=='PENDIENTE'}">
+										<a href="" 
+											class="btn btn-warning	 btn-lg btn-block"
+											data-toggle="modal" 
+											data-target="#asignacionManualDialog" 
+											data-pedido="${row.pedido}" 
+											data-surtido="${row.id}">
+											${fieldValue(bean:row,field:"cliente")}
+										</a>
+									</g:if>
+								</td>
 								<td>${fieldValue(bean:row,field:"forma")}</td>
 								<td>${fieldValue(bean:row,field:"formaDeEntrega")}</td>
 								<td><g:formatDate date="${row.pedidoCreado}" format="HH:mm (dd/MM)"/></td>
@@ -84,6 +95,7 @@
 
 		</div> <!-- end .row 2-->
 		<g:render template="atenderSurtidoDialog"/>
+		<g:render template="asignacionManualDialog"/>
 		
 
 	</div><!-- end .container-->
@@ -96,14 +108,15 @@
 				setInterval(function(){
 
 					var modal=$('#exampleModal');
+					var modal2=$('#asignacionManualDialog');
 
-					if (!modal.is(':visible') ) {
+					if (!modal.is(':visible') && !modal2.is(':visible')) {
 	    				console.log('Actualizar consulta...'+count);
 	    				window.location.reload();
 					}
 					count++;
 
-				},10000);
+				},20000);
 			});
 		</script>	
 	

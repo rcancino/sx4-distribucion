@@ -96,7 +96,8 @@
 		  if(button.data('status')=='PENDIENTE'){
 		  	modal.find('.modal-title').text('ENTREGANDO A  CORTE : ' + producto);
 		  	modal.find('form').get(0).setAttribute('action', 'entregarACorte'); //this works
-		  	if(cortador!==null){
+		  	console.log('Cortador: '+cortador);
+		  	if(cortador!==null && cortador!==''){
 		  		modal.find('.modal-title').text('INICIAR  CORTE : ' + producto);
 		  		modal.find('form').get(0).setAttribute('action', 'iniciarCorte');
 		  	}
@@ -119,5 +120,20 @@
 	});
 	$('body').on('shown.bs.modal', '.modal', function () {
 			$('[id$=recipient-name]').focus();
+	});
+
+	$("form").submit(function(e){
+	    var form=this;
+	    $('input:checked').each(function(){
+	        var corte=$(this).data('corte')
+	        //console.log('Anexando corte: '+corte);
+	        $('<input />').attr('type', 'hidden')
+	          .attr('name', "cortes")
+	        .attr('value', corte)
+	        .appendTo(form);
+	     });
+
+	    
+	    //e.preventDefault(); //STOP default action
 	});
 </script>		

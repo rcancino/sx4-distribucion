@@ -32,6 +32,7 @@
 							<th>Fecha</th>
 							<th>Cortes</th>
 							<th>Asignado</th>
+							<th>S</th>
 							<th class="text-center">Surtido</th>
 							<th class="text-center">Corte</th>
 							%{-- <th class="text-center">Empacado</th> --}%
@@ -56,8 +57,12 @@
 										${fieldValue(bean:row,field:"asignado")}
 									</g:if>
 									<g:else>
-										${fieldValue(bean:row,field:"surtidoDet.surtido.asignado")}
+										S: ${fieldValue(bean:row,field:"surtidoDet.surtido.asignado")}
 									</g:else>
+								</td>
+								<td>
+									<input class="seleccionMultiple" type="checkbox" name="pedidos" value="item1"
+											data-corte="${row.id}" data-toggle="tooltip" title="Corte: ${row.id}"> 
 								</td>
 								<td class="text-center ${row.fin?'success':''}">
 									<g:if test="${!row.asignado}">
@@ -79,7 +84,6 @@
 											${row.statusCorte}
 										</a>
 									</g:if>
-									
 								</td>
 								<td class="text-center">
 									<g:if test="${row.asignado}">

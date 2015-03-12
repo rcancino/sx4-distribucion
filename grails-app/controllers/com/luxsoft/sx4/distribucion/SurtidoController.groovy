@@ -115,6 +115,50 @@ class SurtidoController {
 
     }
 
+    @Secured(['permitAll']) 
+    @Transactional
+    def asignacionManual(Surtido surtido){
+      String nip=params.nip
+      if(!nip){
+        flash.error="Digite su NIP para asignar pedido $surtido.pedido"
+        redirect action:'pendientes'
+        return
+      }
+      def user=Usuario.findByNip(nip)
+      if(!user){
+        flash.error="Operador no encontrado verifique su NIP "
+        redirect action:'pendientes'
+        return 
+      }
+      if(!user.getAuthorities().find{it.authority=='SUPERVISOR_SURTIDO'}){
+        flash.error="No tiene el ROL de SUPERVISOR_SURTIDO  "
+        redirect action:'pendientes'
+        return 
+      }
+
+      def surtidor=Surtidor.get(params.surtidor)
+      
+      surtido.asignado=surtidor.username
+      surtido.iniciado=new Date()
+      surtido.save(flush:true,failOnError:true)
+      
+      if(params.surtidos){
+        def adicionales=params.surtidos.findAll({it.toLong()!=surtido.id})
+        adicionales.each{
+          def s2=Surtido.get(it.toLong())
+          s2.asignado=surtidor.username
+          s2.iniciado=new Date()
+          s2.save(flush:true,failOnError:true)
+
+        }
+        //print 'Surtidos adicionales: '+adicionales
+      }
+      log.info "Surtido de pedido: $surtido.pedido asignado a  $surtidor.nombre "
+      flash.success="Surtido de pedido: $surtido.pedido asignado a  $surtidor.nombre "
+      redirect action:'pendientes'
+
+    }
+
     
     @Secured(['permitAll'])
     @Transactional

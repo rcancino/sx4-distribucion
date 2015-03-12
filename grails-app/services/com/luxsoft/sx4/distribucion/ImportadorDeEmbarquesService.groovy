@@ -118,7 +118,7 @@ class ImportadorDeEmbarquesService {
                 
                 actualizar(embarque,row)
             }else{
-                log.debug "El embarque $embarque.ir ha sido eliminado"
+                log.debug "El embarque $embarque.id ha sido eliminado"
                 embarque.delete flush:true
             }
         }
@@ -131,7 +131,7 @@ class ImportadorDeEmbarquesService {
         if(row){
                 actualizar(embarque,row)
         }else{
-            log.debug "El embarque $embarque.ir ha sido eliminado"
+            log.debug "El embarque $embarque.id ha sido eliminado"
             embarque.delete flush:true
         }
     }
