@@ -34,13 +34,14 @@ class ImportadorDeCorteService {
     """
 
     def SQL_CORTES_TRS="""
-    	select s.nombre as sucursal,p.clave as producto,p.descripcion,p.cantidad,p.cortes
+        select s.nombre as sucursal,X.clave as producto,X.descripcion,p.solicitado as cantidad,p.cortes
 		,p.CORTES_INSTRUCCION as instruccion,0 as precioCorte,ped.documento as pedido,s.nombre
-		,p.documento,false as puesto,true  as FACTURAR ,p.inventario_id as origen
-		from sx_inventario_trd p 
-		join sx_traslados ped on p.traslado_id=ped.traslado_id
-		join sw_sucursales s on p.SUCURSAL_ID=s.SUCURSAL_ID
-		where p.CORTES_INSTRUCCION is not null and p.CORTES_INSTRUCCION <>'' and  p.traslado_id=:origen
+		,ped.documento,false as puesto,true  as FACTURAR ,p.sol_id as origen
+		from sx_solicitud_trasladosdet p 
+		join sx_solicitud_traslados ped on p.sol_id=ped.sol_id
+		 JOIN sx_productos X ON(X.PRODUCTO_ID=P.PRODUCTO_ID) join sx_unidades u on(u.UNIDAD=x.UNIDAD)
+		join sw_sucursales s on PED.ORIGEN_ID=s.SUCURSAL_ID
+		where p.CORTES_INSTRUCCION is not null and p.CORTES_INSTRUCCION <>'' and  P.SOL_ID=:origen
     """
 
     def importar(Surtido surtido){

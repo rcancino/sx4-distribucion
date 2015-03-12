@@ -148,7 +148,7 @@ class SurtidoController {
         return 
       }
 
-      def surtidor=Surtidor.get(params.surtidor)
+      def surtidor=Usuario.get(params.surtidor)
       
       surtido.asignado=surtidor.username
       surtido.iniciado=new Date()

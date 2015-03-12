@@ -83,19 +83,20 @@ class ImportadorDeSurtidoService {
     """
 
     def SQL_TRASLADOS="""
-    	select 	'TRD' AS forma,s.nombre as sucursal,p.documento as pedido,'1' as cliente,p.MODIFICADO_USR as nombre,date(p.fecha) as fecha
-		,p.MODIFICADO_USR as vendedor,P.modificado as facturado,p.creado as pedidoCreado,p.TRASLADO_ID as origen
+        select 'SOL' AS forma,s.nombre as sucursal,p.documento as pedido,'1' as cliente,p.CREADO_USR as nombre,date(p.fecha) as fecha
+		,p.CREADO_USR as vendedor,P.modificado as facturado,p.creado as pedidoCreado,p.SOL_ID as origen
 		,'TRASLADO' as tipo,'ENVIO' as  formaDeEntrega,p.fecha as tpuesto,false as parcial
-		,p.DOCUMENTO as venta,'TPS' as tipoDeVenta
+		,p.DOCUMENTO as venta,'SOL' as tipoDeVenta
 		,(SELECT y.nombre FROM sx_solicitud_traslados x join sw_sucursales y on(y.SUCURSAL_ID=x.SUCURSAL_ID) where x.SOL_ID=p.sol_id) as comentario
-		from sx_traslados p
-		join sw_sucursales s on P.SUCURSAL_ID=s.SUCURSAL_ID
-		where s.nombre=:sucursal and date(p.fecha)=:fecha and p.tipo='TPS'
+		from sx_solicitud_traslados p
+		join sw_sucursales s on P.ORIGEN_ID=s.SUCURSAL_ID		
+		where s.nombre=:sucursal and date(p.fecha)=:fecha
     """
 
     def SQL_TRASLADOS_DET="""
-    	select clave as producto,descripcion,cantidad,factoru as factor,kilos,inventario_id as origen from sx_inventario_trd p
-    	where p.traslado_id=?
+    	select X.clave as producto,X.descripcion,P.solicitado as cantidad,u.factor,(p.solicitado/u.factor*x.kilos) as kilos,p.sol_id as origen 
+    	from sx_solicitud_trasladosdet p JOIN sx_productos X ON(X.PRODUCTO_ID=P.PRODUCTO_ID) join sx_unidades u on(u.UNIDAD=x.UNIDAD)
+    	where P.SOL_ID=?
     """
 
 
