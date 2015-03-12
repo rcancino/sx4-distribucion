@@ -207,9 +207,9 @@ class CorteController {
     @Transactional
     def terminarEmpacado(Corte corte){
       
-      def cortador=getAuthenticatedUser()
-      assert cortador,'No esta firmado al sistema'
-      assert validarOperacionDeCortado(),'El sistema esta registrado sin rol de CORTADOR'
+      //def cortador=getAuthenticatedUser()
+      //assert cortador,'No esta firmado al sistema'
+      //assert validarOperacionDeCortado(),'El sistema esta registrado sin rol de CORTADOR'
       assert corte.statusEmpaque=='EN EMPACADO','Corte  no esta EN EMPACADO'
 
       String nip=params.nip
@@ -241,8 +241,12 @@ class CorteController {
       corte.save(flush:true)
       event('empacadoTerminado', corte.surtidoDet.surtido.id)
       log.info "Empacado terminado para $corte.producto  "
+      
+      def cortador=Usuario.findByUsername(corte.asignado)
+
       flash.success= "Empacado terminado para $corte.producto  "
-      redirect action:'pendientes'
+      redirect action:'enProceso',params:[id:cortador.id]
+
     }
 
     @Secured(['permitAll'])
@@ -254,7 +258,7 @@ class CorteController {
       def cortadores=UsuarioRole.executeQuery("select l.usuario from UsuarioRole l where l.role.authority='CORTADOR'")
 
       if(cortador==null){
-        flash.error="No ha cortador registrado"
+        flash.error="No hay cortador registrado"
 
         println 'Cortadores registrados: '+cortadores.size()
         [corteInstanceList:[],corteInstanceCount:0,cortadores:cortadores]

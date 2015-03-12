@@ -6,7 +6,7 @@
 		        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 		        <h4 class="modal-title" id="entregarModalLabel">New message</h4>
 		      </div>
-		      <g:form  action="asignar" class="form-horizontal">
+		      <g:form  controller="corte" action="asignar" class="form-horizontal">
 		      <div class="modal-body">
 		        	<g:hiddenField id="corteField" name="id"/>
 		          <fieldset disabled>
@@ -95,7 +95,9 @@
 		  	modal.find('form').get(0).setAttribute('action', 'iniciarEmpacado'); 
 		  }else if(button.data('status')=='EN EMPACADO'){
 		  	modal.find('.modal-title').text('Terminando Empacado: ' + producto);
+
 		  	modal.find('form').get(0).setAttribute('action', 'terminarEmpacado'); 
+		  	modal.find('form').get(0).setAttribute('controller', 'corte'); 
 		  }
 
 		  modal.find("[name='descripcion']").val(button.data('descripcion'));
