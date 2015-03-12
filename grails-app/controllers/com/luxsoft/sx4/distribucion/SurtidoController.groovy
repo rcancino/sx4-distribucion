@@ -37,7 +37,11 @@ class SurtidoController {
         respond Surtido.list(params), model:[surtidoInstanceCount:Surtido.count()]
     }
 
-   
+   @Secured(['permitAll'])
+   def traslados(){
+    nav.set(scope:'surtidor/traslados')
+      redirect action:'pendientes',params:[forma:'TRASLADOS']
+   }
     
 
     @Secured(['permitAll'])
@@ -45,7 +49,15 @@ class SurtidoController {
         //params.max = 100
         params.sort='pedidoCreado'
         params.order='asc'
+
         def query=Surtido.where{asignado==null}
+        /*
+        if(params.forma=='TRASLADOS'){
+          query=query.where{forma=='SOL'}
+        }else{
+          query=query.where{forma!='SOL'}
+        }
+        */
         respond query.list(params), model:[surtidoInstanceCount:query.count()]
         //respond Surtido.list(params), model:[surtidoInstanceCount:Surtido.count()]
     }
