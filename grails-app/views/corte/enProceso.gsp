@@ -41,7 +41,7 @@
 							<th>Fecha</th>
 							<th>Cortadores</th>
 							<th>Empacadores</th>
-							<th class="text-center">Estatus</th>
+							<th class="text-center">Empacado</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -99,7 +99,7 @@
 									</a>
 								</td> --}%
 								<td class="text-center">
-									<g:if test="${row.fin}">
+									<g:if test="${!row.empacadoFin}">
 										<a href="" data-toggle="modal" class="btn btn-warning btn-lg btn-block"
 											data-target="#empaqueModal"
 											data-pedido="${row.pedido}" 
@@ -119,6 +119,9 @@
 											${row.status}
 										</a>
 									</g:if>
+									<g:else>
+										<g:formatDate date="${row.empacadoFin}" format="hh:mm (dd-MM)"/>
+									</g:else>
 								</td>
 								
 							</tr>
