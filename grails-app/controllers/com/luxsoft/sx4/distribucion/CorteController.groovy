@@ -11,6 +11,8 @@ class CorteController {
 
 	def importacionService
 
+  def corteService
+
     @Secured(["hasAnyRole('GERENTE')"])
     def index() { 
     }
@@ -113,10 +115,8 @@ class CorteController {
       corte.empacadoInicio=corte.inicio
       corte.save(flush:true)
       //Actualizando el inicio del corte en surtido
-      if(!corte.surtidoDet.surtido.corteInicio)
-        corte.surtidoDet.surtido.corteInicio=corte.inicio
+      corteService.registrarInicioDeCorteEnSurtido corte
       //event('corteIniciado', corte)
-      
       if(params.cortes){
         def adicionales=params.cortes.findAll({it.toLong()!=corte.id})
         adicionales.each{
@@ -125,7 +125,8 @@ class CorteController {
               ca.inicio=new Date()
               ca.empacadoInicio=corte.inicio
               ca.save(flush:true)
-              event('corteIniciado', ca)
+              //event('corteIniciado', ca)
+              corteService.registrarInicioDeCorteEnSurtido ca
           }
         }
         //print 'Surtidos adicionales: '+adicionales
@@ -154,7 +155,11 @@ class CorteController {
       if(cortador.nip==nip){
           corte.fin=new Date()
           corte.save(flush:true)
-          event('corteTerminado', corte)
+          //event('corteTerminado', corte)
+          
+          //Actualizar surtido
+          corteService.registrarFinDeCorteEnSurtido(corte)
+
           log.info "Corte terminado para  $corte.producto entregado por:  $cortador.nombre "
           flash.success= "Corte terminado para  $corte.producto. Entregado por:  $cortador.nombre " 
 
@@ -165,7 +170,8 @@ class CorteController {
               if(ca.asignado==corte.asignado && (ca.fin==null) ){
                   ca.fin=new Date()
                   ca.save(flush:true)
-                  event('corteTerminado', ca)
+                  corteService.registrarFinDeCorteEnSurtido(ca)
+                  //event('corteTerminado', ca)
               }
             }
             //print 'Surtidos adicionales: '+adicionales

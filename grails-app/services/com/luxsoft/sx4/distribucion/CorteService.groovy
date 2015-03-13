@@ -21,7 +21,7 @@ class CorteService {
 	}
 
 	//@NotTransactional
-    @grails.events.Listener(topic="empacadoTerminado")
+    //@grails.events.Listener(topic="empacadoTerminado")
 	def empacadoTerminado(Long surtidoId){
 		
 		Surtido.withNewSession { session ->
@@ -60,6 +60,32 @@ class CorteService {
 			// 	surtido.corteFin=new Date()
 			// 	surtido.save(flush:true)	
 			// }
+		}
+	}
+
+
+	def registrarFinDeCorteEnSurtido(Corte corte){
+		def surtido=corte.surtidoDet.surtido
+		println 'Actualizando fin de corte en surtido: '+surtido.id
+		def cortes=surtido.partidas.findAll{it.corte!=null && it.corte!=corte}
+		println 'Partidas de corte: '+cortes.size()
+		def found=cortes.find{
+			it.corte.empacadoFin==null
+		}
+		println 'Partida en corte pendiente: '+found
+
+		if(found==null){
+			log.info 'Actualizando  fin del proceso de corte en el surtido '+surtido.id
+			surtido.corteFin=new Date()
+			surtido.save(flush:true)
+		}
+	}
+
+	def registrarInicioDeCorteEnSurtido(Corte corte){
+		def surtido=corte.surtidoDet.surtido
+		if(surtido.corteInicio==null){
+		  surtido.corteInicio=corte.inicio
+		  surtido.save(flush:true)
 		}
 	}
 }
