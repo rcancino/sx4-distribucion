@@ -205,6 +205,7 @@ class CorteController {
     }
 
     @Transactional
+    @Secured(['permitAll'])
     def terminarEmpacado(Corte corte){
       
       //def cortador=getAuthenticatedUser()
@@ -259,8 +260,6 @@ class CorteController {
 
       if(cortador==null){
         flash.error="No hay cortador registrado"
-
-        println 'Cortadores registrados: '+cortadores.size()
         [corteInstanceList:[],corteInstanceCount:0,cortadores:cortadores]
         return
       }

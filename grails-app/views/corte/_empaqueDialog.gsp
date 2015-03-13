@@ -4,9 +4,9 @@
 		    <div class="modal-content">
 		      <div class="modal-header">
 		        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-		        <h4 class="modal-title" id="entregarModalLabel">New message</h4>
+		        <h4 class="modal-title" id="entregarModalLabel">Terminado de empacado</h4>
 		      </div>
-		      <g:form  controller="corte" action="asignar" class="form-horizontal">
+		      <g:form  controller="corte" action="terminarEmpacado" class="form-horizontal">
 		      <div class="modal-body">
 		        	<g:hiddenField id="corteField" name="id"/>
 		          <fieldset disabled>
@@ -90,6 +90,7 @@
 		  var pedido=button.data('pedido');
 		  var modal = $(this);
 		  
+		  /*
 		  if(button.data('status')=='PENDIENTE'){
 		  	modal.find('.modal-title').text('Iniciando Empacado: ' + producto);
 		  	modal.find('form').get(0).setAttribute('action', 'iniciarEmpacado'); 
@@ -99,7 +100,7 @@
 		  	modal.find('form').get(0).setAttribute('action', 'terminarEmpacado'); 
 		  	modal.find('form').get(0).setAttribute('controller', 'corte'); 
 		  }
-
+			*/
 		  modal.find("[name='descripcion']").val(button.data('descripcion'));
 		  modal.find("[name='cantidad']").val(cantidad);
 		  modal.find("[name='pedido']").val(pedido);

@@ -27,7 +27,7 @@ class CorteService {
 		Surtido.withNewSession { session ->
 
 			def surtido=Surtido.find("from Surtido s where s.id=?",[surtidoId])
-			log.info 'Analizando surtido '+surtido.id+ ' Cortes: '+surtido.cortes
+			
 			//println 'Partidas: '+surtido.partidas
 			try {
 				def cortes=surtido.partidas.findAll{it.corte!=null}
@@ -35,6 +35,7 @@ class CorteService {
 					it.corte.empacadoFin==null
 				}
 				if(found==null){
+					log.info 'Actualizando  fin del proceso de corte en el surtido '+surtido.id
 					surtido.corteFin=new Date()
 					surtido.save(flush:true)
 				}
@@ -48,7 +49,7 @@ class CorteService {
 			
 			surtido.partidas.each{
 				if(it.corte){
-					println it.corte.empacadoFin
+					//println it.corte.empacadoFin
 				}
 				
 			}
