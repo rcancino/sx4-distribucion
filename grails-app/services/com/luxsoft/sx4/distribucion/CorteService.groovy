@@ -63,7 +63,10 @@ class CorteService {
 		}
 	}
 
-
+	/**
+	* Registra el fin del proceso de corte en el surtido 
+	* al terminar el empacado
+	**/
 	def registrarFinDeCorteEnSurtido(Corte corte){
 		def surtido=corte.surtidoDet.surtido
 		println 'Actualizando fin de corte en surtido: '+surtido.id

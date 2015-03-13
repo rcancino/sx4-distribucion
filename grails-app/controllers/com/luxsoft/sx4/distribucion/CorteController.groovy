@@ -157,8 +157,7 @@ class CorteController {
           corte.save(flush:true)
           //event('corteTerminado', corte)
           
-          //Actualizar surtido
-          corteService.registrarFinDeCorteEnSurtido(corte)
+          
 
           log.info "Corte terminado para  $corte.producto entregado por:  $cortador.nombre "
           flash.success= "Corte terminado para  $corte.producto. Entregado por:  $cortador.nombre " 
@@ -170,7 +169,7 @@ class CorteController {
               if(ca.asignado==corte.asignado && (ca.fin==null) ){
                   ca.fin=new Date()
                   ca.save(flush:true)
-                  corteService.registrarFinDeCorteEnSurtido(ca)
+                  //corteService.registrarFinDeCorteEnSurtido(ca)
                   //event('corteTerminado', ca)
               }
             }
@@ -249,7 +248,9 @@ class CorteController {
       corte.empacador=empacador.username
       corte.empacadoFin=new Date()
       corte.save(flush:true)
-      event('empacadoTerminado', corte.surtidoDet.surtido.id)
+      //event('empacadoTerminado', corte.surtidoDet.surtido.id)
+      //Actualizar surtido
+      corteService.registrarFinDeCorteEnSurtido(corte)
       log.info "Empacado terminado para $corte.producto  "
       
       def cortador=Usuario.findByUsername(corte.asignado)
