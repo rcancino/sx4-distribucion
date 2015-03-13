@@ -112,7 +112,10 @@ class CorteController {
       corte.inicio=new Date()
       corte.empacadoInicio=corte.inicio
       corte.save(flush:true)
-      event('corteIniciado', corte)
+      //Actualizando el inicio del corte en surtido
+      if(!corte.surtidoDet.surtido.corteInicio)
+        corte.surtidoDet.surtido.corteInicio=corte.inicio
+      //event('corteIniciado', corte)
       
       if(params.cortes){
         def adicionales=params.cortes.findAll({it.toLong()!=corte.id})

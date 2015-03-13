@@ -54,7 +54,13 @@ class EmbarqueController {
 			,title:'Atendidos']
     }
 
+    def create(){
+    	[embarqueInstance:new Embarque(sucursal:findSucursal())]
+    }
 
+    String findSucursal(){
+    	grailsApplication.config.luxor.sx4.sucursal
+    }
 
 
 }
