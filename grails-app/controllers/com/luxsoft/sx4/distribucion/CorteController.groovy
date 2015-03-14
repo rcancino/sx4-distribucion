@@ -219,23 +219,24 @@ class CorteController {
       //def cortador=getAuthenticatedUser()
       //assert cortador,'No esta firmado al sistema'
       //assert validarOperacionDeCortado(),'El sistema esta registrado sin rol de CORTADOR'
+      def cortador=Usuario.findByUsername(corte.asignado)
       assert corte.statusEmpaque=='EN EMPACADO','Corte  no esta EN EMPACADO'
 
       String nip=params.nip
       if(!nip){
         flash.error="Digite su NIP para proceder con operación"
-        redirect action:'pendientes'
+         redirect action:'enProceso',params:[id:cortador.id]
         return
       }
       def empacador=Usuario.findByNip(nip)
       if(!empacador){
         flash.error="Empacador no encontrado verifique su NIP "
-        redirect action:'pendientes'
+         redirect action:'enProceso',params:[id:cortador.id]
         return 
       }
       if(!empacador.getAuthorities().find{it.authority=='EMPACADOR'}){
         flash.error="No tiene el ROL de EMPACADOR verifique su NIP "
-        redirect action:'pendientes'
+         redirect action:'enProceso',params:[id:cortador.id]
         return 
       }
       /*
@@ -253,7 +254,7 @@ class CorteController {
       corteService.registrarFinDeCorteEnSurtido(corte)
       log.info "Empacado terminado para $corte.producto  "
       
-      def cortador=Usuario.findByUsername(corte.asignado)
+      
 
       flash.success= "Empacado terminado para $corte.producto  "
       redirect action:'enProceso',params:[id:cortador.id]
