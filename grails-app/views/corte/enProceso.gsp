@@ -41,6 +41,7 @@
 							<th>Fecha</th>
 							<th>Cortadores</th>
 							<th>Empacadores</th>
+							<th>S</th>
 							<th class="text-center">Empacado</th>
 						</tr>
 					</thead>
@@ -98,6 +99,10 @@
 										${row.status}
 									</a>
 								</td> --}%
+								<td>	
+									<input class="seleccionMultiple" type="checkbox" name="cortes" value="item1"
+											data-corte="${row.id}" data-toggle="tooltip" title="Corte: ${row.id}"> 
+								</td>
 								<td class="text-center">
 									<g:if test="${!row.empacadoFin}">
 										<a href="" data-toggle="modal" class="btn btn-warning btn-lg btn-block"

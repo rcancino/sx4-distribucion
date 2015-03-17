@@ -114,6 +114,20 @@
 		});
 
 	});
+
+	$("form").submit(function(e){
+	    var form=this;
+	    $('input:checked').each(function(){
+	        var corte=$(this).data('corte')
+	        //console.log('Anexando corte: '+corte);
+	        $('<input />').attr('type', 'hidden')
+	          .attr('name', "cortes")
+	        .attr('value', corte)
+	        .appendTo(form);
+	     });
+	    //e.preventDefault(); //STOP default action
+	});
+
 	$('body').on('shown.bs.modal', '.modal', function () {
 				$('[id$=recipient-name]').focus();
 	});

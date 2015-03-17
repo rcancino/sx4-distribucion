@@ -250,9 +250,26 @@ class CorteController {
       corte.save(flush:true)
       //event('empacadoTerminado', corte.surtidoDet.surtido.id)
       //Actualizar surtido
-      corteService.registrarFinDeCorteEnSurtido(corte)
-      log.info "Empacado terminado para $corte.producto  "
       
+      log.info "Empacado terminado para $corte.producto  "
+
+      if(params.cortes){
+
+        def adicionales=params.cortes.findAll({it.toLong()!=corte.id})
+        println 'Cortes adicionales: '+params.cortes
+        adicionales.each{
+          def ca=Corte.get(it)
+          if( corte.pedido==ca.pedido && !ca.empacador && !ca.empacadoFin){
+              ca.empacador=empacador.username
+              ca.empacadoFin=corte.empacadoFin
+              ca.save(flush:true)
+              log.info "Empacado terminado para $ca.producto  "
+          }
+        }
+            //print 'Surtidos adicionales: '+adicionales
+      }
+
+      corteService.registrarFinDeCorteEnSurtido(corte)
       def cortador=Usuario.findByUsername(corte.asignado)
 
       flash.success= "Empacado terminado para $corte.producto  "

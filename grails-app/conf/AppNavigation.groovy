@@ -30,6 +30,7 @@ navigation={
 				porEntregar(action:'porEntregarAnalisis')
 				entregados(action:'entregados')
 				porSucursal()
+				traslados()
 			}
 		}
 		corte(controller:'corte',action:'index'){

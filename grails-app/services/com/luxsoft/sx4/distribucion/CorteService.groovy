@@ -69,13 +69,13 @@ class CorteService {
 	**/
 	def registrarFinDeCorteEnSurtido(Corte corte){
 		def surtido=corte.surtidoDet.surtido
-		println 'Actualizando fin de corte en surtido: '+surtido.id
+		//println 'Actualizando fin de corte en surtido: '+surtido.id
 		def cortes=surtido.partidas.findAll{it.corte!=null && it.corte!=corte}
-		println 'Partidas de corte: '+cortes.size()
+		//println 'Partidas de corte: '+cortes.size()
 		def found=cortes.find{
 			it.corte.empacadoFin==null
 		}
-		println 'Partida en corte pendiente: '+found
+		//println 'Partida en corte pendiente: '+found
 
 		if(found==null){
 			log.info 'Actualizando  fin del proceso de corte en el surtido '+surtido.id

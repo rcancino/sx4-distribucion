@@ -63,6 +63,8 @@ class Surtido {
 
     String comentario
 
+    Boolean cancelado=false
+
 
 
 

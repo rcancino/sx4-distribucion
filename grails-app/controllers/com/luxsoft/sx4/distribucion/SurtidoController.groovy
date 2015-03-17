@@ -37,10 +37,13 @@ class SurtidoController {
         respond Surtido.list(params), model:[surtidoInstanceCount:Surtido.count()]
     }
 
-   @Secured(['permitAll'])
-   def traslados(){
-    nav.set(scope:'surtidor/traslados')
-      redirect action:'pendientes',params:[forma:'TRASLADOS']
+  @Secured(["hasAnyRole('GERENTE')"])
+   def traslados(Integer max){
+      params.max = Math.min(max ?: 20, 100)
+      params.sort='pedidoCreado'
+      params.order='asc'
+      def query=Surtido.where{asignado==null && forma=='SOL'}
+      [surtidoInstanceList:query.list(params),surtidoInstanceCount:query.count()]        
    }
     
 
@@ -49,15 +52,8 @@ class SurtidoController {
         //params.max = 100
         params.sort='pedidoCreado'
         params.order='asc'
-
-        def query=Surtido.where{asignado==null}
-        /*
-        if(params.forma=='TRASLADOS'){
-          query=query.where{forma=='SOL'}
-        }else{
-          query=query.where{forma!='SOL'}
-        }
-        */
+        def query=Surtido.where{asignado==null && cancelado==false}
+       
         respond query.list(params), model:[surtidoInstanceCount:query.count()]
         //respond Surtido.list(params), model:[surtidoInstanceCount:Surtido.count()]
     }
@@ -329,6 +325,17 @@ class SurtidoController {
 
     }
 
+
+    @Secured(["hasAnyRole('GERENTE')"])
+    @Transactional
+    def cancelarTraslado(Surtido surtido) {
+      assert surtido.forma=='SOL','No es un surtido de traslado'
+      if(!surtido.cancelado){
+        surtido.cancelado=true
+        surtido.save flush:true
+      }
+      redirect action:'traslados'
+    }
 
     
 }
