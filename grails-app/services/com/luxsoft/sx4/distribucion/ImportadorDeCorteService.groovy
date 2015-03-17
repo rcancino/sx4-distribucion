@@ -51,14 +51,15 @@ class ImportadorDeCorteService {
 		surtido.partidas.each{det->
 			log.info "Buscando instruccion de corte para $surtido.pedido $det.origen"
 			def select=SQL_MESTREO
-			if(surtido.forma=='TRD')
+			if(surtido.forma=='SOL')
 				select=SQL_CORTES_TRS
-			db.eachRow( [pedido:surtido.origen,origen:det.origen as Integer],select) { row->
+			db.eachRow( [pedido:surtido.origen,origen:det.origen],select) { row->
 				
 				
-				def corte=Corte.findBySurtidoDet(det)
+				def corte=Corte.findByOrigen(det.origen)
 				if(corte){
 					log.debug 'Corte ya importado'
+					
 				}else{
 
 					corte=new Corte(row.toRowResult())
@@ -69,13 +70,17 @@ class ImportadorDeCorteService {
 					}
 					
 					log.debug "Importando instruccion  corte: "+corte.instruccion
-					det.corte=corte
+					
+					
+					
 					try {
+						det.corte=corte
 						det.save(flush:true,failOnError:true)
 					}
 					catch(Exception e) {
-						
-						throw new RuntimeException(e)
+						def ex=org.apache.commons.lang.exception.ExceptionUtils.getCause(e)
+						def msg=org.apache.commons.lang.exception.ExceptionUtils.getRootCauseMessage(e)
+						throw new RuntimeException(msg,ex)
 					}
 					
 					
