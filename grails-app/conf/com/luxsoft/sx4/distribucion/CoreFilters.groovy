@@ -1,5 +1,7 @@
 package com.luxsoft.sx4.distribucion
 
+import com.luxsoft.sx4.Periodo
+
 class CoreFilters {
 
     def filters = {
@@ -7,6 +9,9 @@ class CoreFilters {
             before = {
                 if(!session.fecha){
                     session.fecha=new Date()
+                }
+                if(!session.periodoEmbarques){
+                    session.periodoEmbarques=new Periodo(new Date()-5,new Date())
                 }
                 
             }

@@ -326,7 +326,7 @@ class SurtidoController {
     }
 
 
-    @Secured(["hasAnyRole('GERENTE')"])
+    @Secured(["hasAnyRole('SUPERVISOR_SURTIDO')"])
     @Transactional
     def cancelarTraslado(Surtido surtido) {
       assert surtido.forma=='SOL','No es un surtido de traslado'

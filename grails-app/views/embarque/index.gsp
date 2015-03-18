@@ -5,26 +5,65 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="layout" content="application"/>
 	<asset:stylesheet src="datatables/dataTables.css"/>
-	<asset:javascript src="datatables/dataTables.js"/> 
+	<asset:javascript src="datatables/dataTables.js"/>
+	<asset:stylesheet src="jquery-ui.css"/>
+	<asset:javascript src="jquery-ui/autocomplete.js"/> 
 	<title>Embarques</title>
 </head>
 <body>
-	<div class="container-fluid">
-		<div class="row">
+	<div class="container">
 
-			<div class="col-md-12">
-				<div class="page-header">
-				  <h2>Embarques <small>${title} (${periodo})</small></h2>
+		<div class="row">
+			<div class="page-header">
+			  	<h2>Embarques 
+			  		<small>
+			  			<a href="#selectorDePeriodoDialog" data-toggle="modal">Periodo (${session.periodoEmbarques})</a>
+			  		</small>
+			  	</h2>
+			  	
+			</div>
+			<div class="toolbar-panel">
+				<div class="btn-group">
+					<input type='text' id="filtro" placeholder="Buscar" class="form-control">
+				</div>
+				
+				
+				<div class="btn-group">
+					<g:link action="index" class="btn btn-default">
+						<span class="glyphicon glyphicon-repeat"></span> Refrescar
+					</g:link>
+					
+					
+					
+				</div>
+				<div class="btn-group">
+					<button type="button" name="operaciones"
+							class="btn btn-default dropdown-toggle" data-toggle="dropdown"
+							role="menu">
+							Operaciones <span class="caret"></span>
+					</button>
+					<ul class="dropdown-menu">
+						<li>
+							<g:link action="create">
+								<span class="glyphicon glyphicon-floppy-saved"></span> Nuevo
+							</g:link>
+						</li>
+					</ul>
+				</div>
+				<div class="btn-group">
+					<button type="button" name="reportes"
+							class="btn btn-default dropdown-toggle" data-toggle="dropdown"
+							role="menu">
+							Reportes <span class="caret"></span>
+					</button>
+					<ul class="dropdown-menu">
+						<li><g:link controller="reporte" action="usuariosDelSistema"> Pendiente</g:link></li>
+					    
+					</ul>
 				</div>
 			</div>
 
-			<div class="col-md-2">
-				<g:render template="sideBar"/>
-			</div>
-			
-			<div class="col-md-10">
-				
-				
+			<div>
 				<table id="grid" class="table table-striped table-bordered table-condensed ">
 					<thead>
 						<tr class="text-center">
@@ -42,7 +81,7 @@
 							<tr >
 								<td>${fieldValue(bean:row,field:"documento")}</td>
 								<td>${fieldValue(bean:row,field:"chofer")}</td>
-								<td><g:formatDate date="${row.fecha}" format="dd/MM"/></td>
+								<td><g:formatDate date="${row.fecha}" format="dd - MMM"/></td>
 								%{-- <td><g:formatDate date="${row.cerrado}" format="HH:mm (MM/dd)"/></td> --}%
 								<td><g:formatDate date="${row.salida}" format="HH:mm (MM/dd)"/></td>
 								<td><g:formatDate date="${row.regreso}" format="HH:mm (MM/dd)"/></td>
@@ -58,7 +97,8 @@
 
 		</div> <!-- end .row 2-->
 		
-
+		<g:render template="/_common/selectorDePeriodo" 
+			model="[operacion:'cambiarPeriodo',periodo:session.periodoEmbarques]"/>
 	</div><!-- end .container-->
 	<script type="text/javascript">
 		$(function(){

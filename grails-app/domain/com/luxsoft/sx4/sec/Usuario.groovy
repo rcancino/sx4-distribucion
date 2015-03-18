@@ -35,7 +35,7 @@ class Usuario {
 		passwordExpired()
 		email nullable:true,email:true
 		numeroDeEmpleado nullable:true
-		nip minSize:6,maxSize:6,unique:true
+		nip minSize:4,maxSize:4,unique:true
 		sucursal nullable:true,maxSize:20
 		puesto nullable:true,maxSize:30
 	}

@@ -23,7 +23,7 @@ class Embarque {
 	Date regreso
 	String comentario
 	//Transporte transporte
-	String chofer
+	Chofer chofer
 	long kilometroInicial=0.0
 	long kilometroFinal=0.0
 	BigDecimal valor=0.0

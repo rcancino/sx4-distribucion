@@ -20,7 +20,7 @@ class ImportadorDeEmbarquesService {
         select e.embarque_id as origen
         ,e.fecha
         ,e.sucursal
-        ,e.chofer
+        ,e.chofer as nombre
         ,e.comentario
         ,e.documento
         ,e.creado
@@ -92,6 +92,9 @@ class ImportadorDeEmbarquesService {
             def embarque=Embarque.findByOrigen(row.origen)
             if(!embarque){
                 embarque=new Embarque(row.toRowResult())
+                def chofer=Chofer.findOrSaveByNombre(row.nombre)
+                println 'Chofer detectado: '+chofer
+                embarque.chofer=chofer
                 db.eachRow(SQL_DETALLE,[row.origen]){ det->
                     def entrega=new Entrega(det.toRowResult())
                     db.eachRow(SQL_ENTREGADET,[det.origen]){ ed->
@@ -149,6 +152,16 @@ class ImportadorDeEmbarquesService {
     }
 
 
+    def importarChoferes(){
+        def sql = new Sql(dataSource_importacion)
+
+        sql.eachRow( "select distinct nombre from sx_choferes") { row->
+            def chofer=Chofer.findOrSaveByNombre(row.nombre)
+
+        }
+    }
+
+
     	
     
 
@@ -161,7 +174,7 @@ class ImportadorDeEmbarquesService {
         select e.embarque_id as origen
         ,e.fecha
         ,e.sucursal
-        ,e.chofer
+        ,e.chofer as nombre
         ,e.comentario
         ,e.documento
         ,e.creado
