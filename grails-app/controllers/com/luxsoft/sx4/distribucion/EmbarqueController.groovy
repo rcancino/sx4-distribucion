@@ -67,11 +67,6 @@ class EmbarqueController {
     @Transactional
     def save(Embarque embarqueInstance){
         assert embarqueInstance,'Embaqrque nulo'
-        // embarqueInstance.validate()
-        // if(embarqueInstance.hasErrors()){
-        //     render view:'create',model:[embarqueInstance:embarqueInstance]
-        //     return
-        // }
         try {
 
             embarqueInstance=embarqueService.create embarqueInstance
@@ -83,6 +78,10 @@ class EmbarqueController {
             return
         }
 
+    }
+
+    def show(Embarque embarqueInstance){
+        [embarqueInstance:embarqueInstance]
     }
 
     String findSucursal(){

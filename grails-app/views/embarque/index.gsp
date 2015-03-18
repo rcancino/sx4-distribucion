@@ -79,7 +79,11 @@
 					<tbody>
 						<g:each in="${embarqueInstanceList}" var="row">
 							<tr >
-								<td>${fieldValue(bean:row,field:"documento")}</td>
+								<td>
+									<g:link action="show" id="${row.id}">
+										${formatNumber(number:row.documento,format:'####')}
+									</g:link>
+								</td>
 								<td>${fieldValue(bean:row,field:"chofer")}</td>
 								<td><g:formatDate date="${row.fecha}" format="dd - MMM"/></td>
 								%{-- <td><g:formatDate date="${row.cerrado}" format="HH:mm (MM/dd)"/></td> --}%
