@@ -1,4 +1,4 @@
-package com.luxsoft.sx4.distribucion
+package com.luxsoft.sx4
 
 import grails.test.mixin.TestFor
 import spock.lang.Specification
@@ -6,8 +6,8 @@ import spock.lang.Specification
 /**
  * See the API for {@link grails.test.mixin.domain.DomainClassUnitTestMixin} for usage instructions
  */
-@TestFor(AuxiliarDeSurtido)
-class AuxiliarDeSurtidoSpec extends Specification {
+@TestFor(InstruccionDeEntrega)
+class InstruccionDeEntregaSpec extends Specification {
 
     def setup() {
     }

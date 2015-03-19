@@ -26,7 +26,7 @@ class BootStrap {
 				,nombres:'admin'
 				,nombre:' ADMIN ADMIN'
 				,numeroDeEmpleado:'0000'
-				,nip:'123456')
+				,nip:'1234')
 			.save(flush:true,failOnError:true)
 			UsuarioRole.create(admin,usuarioRole,true)
 			UsuarioRole.create(admin,adminRole,true)
@@ -43,7 +43,7 @@ class BootStrap {
 						,nombres:'surtidor'
 						,nombre:' surtidor surtidor'
 						,numeroDeEmpleado:'0000'
-						,nip:'424000').save(flush:true,failOnError:true)
+						,nip:'4240').save(flush:true,failOnError:true)
 					UsuarioRole.create(surtidor,usuarioRole,true)
 					UsuarioRole.create(surtidor,surtidorRole,true)
 				}
@@ -57,7 +57,7 @@ class BootStrap {
 						,nombres:'cortador1'
 						,nombre:' cortador1 cortador1'
 						,numeroDeEmpleado:'0000'
-						,nip:'433000').save(flush:true,failOnError:true)
+						,nip:'4330').save(flush:true,failOnError:true)
 					UsuarioRole.create(cortador1,usuarioRole,true)
 					UsuarioRole.create(cortador1,cortadorRole,true)
 				}
@@ -71,7 +71,7 @@ class BootStrap {
 						,nombres:'empacador1'
 						,nombre:' empacador1 empacador1'
 						,numeroDeEmpleado:'0000'
-						,nip:'533000').save(flush:true,failOnError:true)
+						,nip:'5330').save(flush:true,failOnError:true)
 					UsuarioRole.create(empacador1,usuarioRole,true)
 					UsuarioRole.create(empacador1,empacadorRole,true)
 				}

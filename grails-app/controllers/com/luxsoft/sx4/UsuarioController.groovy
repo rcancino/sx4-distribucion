@@ -81,7 +81,7 @@ class UsuarioController {
 			if(!found){
 				def usuario=new Usuario(row.toRowResult())
 				usuario.nombre="$usuario.nombres $usuario.apellidoPaterno?:'' $usuario.apellidoMaterno?:''"
-				usuario.nip=RandomStringUtils.randomNumeric(6)
+				usuario.nip=RandomStringUtils.randomNumeric(4)
 				usuario.username=RandomStringUtils.random(6, true, true)
 				usuario.password='123'
 				usuario.save flush:true,failOnError:true
