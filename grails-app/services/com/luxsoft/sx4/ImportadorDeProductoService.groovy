@@ -17,7 +17,7 @@ class ImportadorDeProductoService {
 
     @NotTransactional
     def importar(String clave) {
-        println 'Importando producto:'+clave
+        //println 'Importando producto:'+clave
         def sql = new Sql(dataSource_importacion)
         String select="""
             SELECT 
@@ -52,7 +52,7 @@ class ImportadorDeProductoService {
         """
         def row=sql.firstRow(select,[clave])
 
-        println 'Row para producto: '+row
+        //println 'Row para producto: '+row
         def prod=Producto.findByOrigen(row.origen)
         if(!prod){
             prod=new Producto(row)

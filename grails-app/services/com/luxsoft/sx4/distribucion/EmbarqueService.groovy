@@ -3,6 +3,7 @@ package com.luxsoft.sx4.distribucion
 import grails.transaction.Transactional
 import com.luxsoft.sx4.Folio
 import org.apache.commons.lang.exception.ExceptionUtils
+import com.luxsoft.sx4.*
 
 @Transactional
 class EmbarqueService {
@@ -27,6 +28,14 @@ class EmbarqueService {
     		throw new EmbarqueException(message:e.message,embarque:embarque)
     	}
     	
+    }
+
+    def agregarEntregaDeVentas(Embarque embarque,def ventas){
+        ventas.each{
+            def ins=InstruccionDeEntrega.get(it.id)
+            println 'Procesando entrega: '+ins
+        }
+        return embarque
     }
 }
 

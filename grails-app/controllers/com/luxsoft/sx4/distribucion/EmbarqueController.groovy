@@ -5,6 +5,9 @@ import grails.transaction.NotTransactional
 import org.springframework.security.access.annotation.Secured
 import com.luxsoft.sx4.sec.Usuario
 import com.luxsoft.sx4.Periodo
+import com.luxsoft.sx4.InstruccionDeEntrega
+import grails.converters.JSON
+import org.codehaus.groovy.grails.web.json.JSONArray
 
 @Transactional(readOnly = true)
 @Secured(["hasAnyRole('GERENTE')"])
@@ -68,11 +71,10 @@ class EmbarqueController {
     def save(Embarque embarqueInstance){
         assert embarqueInstance,'Embaqrque nulo'
         try {
-
+            embarqueInstance.sucursal=findSucursal()
             embarqueInstance=embarqueService.create embarqueInstance
             flash.message='Embarque generado: '+embarqueInstance.id
             redirect action:'index'
-
         }catch(EmbarqueException ex) {
             render view:'create',model:[embarqueInstance:ex.embarque]
             return
@@ -82,6 +84,20 @@ class EmbarqueController {
 
     def show(Embarque embarqueInstance){
         [embarqueInstance:embarqueInstance]
+    }
+
+    def agregarEntrega(Embarque embarqueInstance){
+        def pendientes=InstruccionDeEntrega.findAllByEntregaIsNull()
+        [embarqueInstance:embarqueInstance,pendientes:pendientes]
+    }
+
+    def registrarEntregas(Embarque embarqueInstance){
+        assert request.xhr,'No es un Ajax request'
+        def dataToRender=[:]
+        JSONArray facturas=JSON.parse(params.partidas);
+        embarqueInstance=embarqueService.agregarEntregaDeVentas(embarqueInstance,facturas)
+        dataToRender.id=embarqueInstance.id
+        render dataToRender as JSON
     }
 
     String findSucursal(){

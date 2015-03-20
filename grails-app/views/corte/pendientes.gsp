@@ -27,6 +27,7 @@
 					<thead>
 						<tr>
 							<th>Pedido</th>
+							<th>T</th>
 							<th>Producto</th>
 							<th>Descripcion</th>
 							<th>Fecha</th>
@@ -48,6 +49,7 @@
 									</a>
 									
 								</td>
+								<td>${fieldValue(bean:row,field:"surtidoDet.surtido.forma")}</td>
 								<td>${fieldValue(bean:row,field:"producto")}</td>
 								<td>${fieldValue(bean:row,field:"descripcion")}</td>
 								<td><g:formatDate date="${row.dateCreated}" format="hh:mm (dd-MM)"/></td>

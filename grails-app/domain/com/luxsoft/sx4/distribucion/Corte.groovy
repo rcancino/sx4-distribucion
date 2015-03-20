@@ -56,6 +56,7 @@ class Corte {
     	empacadoInicio nullable:true
     	empacadoFin nullable:true
     	empacador nullable:true
+        instruccion nullable:true
     }
 
     static transients = ['status','surtidor','statusCorte','statusEmpaque']

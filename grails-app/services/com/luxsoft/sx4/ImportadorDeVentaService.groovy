@@ -43,6 +43,7 @@ class ImportadorDeVentaService {
 					venta.addToPartidas(sdet)
 				}
    				venta.save(flush:true,failOnError:true)
+   				log.debug 'Venta importada: '+venta.origen
    				//event('ventaImportada', venta)
    			}
    			/*
@@ -64,7 +65,7 @@ class ImportadorDeVentaService {
     	}
     	def sql = new Sql(dataSource_importacion)
     	def row=sql.firstRow("select * from sx_pedidos_entregas where instruccion_id=?",venta.instruccion_id)
-    	println 'Instruccion: '+row
+    	//println 'Instruccion: '+row
     	def instruccion=new InstruccionDeEntrega()
     	instruccion.direccion=new Direccion(
     		calle:row.calle,

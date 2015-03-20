@@ -94,7 +94,10 @@ class ImportadorDeSurtidoService {
     """
 
     def SQL_TRASLADOS_DET="""
-    	select X.clave as producto,X.descripcion,P.solicitado as cantidad,u.factor,(p.solicitado/u.factor*x.kilos) as kilos,p.sol_id as origen 
+    	select concat(p.sol_id,'-',convert(p.renglon,char)) as origen 
+    	,P.solicitado as cantidad,u.factor
+    	,(p.solicitado/u.factor*x.kilos) as kilos
+    	,X.clave as producto,X.descripcion
     	from sx_solicitud_trasladosdet p JOIN sx_productos X ON(X.PRODUCTO_ID=P.PRODUCTO_ID) join sx_unidades u on(u.UNIDAD=x.UNIDAD)
     	where P.SOL_ID=?
     """
@@ -186,6 +189,7 @@ class ImportadorDeSurtidoService {
 				}
 				surtido.save(flush:true,failOnError:true)
 				//importadorDeCorteService.importar(surtido)
+				importadorDeCorteService.importar(surtido)
 				event('registroDeSurtido', surtido)
 			}
 		}

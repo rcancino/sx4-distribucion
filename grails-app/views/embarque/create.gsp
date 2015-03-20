@@ -19,7 +19,7 @@
 			<div class="col-sm-12">
 				<g:form class="form form-horizontal" action="save" name="embarqueForm">
 					<f:with bean="${embarqueInstance}">
-						<f:field property="sucursal" input-class="form-control" cols="col-sm-8" colsLabel="col-sm-2"/>
+						<f:field property="sucursal" input-class="form-control" cols="col-sm-8" colsLabel="col-sm-2" input-disabled="disabled"/>
 						<f:field property="fecha" >
 							<div class="form-group">
 								<div class="col-sm-8">
@@ -28,7 +28,7 @@
 								</div>
 							</div>
 						</f:field>
-						<f:field property="chofer" input-class="form-control" cols="col-sm-8" colsLabel="col-sm-2"/>
+						<f:field property="chofer" input-class="form-control" cols="col-sm-8" colsLabel="col-sm-2" />
 						<f:field property="comentario" input-class="form-control" cols="col-sm-8" colsLabel="col-sm-2"/>
 					</f:with>
 					<g:hasErrors bean="${embarqueInstance}">
@@ -51,6 +51,7 @@
 	<script type="text/javascript">
 		$(document).ready(function(){
 			$(".fecha").datepicker({});
+			$('#chofer').focus();
 		});	
 	</script>
 	

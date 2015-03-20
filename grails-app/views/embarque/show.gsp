@@ -28,6 +28,10 @@
 								<span class="glyphicon glyphicon-floppy-saved"></span> Nuevo
 							</g:link>
 						</li>
+						<li><g:link action="agregarEntrega" id="${embarqueInstance.id}">
+								<i class="fa fa-plus"></i> Agregar
+							</g:link>
+						</li>
 					</ul>
 				  
 				</div>

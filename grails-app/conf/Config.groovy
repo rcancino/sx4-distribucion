@@ -131,18 +131,14 @@ log4j.main = {
         environments{
             
           development{
-            info 'grails.app.controllers'
-            info 'grails.app.controllers.com.luxsoft.sx4'
+            info  'grails.app.controllers'
+            info  'grails.app.controllers.com.luxsoft.sx4'
+            info  'grails.app.services.com.luxsoft.sx4.distribucion'
+            debug 'grails.app.jobs.com.luxsoft.sx4.distribucion'
+            debug 'grails.app.jobs.com.luxsoft.sx4.distribucion.ImportadorDeVentasJob'
+            //debug  importacionLog:'grails.app.services.com.luxsoft.sx4.distribucion'
+            //debug  importacionLog:'grails.app.jobs.com.luxsoft.sx4.distribucion'
             
-            info 'grails.app.services.com.luxsoft.sx4.distribucion'
-            debug 'grails.app.services.com.luxsoft.sx4.distribucion.ImportadorDeCorteService'
-            
-            debug  importacionLog:'grails.app.services.com.luxsoft.sx4.distribucion.ImportadorDeSurtidoService'
-            debug  importacionLog:'grails.app.services.com.luxsoft.sx4.distribucion.ImportadorDeEmbarquesService'
-            info  'grails.app.jobs.com.luxsoft.sx4.distribucion.ImportadorDeSurtidoJob'
-            debug  'grails.app.jobs.com.luxsoft.sx4.distribucion.ImportadorDeEmbarquesJob'
-            debug  'grails.app.jobs.com.luxsoft.sx4.distribucion.ActualizarEmbarquesJob'
-            debug  importacionLog:'grails.app.jobs.com.luxsoft.sx4.distribucion'
             
 
           }
@@ -151,9 +147,8 @@ log4j.main = {
             error 'grails.app.services'
             error 'grails.app.controllers'
             error 'grails.app.services.com.luxsoft.sx4.distribucion'
-            error importacionLog: 'grails.app.services.com.luxsoft.sx4.distribucion.ImportadorDeSurtidoService'
-            error importacionLog: 'grails.app.services.com.luxsoft.sx4.distribucion.ImportadorDeEmbarquesService'
-            debug importacionLog:'grails.apps.jobs'
+            error importacionLog: 'grails.app.services.com.luxsoft.sx4.distribucion'
+            debug importacionLog:'grails.app.jobs.com.luxsoft.sx4.distribucion'
           }
             
         }

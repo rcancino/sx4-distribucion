@@ -258,7 +258,7 @@ class CorteController {
       if(params.cortes){
 
         def adicionales=params.cortes.findAll({it.toLong()!=corte.id})
-        println 'Cortes adicionales: '+params.cortes
+        
         adicionales.each{
           def ca=Corte.get(it)
           if( corte.pedido==ca.pedido && !ca.empacador && !ca.empacadoFin){
@@ -303,43 +303,47 @@ class CorteController {
     @Secured(['permitAll'])
     def agregarAuxiliar(){
       Corte corte=Corte.get(params.id)
+      def cortador=Usuario.findByUsername(corte.asignado)
       assert corte,'No existe el corte '+params.id
       String tipo=params.tipo
       assert tipo,'Auxiliar sin tipo no se puede generar'
       String nip=params.nip
       if(!nip){
         flash.error="Digite su NIP para agregar un auxiliar $tipo para el pedido $corte.pedido"
-        redirect action:'enProceso'
+        redirect action:'enProceso',params:[id:cortador.id]
         return
       }
-      def cortador=Usuario.findByNip(nip)
-      if(!cortador){
+      def auxiliar=Usuario.findByNip(nip)
+      if(!auxiliar){
         flash.error="Operador no encontrado verifique su NIP "
-        redirect action:'enProceso'
+        redirect action:'enProceso',params:[id:cortador.id]
         return 
       }
+
       def auth=tipo
-      if(!cortador.getAuthorities().find{it.authority==auth}){
-        flash.error="No tiene el ROL de CORTADOR verifique su NIP "
-        redirect action:'enProceso'
+      if(!auxiliar.getAuthorities().find{it.authority==auth}){
+        flash.error="No tiene el ROL de $auth verifique su NIP "
+        redirect action:'enProceso',params:[id:cortador.id]
         return 
       }
-      if(cortador.username==corte.asignado){
-        flash.error="El corte ya esta asignado a: ($cortador.username) no puede ser auxiliar"
-        redirect action:'enProceso'
+
+      if(auxiliar.username==corte.asignado){
+        flash.error="El corte ya esta asignado a: ($auxiliar.username) no puede ser auxiliar"
+        redirect action:'enProceso',params:[id:cortador.id]
         return 
       }
-      if(corte.auxiliares.find{it.nombre==cortador.username && it.tipo==tipo}){
-        flash.error="Auxiliar $tipo ya asignado al pedido $corte.pedido ($cortador.username) "
-        redirect action:'enProceso'
+
+      if(corte.auxiliares.find{it.nombre==auxiliar.username && it.tipo==tipo}){
+        flash.error="$auxiliar.username ya esta registrado como auxiliar del corte/empaque"
+        redirect action:'enProceso',params:[id:cortador.id]
         return 
       }
       
-      corte.addToAuxiliares(nombre:cortador.username,tipo:tipo)
+      corte.addToAuxiliares(nombre:auxiliar.username,tipo:tipo)
       corte.save(flush:true,failOnError:true)
-      log.info "Cortador auxiliar $cortador.username asignado al  pedido: $corte.pedido   "
-      flash.success="Auxiliar $tipo $cortador.username asignado al  pedido: $corte.pedido   "
-      redirect action:'enProceso'
+      log.info "Cortador auxiliar $auxiliar.username asignado al  pedido: $corte.pedido   "
+      flash.success="Auxiliar $tipo $auxiliar.username asignado al  pedido: $corte.pedido   "
+      redirect action:'enProceso',params:[id:cortador.id]
 
     }
 
