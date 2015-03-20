@@ -101,6 +101,25 @@ class EmbarqueController {
         render dataToRender as JSON
     }
 
+    @Transactional
+    def hacerParcial(Entrega entregaInstance){
+        assert entregaInstance,'No existe la entrega: '+params.id
+        def instruccion=InstruccionDeEntrega.findByEntrega(entregaInstance)
+        def documentos=[]
+        instruccion.venta.partidas.each{
+            def entregaDet=new EntregaDet(it)
+            documentos.add(entregaDet)
+        }
+        [entregaInstance:entregaInstance,documentos:documentos]
+    }
+
+     @Transactional
+    def agregarEntregaParcial(Entrega entregaInstance){
+        println 'Generando entrega parcial:'+params
+        flash.message="Generando entrega parcial: "+params.partidas
+        redirect action:'show',params:[id:entregaInstance.embarque.id]
+    }
+
     String findSucursal(){
     	grailsApplication.config.luxor.sx4.sucursal
     }

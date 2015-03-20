@@ -36,8 +36,6 @@
 			<td>Documento</td>
 			<td>Tipo</td>
 			<td>Fecha D</td>
-			
-			<td>P</td>
 			<td>Cliente</td>
 			<td>Arribo</td>
 			<td>Recepción</td>
@@ -51,19 +49,14 @@
 	</thead>
 	<tbody>
 		<g:each in="${entregas}" var="row">
-			<tr id="${row.id}">
+			<tr id="${row.id}" class="${row.parcial}?'warning':''">
 				<td>
-					${formatNumber(number:row.documento,format:'####')}
+					<g:link action="hacerParcial" id="${row.id}" title="Registrar como parcial" data-toggle="tooltip" >
+						${formatNumber(number:row.documento,format:'####')}
+					</g:link>
 				</td>
 				<td>${fieldValue(bean:row,field:"tipoDeDocumento")}</td>
 				<td><g:formatDate date="${row.fechaDeDocumento}" format="dd/MM/yyyy"/></td>
-				
-				<td>
-					<g:if test="${row.parcial}"><i class="fa fa-star-half-o"></i></g:if>
-					<g:else><i class="fa fa-star"></i></g:else>
-					
-				</td>
-				<td>${fieldValue(bean:row,field:"nombre")}</td>
 				<td>
 					<abbr title="${fieldValue(bean:row,field:'nombre')}">
 						${org.apache.commons.lang.StringUtils.substring(row.nombre,0,20)}

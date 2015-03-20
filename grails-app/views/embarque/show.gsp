@@ -13,6 +13,11 @@
 			<div class="page-header">
 			  	<h2>Embarque ${embarqueInstance.documento}  (${embarqueInstance.chofer}) </h2>
 			</div>
+			<g:if test="${flash.message}">
+				<div class="alert alert-info">
+			  		<h4>${flash.message}</h4>
+				</div>
+			</g:if>
 
 			<div class="col-sm-2">
 				<div class="panel panel-info">
