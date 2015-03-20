@@ -14,22 +14,19 @@ import org.apache.commons.lang.time.DateUtils
  * 
  */
 @ToString(includeNames=true,includePackage=false)
-@EqualsAndHashCode(includes='folio')
+@EqualsAndHashCode(includes='documento,tipoDeDocumento')
 class Entrega {
 
 	
 
-	String origen
+	//String origen
 	String documento
 	String tipoDeDocumento
 	Date fechaDeDocumento
-	String documentoOrigen
-
-	Long folio
-	
-	BigDecimal totalDocumento=0.0
 	
 	Boolean parcial=false
+	BigDecimal totalDocumento=0.0
+	
 	String cliente
 	String nombre
 	
@@ -63,7 +60,6 @@ class Entrega {
     static constraints = {
     	
     	documento maxSize:15
-    	documentoOrigen nullable:true
 		tipoDeDocumento maxSize:10
 		totalDocumento scale:4
 		cliente maxSize:20

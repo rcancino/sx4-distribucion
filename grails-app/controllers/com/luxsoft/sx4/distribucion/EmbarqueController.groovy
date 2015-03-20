@@ -91,6 +91,7 @@ class EmbarqueController {
         [embarqueInstance:embarqueInstance,pendientes:pendientes]
     }
 
+    @Transactional
     def registrarEntregas(Embarque embarqueInstance){
         assert request.xhr,'No es un Ajax request'
         def dataToRender=[:]

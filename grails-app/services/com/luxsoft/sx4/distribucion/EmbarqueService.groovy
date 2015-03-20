@@ -32,9 +32,29 @@ class EmbarqueService {
 
     def agregarEntregaDeVentas(Embarque embarque,def ventas){
         ventas.each{
-            def ins=InstruccionDeEntrega.get(it.id)
-            println 'Procesando entrega: '+ins
+            def ins=InstruccionDeEntrega.get(it)
+            def venta=ins.venta
+            def entrega=new Entrega(
+                documento:venta.documento,
+                tipoDeDocumento:venta.tipoVenta,
+                fechaDeDocumento:venta.fecha,
+                documentoOrigen:venta.id,
+                totalDocumento:venta.total,
+                cliente:venta.cliente.clave,
+                nombre:venta.nombre,
+                kilos :venta.kilos,
+                cantidad:venta.partidas.sum (0.0,{it.cantidad}),
+                valor:venta.total
+                )
+            embarque.addToPartidas(entrega)
+            entrega.validate()
+            if(entrega.hasErrors()){
+                throw new RuntimeException("Errores de validacion en entrega: "+entrega.errors)
+            }
+            ins.entrega=entrega
+            ins.save flush:true
         }
+        embarque.save failOnError:true
         return embarque
     }
 }
@@ -42,6 +62,6 @@ class EmbarqueService {
 class EmbarqueException extends RuntimeException{
 	String message
 	Embarque embarque
-
-    
 }
+
+

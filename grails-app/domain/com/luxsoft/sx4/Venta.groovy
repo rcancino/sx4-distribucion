@@ -51,6 +51,8 @@ class Venta {
 
 	static hasMany=[partidas:VentaDet]
 
+	static transients = ['kilos']
+
 	Date dateCreated
 	Date lastUpdated
 
@@ -79,6 +81,10 @@ class Venta {
 
     static mapping={
     	partidas cascade:"all-delete-orphan"
+    }
+
+    def getKilos(){
+    	return partidas.sum(0.0,{it.kilos})
     }
     
 }

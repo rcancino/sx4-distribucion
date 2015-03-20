@@ -36,12 +36,14 @@
 			<td>Documento</td>
 			<td>Tipo</td>
 			<td>Fecha D</td>
-			<td>Total D</td>
+			
 			<td>P</td>
 			<td>Cliente</td>
 			<td>Arribo</td>
 			<td>Recepción</td>
+			<td>Kilos</td>
 			<td>Valor</td>
+			
 			%{-- <td>Salida</td>
 			<td>Regreso</td>
 			<td>Comentario</td> --}%
@@ -55,16 +57,23 @@
 				</td>
 				<td>${fieldValue(bean:row,field:"tipoDeDocumento")}</td>
 				<td><g:formatDate date="${row.fechaDeDocumento}" format="dd/MM/yyyy"/></td>
-				<td>${formatNumber(number:row.totalDocumento,type:'currency')}</td>
+				
 				<td>
 					<g:if test="${row.parcial}"><i class="fa fa-star-half-o"></i></g:if>
 					<g:else><i class="fa fa-star"></i></g:else>
 					
 				</td>
 				<td>${fieldValue(bean:row,field:"nombre")}</td>
+				<td>
+					<abbr title="${fieldValue(bean:row,field:'nombre')}">
+						${org.apache.commons.lang.StringUtils.substring(row.nombre,0,20)}
+					</abbr>
+				</td>
 				<td><g:formatDate date="${row.arribo}" format="HH:mm (MM/dd)"/></td>
 				<td><g:formatDate date="${row.recepcion}" format="HH:mm (MM/dd)"/></td>
+				<td>${formatNumber(number:row.kilos,format:'###.###')}</td>
 				<td>${formatNumber(number:row.valor,type:'currency')}</td>
+
 				%{-- 
 				<td><g:formatDate date="${row.salida}" format="HH:mm (MM/dd)"/></td>
 				<td><g:formatDate date="${row.regreso}" format="HH:mm (MM/dd)"/></td>
