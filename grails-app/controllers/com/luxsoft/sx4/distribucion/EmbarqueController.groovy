@@ -105,6 +105,7 @@ class EmbarqueController {
     def hacerParcial(Entrega entregaInstance){
         assert entregaInstance,'No existe la entrega: '+params.id
         def instruccion=InstruccionDeEntrega.findByEntrega(entregaInstance)
+        assert instruccion,'No localizo la instruccion de entrega para la entrega: '+entregaInstance.id
         def documentos=[]
         instruccion.venta.partidas.each{
             def entregaDet=new EntregaDet(it)

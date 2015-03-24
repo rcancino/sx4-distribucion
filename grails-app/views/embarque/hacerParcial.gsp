@@ -27,7 +27,6 @@
 				<table id="grid" class="table table-striped table-bordered table-condensed">
 					<thead>
 						<tr>
-							<td>Folio</td>
 							<td>Clave</td>
 							<td>Descripcion</td>
 							<td>Cantidad</td>
@@ -40,19 +39,21 @@
 					</thead>
 					<tbody>
 						<g:each in="${documentos}" var="row">
-							<td>${formatNumber(number:row.id,format:'####')}</td>
-							<td>${row.producto}</td>
-							<td>${row.descripcion}</td>
-							<td>${formatNumber(number:row.cantidad,format:'####.###')}</td>
-							<td>${formatNumber(number:row.asignado,format:'####.###')}</td>
-							<td>${formatNumber(number:row.pendiente,format:'####.###')}</td>
-							<td name="data">
-								<g:hiddenField name="partidas.ventaDet" value="${row.ventaDet.id}"/>
-								<g:field type="text" name="partidas.cantidad" 
-									required="" value="${row.pendiente}"/>
-							</td>
-							<td>${formatNumber(number:row.ventaDet.kilos,format:'####.###')}</td>
-							<td>${formatNumber(number:row.valor,type:'currency')}</td>
+							<tr>
+								<td>${row.producto}</td>
+								<td>${row.descripcion}</td>
+								<td>${formatNumber(number:row.cantidad,format:'####.###')}</td>
+								<td>${formatNumber(number:row.asignado,format:'####.###')}</td>
+								<td>${formatNumber(number:row.pendiente,format:'####.###')}</td>
+								<td name="data">
+									<g:hiddenField name="partidas.ventaDet" value="${row.ventaDet.id}"/>
+									<g:field type="text" name="partidas.cantidad" 
+										required="" value="${row.pendiente}"/>
+								</td>
+								<td>${formatNumber(number:row.ventaDet.kilos,format:'####.###')}</td>
+								<td>${formatNumber(number:row.valor,type:'currency')}</td>
+							</tr>
+							
 						</g:each>
 					</tbody>
 				</table>
