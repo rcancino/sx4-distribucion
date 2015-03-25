@@ -6,6 +6,7 @@ import groovy.transform.EqualsAndHashCode
 import org.grails.databinding.BindingFormat
 
 import org.apache.commons.lang.time.DateUtils
+import com.luxsoft.sx4.InstruccionDeEntrega
 
 /**
  * 
@@ -32,7 +33,7 @@ class Entrega {
 	
 	int paquetes = 0
 	BigDecimal kilos = 0
-	BigDecimal cantidad = 0
+	
 
 	Date arribo
 	Date recepcion
@@ -64,7 +65,7 @@ class Entrega {
 		totalDocumento scale:4
 		cliente maxSize:20
 		kilos scale:4
-		cantidad scale:4
+		
 
 		arribo(nullable:true)
 		recepcion(nullable:true)
@@ -85,59 +86,47 @@ class Entrega {
 		partidas cascade: "all-delete-orphan"
 	}
 
+	def actualizar(){
+		actualziarValor()
+		actualizarKilos()
+	}
+
 
 	/**
 	 * Actualiza los importes de la unidad
 	 */
 	public void actualziarValor() {
-		def total=0.0
-		if(factura){
-			if(parcial){
-				valor=venta.importeBruto-venta.importeDescuento
-			}else{
-				/*
-				BigDecimal total=BigDecimal.ZERO;				
-				for(EntregaDet det:getPartidas()){
-					det.actualizar();
-					total=total.add(det.getValor());
-				}
-				setValor(total);
-				*/
-				
-				valor=partidas.sum 0.0,{it.valor}
-			}
+		
+		if(parcial){
+			partidas*.actualizar()
+			valor=partidas.sum 0.0,{it.valor}
+		}else{
+			def instruccion=InstruccionDeEntrega.findByEntrega(this)
+			def venta=instruccion.venta
+			valor=venta.importe
 		}
-		valor=total
+		
 	}
 	
-	/*
-	public void actualizarKilosCantidad(){
-		if(getFactura()!=null){
-			if(!isParcial()){				
-				double kilos = 0;
-				double cantidad=0;
-				for (VentaDet det : getFactura().getPartidas()) {
-					kilos = kilos + det.getKilos();
-					cantidad=cantidad+det.getCantidadEnUnidad();
-				}
-				setKilos(kilos);
-				setCantidad(Math.abs(cantidad));
-			}else{
-				double kilos = 0;
-				double cantidad=0;
-				for (EntregaDet det : partidas) {
-					double factor=det.getVentaDet().getFactor();
-					double cantiUni=det.getCantidad()/factor;
-					double kg=det.getProducto().getKilos();
-					kilos = kilos+(cantiUni*kg);
-					cantidad+=cantiUni;
-				}
-				setKilos(kilos);
-				setCantidad(Math.abs(cantidad));
+	
+	public void actualizarKilos(){
+		if(!parcial){
+			def instruccion=InstruccionDeEntrega.findByEntrega(this)
+			def venta=instruccion.venta
+			if(venta!=null){
+				kilos=venta.kilos
+			}
+		}else{
+
+			this.kilos=0
+			partidas.each{
+				def cantiUni=it.cantidad/it.ventaDet.factor
+				def kg=it.ventaDet.producto.kilos
+				this.kilos+=cantiUni*kg
 			}
 		}
 	}
-	*/
+	
 	
 	/*
 	public void actualizarComision(){

@@ -25,18 +25,29 @@
 						<h3 class="panel-title">Operaciones</h3>
 					</div>
 					<ul class="nav nav-tabs nav-stacked">
-						<li><g:link action="edit" id="${embarqueInstance.id}"> 
-								<span class="glyphicon glyphicon-pencil"></span> Editar
-							</g:link>
-						</li>
-						<li><g:link action="create">
-								<span class="glyphicon glyphicon-floppy-saved"></span> Nuevo
-							</g:link>
-						</li>
-						<li><g:link action="agregarEntrega" id="${embarqueInstance.id}">
-								<i class="fa fa-plus"></i> Agregar
-							</g:link>
-						</li>
+						
+						<g:if test="${!embarqueInstance.salida}">
+							<li><g:link action="agregarEntrega" id="${embarqueInstance.id}">
+									<i class="fa fa-plus"></i> Agregar
+								</g:link>
+							</li>
+							<li>
+								<g:link action="registrarSalida" id="${embarqueInstance.id}"
+									onclick="return confirm('Registrar la salida del embarque ${embarqueInstance.documento} ?');">
+									<i class="fa fa-toggle-off"></i> Registrar salida
+								</g:link>
+							</li>
+							
+						</g:if>
+						<g:if test="${embarqueInstance.salida}">
+							<li>
+								<g:link action="cancelarSalida" id="${embarqueInstance.id}"
+										onclick="return confirm('Cancelar la salida del embarque ${embarqueInstance.documento} ?');">
+									<i class="fa fa-remove"></i> Cancelar salida
+								</g:link>
+							</li>
+							
+						</g:if>
 					</ul>
 				  
 				</div>

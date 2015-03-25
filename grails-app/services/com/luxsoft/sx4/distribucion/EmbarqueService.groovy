@@ -19,6 +19,7 @@ class EmbarqueService {
             if(!folio) 
                 folio=new Folio(serie:serie,folio:1).save()
             embarque.documento=folio.next()
+            //embarque.actualizar()
     		embarque=embarque.save flush:true,failOnError:true
     		event('altaDeEmbarque',embarque)
     		return embarque
@@ -43,7 +44,6 @@ class EmbarqueService {
                 cliente:venta.cliente.clave,
                 nombre:venta.nombre,
                 kilos :venta.kilos,
-                cantidad:venta.partidas.sum (0.0,{it.cantidad}),
                 valor:venta.total
                 )
             embarque.addToPartidas(entrega)
@@ -54,7 +54,31 @@ class EmbarqueService {
             ins.entrega=entrega
             ins.save flush:true
         }
-        embarque.save failOnError:true
+        embarque.actualizar()
+        embarque.save failOnError:true,flush:true
+        return embarque
+    }
+
+    def eliminarEntrega(Embarque embarque,Entrega entrega){
+
+        def instruccion=InstruccionDeEntrega.findByEntrega(entrega)
+        instruccion.entrega=null
+
+        embarque.removeFromPartidas(entrega)
+        embarque.actualizar()
+        embarque.save (failOnError:true,flush:true)
+        return embarque
+    }
+
+    def registrarSalida(Embarque embarque){
+        embarque.salida=new Date()
+        embarque.save flush:true
+        return embarque
+    }
+
+    def cancelarSalida(Embarque embarque){
+        embarque.salida=null
+        embarque.save flush:true
         return embarque
     }
 }

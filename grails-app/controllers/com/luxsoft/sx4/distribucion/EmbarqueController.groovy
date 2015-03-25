@@ -102,27 +102,31 @@ class EmbarqueController {
     }
 
     @Transactional
-    def hacerParcial(Entrega entregaInstance){
-        assert entregaInstance,'No existe la entrega: '+params.id
-        def instruccion=InstruccionDeEntrega.findByEntrega(entregaInstance)
-        assert instruccion,'No localizo la instruccion de entrega para la entrega: '+entregaInstance.id
-        def documentos=[]
-        instruccion.venta.partidas.each{
-            def entregaDet=new EntregaDet(it)
-            documentos.add(entregaDet)
-        }
-        [entregaInstance:entregaInstance,documentos:documentos]
-    }
+    def eliminarEntrega(Entrega entrega){
+        def embarqueInstance=entrega.embarque
+        assert embarqueInstance,'Debe existir el embarque de la entrega '+entrega
+        embarqueInstance=embarqueService.eliminarEntrega(embarqueInstance,entrega)
+        respond embarqueInstance, view:'show'
 
-     @Transactional
-    def agregarEntregaParcial(Entrega entregaInstance){
-        println 'Generando entrega parcial:'+params
-        flash.message="Generando entrega parcial: "+params.partidas
-        redirect action:'show',params:[id:entregaInstance.embarque.id]
     }
 
     String findSucursal(){
     	grailsApplication.config.luxor.sx4.sucursal
+    }
+
+
+     @Transactional
+    def registrarSalida(Embarque embarqueInstance){
+        embarqueInstance=embarqueService.registrarSalida(embarqueInstance)
+        flash.message="Salida de embarque: "+formatDate(date:embarqueInstance.salida,format:'dd/MM/yyyy HH:mm')
+        respond embarqueInstance, view:'show'
+    }
+
+      @Transactional
+    def cancelarSalida(Embarque embarqueInstance){
+        embarqueInstance=embarqueService.cancelarSalida(embarqueInstance)
+        flash.message="Salida de embarque cancelada "
+        respond embarqueInstance, view:'show'
     }
 
 

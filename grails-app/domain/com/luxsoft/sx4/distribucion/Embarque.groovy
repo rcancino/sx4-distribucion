@@ -64,16 +64,11 @@ class Embarque {
     	return partidas.sum (0.0,{it.kilos})
     }
 
-	def beforeInsert() {
-		actualizar()
-	}
-
-	def beforeUpdate() {
-		actualizar()
-	}
+	
 
 	def actualizar(){
 		if(partidas){
+			partidas*.actualizar()
 			valor=valorCalculado()
 			kilos=kilosCalculados()
 			

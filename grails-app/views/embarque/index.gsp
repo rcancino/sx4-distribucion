@@ -80,12 +80,12 @@
 						<g:each in="${embarqueInstanceList}" var="row">
 							<tr >
 								<td>
-									<g:link action="show" id="${row.id}">
+									<g:link action="show" id="${row.id}" class="btn btn-primary btn-block">
 										${formatNumber(number:row.documento,format:'####')}
 									</g:link>
 								</td>
 								<td>${fieldValue(bean:row,field:"chofer")}</td>
-								<td><g:formatDate date="${row.fecha}" format="dd - MMM"/></td>
+								<td><g:formatDate date="${row.fecha}" format="dd-MMM-yyyy"/></td>
 								%{-- <td><g:formatDate date="${row.cerrado}" format="HH:mm (MM/dd)"/></td> --}%
 								<td><g:formatDate date="${row.salida}" format="HH:mm (MM/dd)"/></td>
 								<td><g:formatDate date="${row.regreso}" format="HH:mm (MM/dd)"/></td>

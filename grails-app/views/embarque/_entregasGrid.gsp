@@ -1,35 +1,3 @@
-	%{-- 
-	String documento
-	String tipoDeDocumento
-	Date fechaDeDocumento
-	String documentoOrigen
-
-	Long folio
-	
-	BigDecimal totalDocumento=0.0
-	
-	Boolean parcial=false
-	String cliente
-	String nombre
-	
-	int paquetes = 0
-	BigDecimal kilos = 0
-	BigDecimal cantidad = 0
-
-	Date arribo
-	Date recepcion
-	String recibio
-
-	String comentario
-
-	BigDecimal valor=0.0
-	BigDecimal porCobrar=0.0
-	BigDecimal comision=1.1
-	BigDecimal comisionPorTonelada=0.0
-	BigDecimal importeComision=0.0
-	Date fechaComision
-	String comentarioDeComision --}%
-
 <table id="documentosGrid" class="table table-striped table-bordered table-condensed ">
 	<thead>
 		<tr class="text-center">
@@ -41,17 +9,15 @@
 			<td>Recepción</td>
 			<td>Kilos</td>
 			<td>Valor</td>
-			
-			%{-- <td>Salida</td>
-			<td>Regreso</td>
-			<td>Comentario</td> --}%
+			<td></td>
 		</tr>
 	</thead>
 	<tbody>
 		<g:each in="${entregas}" var="row">
 			<tr id="${row.id}" class="${row.parcial}?'warning':''">
 				<td>
-					<g:link action="hacerParcial" id="${row.id}" title="Registrar como parcial" data-toggle="tooltip" >
+					<g:link controller="entrega" class="btn btn-primary btn-block"
+						action="show" id="${row.id}" title="Detalle de entrega" data-toggle="tooltip" >
 						${formatNumber(number:row.documento,format:'####')}
 					</g:link>
 				</td>
@@ -66,11 +32,13 @@
 				<td><g:formatDate date="${row.recepcion}" format="HH:mm (MM/dd)"/></td>
 				<td>${formatNumber(number:row.kilos,format:'###.###')}</td>
 				<td>${formatNumber(number:row.valor,type:'currency')}</td>
-
-				%{-- 
-				<td><g:formatDate date="${row.salida}" format="HH:mm (MM/dd)"/></td>
-				<td><g:formatDate date="${row.regreso}" format="HH:mm (MM/dd)"/></td>
-				<td>${fieldValue(bean:row,field:"comentario")}</td> --}%
+				<td>
+					<g:if test="${row.recepcion==null && row.embarque.salida==null }">
+						<g:link action="eliminarEntrega" id="${row.id}" onclick="return confirm('Eliminar la entrega del documento: '+${row.documento});">
+							<i class="fa fa-trash"></i>
+						</g:link>
+					</g:if>
+				</td>
 			</tr>
 		</g:each>
 	</tbody>

@@ -5,19 +5,18 @@ import groovy.transform.ToString
 import groovy.transform.EqualsAndHashCode
 
 import com.luxsoft.sx4.VentaDet
+import com.luxsoft.sx4.Producto
 
 @ToString(includeNames=true,includePackage=false)
 @EqualsAndHashCode(includes='producto,origen')
 class EntregaDet {
 
-	//String origen 
-	//String documentoOrigen //ventaDet
-	String producto
-	String descripcion
+	
+	Producto producto
 	BigDecimal cantidad
-	//BigDecimal entregaAnterior
 	BigDecimal valor
 	VentaDet ventaDet
+    String origen
 
 	BigDecimal asignado
 	BigDecimal pendiente
@@ -28,10 +27,7 @@ class EntregaDet {
 	static transients=['asignado','pendiente']
 
     static constraints = {
-    	producto maxSize:20
-    	descripcion maxSize:250
     	cantidad scale:3
-    	//entregaAnterior scale:3
     	valor scale:4
     	ventaDet nullable:true
     }
@@ -40,10 +36,10 @@ class EntregaDet {
 
     public EntregaDet(VentaDet vd){
     	ventaDet=vd
-    	producto=vd.clave
-    	descripcion=vd.descripcion
-    	cantidad=vd.cantidad
+        producto=vd.producto
+    	cantidad=0.0
     	valor=vd.subtotal
+        origen=vd.id
     }
 
     def getAsignado(){
@@ -59,18 +55,15 @@ class EntregaDet {
     	return pendiente
     }
 
-
-
-    /*
+    
     def actualizar(){
-		double canti=this.cantidad/this.ventaDet.getFactor();
-		CantidadMonetaria precio=CantidadMonetaria.pesos(ventaDet.getPrecio());
-		
-		CantidadMonetaria impBruto=precio.multiply(canti).abs();
-		CantidadMonetaria descuento=impBruto.multiply(ventaDet.getDescuento()/100);
-		setValor(impBruto.subtract(descuento).amount());
+		def canti=cantidad/this.ventaDet.factor
+		def precio=ventaDet.precio
+		def impBruto=precio*canti.abs()
+		def descuento=impBruto*(ventaDet.descuento/100)
+        valor=impBruto-descuento
 	}
-	*/
+	
 }
 
    	
