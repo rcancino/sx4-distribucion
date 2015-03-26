@@ -37,6 +37,7 @@
 							<th>Asignado</th>
 							<th  class="text-center">Status</th>
 							<th  class="text-center"></th>
+							<td></td>
 
 						</tr>
 					</thead>
@@ -85,7 +86,20 @@
 										data-surtido="${row.id}">
 										Agregar
 									</a>
-									
+								</td>
+								<td>
+									<g:if test="${ (row.cortes && !row.corteInicio) || (!row.cortes && row.status=='POR ENTREGAR') }">
+										<a href="#cancelarAsignacionModal" class="btn btn-default btn-lg btn-block"
+											data-toggle="modal" 
+											data-target="#cancelarAsignacionModal" 
+											data-pedido="${row.pedido}" 
+											data-surtido="${row.id}">
+											<i class="fa fa-trash"></i>
+										</a>
+									</g:if>	
+									<g:else>
+										
+									</g:else>
 									
 								</td>
 							</tr>
@@ -99,6 +113,7 @@
 
 		</div> <!-- end .row 2-->
 		<g:render template="agregarAuxiliarDialog"/>
+		<g:render template="cancelarAsignacion"/>
 		
 
 	</div><!-- end .container-->
@@ -111,8 +126,9 @@
 				setInterval(function(){
 
 					var modal=$('#agregarAuxiliarModal');
+					var modal2=$('#cancelarAsignacionModal');
 
-					if (!modal.is(':visible') ) {
+					if (!modal.is(':visible') && !modal2.is(':visible')) {
 	    				console.log('Actualizar consulta...'+count);
 	    				window.location.reload();
 					}

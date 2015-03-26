@@ -337,6 +337,34 @@ class SurtidoController {
       redirect action:'traslados'
     }
 
+     @Secured(['permitAll']) 
+    @Transactional
+    def cancelarAsignacion(Surtido surtido) {
+      assert surtido.asignado,'El surtido no ha sido asignado por lo que no se puede canclear la asignacion'
+      assert !surtido.cancelado,'El surtido ha sido cancleado no se puede eliminar la asignacion'
+      String nip=params.nip
+      if(!nip){
+        flash.error="Digite su NIP para agregar un auxiliar de surtido para el pedido $surtido.pedido"
+        redirect action:'enProceso'
+        return
+      }
+      def surtidor=Usuario.findByNip(nip)
+      if(!surtidor){
+        flash.error="Operador no encontrado verifique su NIP "
+        redirect action:'enProceso'
+        return 
+      }
+       if(surtidor.username!=surtido.asignado){
+        flash.error="La asignacion del surtido para el pedido: $surtido.pedido  solo puede ser cancelada por:$surtido.asignado"
+        redirect action:'enProceso'
+        return 
+      }
+      surtido.asignado=null
+      surtido.iniciado=null
+      surtido.save(flush:true,failOnError:true)
+      redirect action:'enProceso'
+    }
+
     
 }
 

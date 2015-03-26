@@ -220,7 +220,8 @@ class CorteController {
       //assert cortador,'No esta firmado al sistema'
       //assert validarOperacionDeCortado(),'El sistema esta registrado sin rol de CORTADOR'
       def cortador=Usuario.findByUsername(corte.asignado)
-      assert corte.statusEmpaque=='EN EMPACADO','Corte  no esta EN EMPACADO'
+      //assert corte.statusEmpaque=='EN EMPACADO','Corte  no esta EN EMPACADO'
+      assert corte.fin,'No se ha terminado de cortar por lo que no se puede terminar el empacado'
 
       String nip=params.nip
       if(!nip){
@@ -279,7 +280,7 @@ class CorteController {
 
     @Secured(['permitAll'])
     def enProceso(Integer max,Usuario cortador){
-      params.max = Math.min(max ?: 10, 100)
+      //params.max = Math.min(max ?: 10, 100)
       params.sort='pedido'
       params.order='asc'
 

@@ -104,7 +104,7 @@
 											data-corte="${row.id}" data-toggle="tooltip" title="Corte: ${row.id}"> 
 								</td>
 								<td class="text-center">
-									<g:if test="${!row.empacadoFin}">
+									<g:if test="${row.fin && !row.empacadoFin}">
 										<a href="" data-toggle="modal" class="btn btn-warning btn-lg btn-block"
 											data-target="#empaqueModal"
 											data-pedido="${row.pedido}" 
@@ -126,6 +126,7 @@
 									</g:if>
 									<g:else>
 										<g:formatDate date="${row.empacadoFin}" format="hh:mm (dd-MM)"/>
+										${row.statusEmpaque}
 									</g:else>
 								</td>
 								
