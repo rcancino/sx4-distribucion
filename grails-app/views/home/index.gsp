@@ -36,8 +36,9 @@
 			<div class="col-md-6">
 				<div class="jumbotron">
 				  <h2> <i class="fa fa-truck"></i> Embarques</h2>
-				  <p><a class="btn btn-primary btn-lg" href="#" role="button">
-				  	 Acceso</a></p>
+				  <p><g:link class="btn btn-primary btn-lg" controller="embarque" action="index">
+				  		Acceso
+				  	</g:link>	</p>
 				</div>
 			</div>
 			<div class="col-md-6">
