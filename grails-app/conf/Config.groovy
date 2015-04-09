@@ -178,6 +178,9 @@ grails.plugin.springsecurity.roleHierarchy = '''
    ADMIN > GERENTE 
    
 '''
+
+luxor.sx4.embarques.diasParaAsignacion=3 // Maximo de dias para asignacion de embarques
+
 environments{
     
   development{

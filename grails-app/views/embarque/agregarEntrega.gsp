@@ -38,16 +38,18 @@
 							<th>Fecha</th>
 							<th>Cliente</th>
 							<th>Total</th>
+							<th>Surtido</th>
 						</tr>
 					</thead>
 					<tbody>
 						<g:each in="${pendientes}" var="row">
-							<tr id="${row.id}">
+							<tr id="${row.id}" >
 								<td>${formatNumber(number:row.venta.id,format:'###')}</td>
 								<td>${row.venta.tipoVenta}</td>
 								<td>${formatDate(number:row.venta.fecha,format:'dd/MM/yyyy')}</td>
 								<td>${row.venta.nombre}</td>
 								<td>${formatNumber(number:row.venta.id,type:'currency')}</td>
+								<td class="${row.surtido==null?'warning':''}">${row.surtido?.status?:'SIN SURTIR'}</td>
 							</tr>
 						</g:each>
 					</tbody>

@@ -87,7 +87,10 @@ class EmbarqueController {
     }
 
     def agregarEntrega(Embarque embarqueInstance){
-        def pendientes=InstruccionDeEntrega.findAllByEntregaIsNull()
+        //def pendientes=InstruccionDeEntrega.findAllByEntregaIsNull()
+        def tolerancia=grailsApplication.config.luxor.sx4.embarques.diasParaAsignacion
+        def pendientes=InstruccionDeEntrega.findAll("from InstruccionDeEntrega i where date(i.venta.fecha)>=? and i.entrega=null "
+            ,[new Date()-tolerancia])
         [embarqueInstance:embarqueInstance,pendientes:pendientes]
     }
 
