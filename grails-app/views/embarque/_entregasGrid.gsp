@@ -61,7 +61,7 @@
 				<td>${formatNumber(number:row.kilos,format:'###.###')}</td>
 				%{-- <td>${formatNumber(number:row.valor,type:'currency')}</td> --}%
 				<td>
-					<g:if test="${row.recepcion==null && row.embarque.salida==null }">
+					<g:if test="${row.recepcion==null }">
 						<g:link action="eliminarEntrega" id="${row.id}" onclick="return confirm('Eliminar la entrega del documento: '+${row.documento});">
 							<i class="fa fa-trash"></i>
 						</g:link>
