@@ -5,7 +5,9 @@ package com.luxsoft.sx4.distribucion
 import static org.springframework.http.HttpStatus.*
 import grails.transaction.Transactional
 import org.springframework.security.access.annotation.Secured
+import org.grails.databinding.BindingFormat
 import com.luxsoft.sx4.*
+
 
 @Secured(["hasAnyRole('GERENTE')"])
 @Transactional(readOnly = true)
@@ -74,6 +76,42 @@ class EntregaController {
             }
             '*'{ respond entregaInstance, [status: OK] }
         }
+    }
+
+    @Transactional
+    def asignarFechaHora(Entrega entregaInstance){
+        if (entregaInstance == null) {
+            notFound()
+            return
+        }
+        def tipo=params.tipo
+        def time=params.date('fechaHora','dd/MM/yyyy HH:mm')
+        if(tipo=='arribo'){
+            
+            entregaInstance.arribo=time
+            entregaInstance.save flush:true
+            flash.message="Arribo registrado "+params.fechaHora
+
+        }else if(tipo=='recepcion'){
+            if(!entregaInstance.arribo){
+                flash.message="No puede asignar la recepcion antes del arribo"
+                redirect controller:'embarque',action:'show',params:[id:entregaInstance.embarque.id]
+                return
+            }
+            if(time){
+                def dif=time.getTime()-entregaInstance.arribo.getTime()
+                if(dif< ( (60*1000)*5) ){
+                    flash.message="Recepción inconsitente (Menor a 5 minutos posteriores al arribo)"
+                    redirect controller:'embarque',action:'show',params:[id:entregaInstance.embarque.id]
+                    return
+                }
+            }
+            
+            entregaInstance.recepcion=time
+            entregaInstance.save flush:true
+            flash.message="Recepcion registrada "+params.fechaHora
+        }
+        redirect controller:'embarque',action:'show',params:[id:entregaInstance.embarque.id]
     }
 
     @Transactional
@@ -158,4 +196,12 @@ class EntregaController {
         flash.message = "Cancelacion de entrega parcial: $entregaInstance.id "
         respond entregaInstance, view:'show'
      }
+}
+
+class AsignarFechaHoraCommand{
+    
+    @BindingFormat('dd/MM/yyyy')
+    Date fechaHora
+
+    String tipo
 }

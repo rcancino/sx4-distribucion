@@ -28,8 +28,36 @@
 						${org.apache.commons.lang.StringUtils.substring(row.nombre,0,20)}
 					</abbr>
 				</td>
-				<td><g:formatDate date="${row.arribo}" format="HH:mm (MM/dd)"/></td>
-				<td><g:formatDate date="${row.recepcion}" format="HH:mm (MM/dd)"/></td>
+				<td>
+					<g:if test="${row.embarque.salida!=null  }">
+						<g:if test="${!row.recepcion}">
+							<a  href="#registrarFechaHoraModal" class="btn btn-primary btn-block" 
+								data-toggle="modal"
+								 data-tipo="arribo"
+								 data-entrega="${row.id}"> 
+								<g:if test="${!row.arribo}">Registrar</g:if>
+								<g:else><g:formatDate date="${row.arribo}" format="HH:mm (MM/dd)"/></g:else>
+							</a>
+						</g:if>
+						<g:else><g:formatDate date="${row.arribo}" format="HH:mm (MM/dd)"/></g:else>
+						
+					</g:if>
+				</td>
+				<td>
+					<g:if test="${row.embarque.regreso==null}">
+						<g:if test="${row.embarque.salida!=null && row.arribo!=null  }">
+							<a href="#registrarFechaHoraModal" class="btn btn-primary btn-block"
+								data-toggle="modal" 
+								data-tipo="recepcion"
+								data-entrega="${row.id}"> 
+								<g:if test="${!row.recepcion}">Registrar</g:if>
+								<g:else><g:formatDate date="${row.recepcion}" format="HH:mm (MM/dd)"/></g:else>
+							</a>
+						</g:if>
+					</g:if>
+					<g:else><g:formatDate date="${row.recepcion}" format="HH:mm (MM/dd)"/></g:else>
+					
+				</td>
 				<td>${formatNumber(number:row.kilos,format:'###.###')}</td>
 				<td>${formatNumber(number:row.valor,type:'currency')}</td>
 				<td>
@@ -43,4 +71,5 @@
 		</g:each>
 	</tbody>
 </table>
+
 

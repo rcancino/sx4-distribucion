@@ -81,6 +81,17 @@ class EmbarqueService {
         embarque.save flush:true
         return embarque
     }
+
+    def registrarRegreso(Embarque embarque){
+        embarque.regreso=new Date()
+        embarque.save flush:true
+        return embarque
+    }
+    def cancelarRegreso(Embarque embarque){
+        embarque.regreso=null
+        embarque.save flush:true
+        return embarque
+    }
 }
 
 class EmbarqueException extends RuntimeException{

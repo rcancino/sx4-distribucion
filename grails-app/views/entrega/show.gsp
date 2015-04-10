@@ -29,18 +29,21 @@
 					</div>
 					<ul class="nav nav-tabs nav-stacked">
 						<li>
-							<g:if test="${!entregaInstance.parcial }">
-								<g:link action="registrarParcial" id="${entregaInstance.id}" 
-									onclick="return confirm('Generar entrega parcial de documento ${entregaInstance.documento}');"> 
-									<i class="fa fa-cubes"></i> Registrar parcial
-								</g:link>
+							<g:if test="${!entregaInstance.embarque.salida}">
+								<g:if test="${!entregaInstance.parcial }">
+									<g:link action="registrarParcial" id="${entregaInstance.id}" 
+										onclick="return confirm('Generar entrega parcial de documento ${entregaInstance.documento}');"> 
+										<i class="fa fa-cubes"></i> Registrar parcial
+									</g:link>
+								</g:if>
+								<g:elseif test="${!entregaInstance.embarque.salida}">
+									<g:link action="cancelarParcial" id="${entregaInstance.id}" 
+										onclick="return confirm('Cancelar entrega parcial de documento ${entregaInstance.documento}');"> 
+										<i class="fa fa-cube"></i> Cancelar parcial
+									</g:link>
+								</g:elseif>
 							</g:if>
-							<g:elseif test="${!entregaInstance.embarque.salida}">
-								<g:link action="cancelarParcial" id="${entregaInstance.id}" 
-									onclick="return confirm('Cancelar entrega parcial de documento ${entregaInstance.documento}');"> 
-									<i class="fa fa-cube"></i> Cancelar parcial
-								</g:link>
-							</g:elseif>
+							
 							
 						</li>
 					</ul>

@@ -118,18 +118,41 @@ class EmbarqueController {
     }
 
 
-     @Transactional
+    @Transactional
     def registrarSalida(Embarque embarqueInstance){
         embarqueInstance=embarqueService.registrarSalida(embarqueInstance)
         flash.message="Salida de embarque: "+formatDate(date:embarqueInstance.salida,format:'dd/MM/yyyy HH:mm')
         respond embarqueInstance, view:'show'
     }
 
-      @Transactional
-    def cancelarSalida(Embarque embarqueInstance){
-        embarqueInstance=embarqueService.cancelarSalida(embarqueInstance)
-        flash.message="Salida de embarque cancelada "
+    @Transactional
+    def registrarRegreso(Embarque embarqueInstance){
+        embarqueInstance=embarqueService.registrarRegreso(embarqueInstance)
+        flash.message="Regreso de embarque: "+formatDate(date:embarqueInstance.regreso,format:'dd/MM/yyyy HH:mm')
         respond embarqueInstance, view:'show'
+    }
+
+    @Transactional
+    def cancelarSalida(Embarque embarqueInstance){
+        def found=embarqueInstance.partidas.find{it.arribo!=null}
+        if(found){
+            flash.message="El embarque ya tiene arribos registrados no se puede cancelar la salida"
+            respond embarqueInstance, view:'show'
+        }else{
+            embarqueInstance=embarqueService.cancelarSalida(embarqueInstance)
+            flash.message="Salida de embarque cancelada "
+            respond embarqueInstance, view:'show'
+        }
+        
+    }
+
+    @Transactional
+    def cancelarRegreso(Embarque embarqueInstance){
+        def found=embarqueInstance.partidas.find{it.recepcion==null}
+        embarqueInstance=embarqueService.cancelarRegreso(embarqueInstance)
+        flash.message="Regreso de embarque cancelado "
+        respond embarqueInstance, view:'show'
+        
     }
 
 

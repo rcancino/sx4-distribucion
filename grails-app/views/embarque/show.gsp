@@ -11,7 +11,7 @@
 
 		<div class="row">
 			<div class="page-header">
-			  	<h2>Embarque ${embarqueInstance.documento}  (${embarqueInstance.chofer}) </h2>
+			  	<h2>Embarque ${embarqueInstance.documento} Chofer: ${embarqueInstance.chofer} </h2>
 			</div>
 			<g:if test="${flash.message}">
 				<div class="alert alert-info">
@@ -25,6 +25,11 @@
 						<h3 class="panel-title">Operaciones</h3>
 					</div>
 					<ul class="nav nav-tabs nav-stacked">
+
+						<li><g:link action="index" >
+								<i class="fa fa-list"></i> Embarques
+							</g:link>
+						</li>
 						
 						<g:if test="${!embarqueInstance.salida}">
 							<li><g:link action="agregarEntrega" id="${embarqueInstance.id}">
@@ -39,7 +44,7 @@
 							</li>
 							
 						</g:if>
-						<g:if test="${embarqueInstance.salida}">
+						<g:if test="${embarqueInstance.salida && !embarqueInstance.partidas.find({it.arribo})}">
 							<li>
 								<g:link action="cancelarSalida" id="${embarqueInstance.id}"
 										onclick="return confirm('Cancelar la salida del embarque ${embarqueInstance.documento} ?');">
@@ -48,6 +53,26 @@
 							</li>
 							
 						</g:if>
+						<g:if test="${embarqueInstance.regreso==null}">
+							<g:if test="${embarqueInstance.salida && embarqueInstance.partidas.find({it.recepcion!=null})}">
+								<li>
+									<g:link action="registrarRegreso" id="${embarqueInstance.id}"
+										onclick="return confirm('Registrar el regreso del embarque ${embarqueInstance.documento} ?');">
+										<i class="fa fa-toggle-off"></i> Registrar regreso
+									</g:link>
+								</li>
+								
+							</g:if>	
+						</g:if>
+						<g:else>
+							<li>
+								<g:link action="cancelarRegreso" id="${embarqueInstance.id}"
+										onclick="return confirm('Cancelar el regreso del embarque ${embarqueInstance.documento} ?');">
+									<i class="fa fa-remove"></i> Cancelar regreso
+								</g:link>
+							</li>
+						</g:else>
+						
 					</ul>
 				  
 				</div>
@@ -111,6 +136,7 @@
 				<g:render template="entregasGrid" model="[entregas:embarqueInstance.partidas]"/>
 			</div>
 		</div>
+		<g:render template="registrarFechaHoraDialog"/>
 		
 		
 	</div><!-- end .container-->

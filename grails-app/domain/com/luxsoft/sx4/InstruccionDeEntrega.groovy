@@ -21,6 +21,6 @@ class InstruccionDeEntrega {
     static embedded =['direccion']
 
     def getSurtido(){
-    	return Surtido.findByTipoDeVentaAndVenta(venta.tipoVenta,venta.documento)
+    	return Surtido.findByTipoDeVentaAndVentaAndSucursal(venta.tipoVenta,venta.documento,venta.sucursal.nombre)
     }
 }
