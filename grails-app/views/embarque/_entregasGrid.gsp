@@ -8,7 +8,7 @@
 			<td>Arribo</td>
 			<td>Recepción</td>
 			<td>Kilos</td>
-			<td>Valor</td>
+			%{-- <td>Valor</td> --}%
 			<td></td>
 		</tr>
 	</thead>
@@ -59,7 +59,7 @@
 					
 				</td>
 				<td>${formatNumber(number:row.kilos,format:'###.###')}</td>
-				<td>${formatNumber(number:row.valor,type:'currency')}</td>
+				%{-- <td>${formatNumber(number:row.valor,type:'currency')}</td> --}%
 				<td>
 					<g:if test="${row.recepcion==null && row.embarque.salida==null }">
 						<g:link action="eliminarEntrega" id="${row.id}" onclick="return confirm('Eliminar la entrega del documento: '+${row.documento});">

@@ -37,39 +37,51 @@
 								</g:link>
 							</li>
 							<li>
-								<g:link action="registrarSalida" id="${embarqueInstance.id}"
-									onclick="return confirm('Registrar la salida del embarque ${embarqueInstance.documento} ?');">
-									<i class="fa fa-toggle-off"></i> Registrar salida
-								</g:link>
+								<sec:ifAllGranted roles="SUPERVISOR_EMBARQUE">
+									<g:if test="${!embarqueInstance.partidas.isEmpty()}">
+										<g:link action="registrarSalida" id="${embarqueInstance.id}"
+											onclick="return confirm('Registrar la salida del embarque ${embarqueInstance.documento} ?');">
+											<i class="fa fa-toggle-off"></i> Registrar salida
+										</g:link>
+									</g:if>
+								</sec:ifAllGranted>
 							</li>
-							
 						</g:if>
 						<g:if test="${embarqueInstance.salida && !embarqueInstance.partidas.find({it.arribo})}">
 							<li>
-								<g:link action="cancelarSalida" id="${embarqueInstance.id}"
-										onclick="return confirm('Cancelar la salida del embarque ${embarqueInstance.documento} ?');">
-									<i class="fa fa-remove"></i> Cancelar salida
-								</g:link>
+								<sec:ifAllGranted roles="SUPERVISOR_EMBARQUE">
+									<g:link action="cancelarSalida" id="${embarqueInstance.id}"
+											onclick="return confirm('Cancelar la salida del embarque ${embarqueInstance.documento} ?');">
+										<i class="fa fa-remove"></i> Cancelar salida
+									</g:link>
+								</sec:ifAllGranted>
+								
 							</li>
 							
 						</g:if>
 						<g:if test="${embarqueInstance.regreso==null}">
-							<g:if test="${embarqueInstance.salida && embarqueInstance.partidas.find({it.recepcion!=null})}">
+							<g:if test="${embarqueInstance.salida && !embarqueInstance.partidas.find({it.recepcion==null})}">
 								<li>
-									<g:link action="registrarRegreso" id="${embarqueInstance.id}"
-										onclick="return confirm('Registrar el regreso del embarque ${embarqueInstance.documento} ?');">
-										<i class="fa fa-toggle-off"></i> Registrar regreso
-									</g:link>
+									<sec:ifAllGranted roles="SUPERVISOR_EMBARQUE">
+										<g:link action="registrarRegreso" id="${embarqueInstance.id}"
+											onclick="return confirm('Registrar el regreso del embarque ${embarqueInstance.documento} ?');">
+											<i class="fa fa-toggle-off"></i> Registrar regreso
+										</g:link>
+									</sec:ifAllGranted>
+									
 								</li>
 								
 							</g:if>	
 						</g:if>
 						<g:else>
 							<li>
-								<g:link action="cancelarRegreso" id="${embarqueInstance.id}"
-										onclick="return confirm('Cancelar el regreso del embarque ${embarqueInstance.documento} ?');">
-									<i class="fa fa-remove"></i> Cancelar regreso
-								</g:link>
+								<sec:ifAllGranted roles="SUPERVISOR_EMBARQUE">
+									<g:link action="cancelarRegreso" id="${embarqueInstance.id}"
+											onclick="return confirm('Cancelar el regreso del embarque ${embarqueInstance.documento} ?');">
+										<i class="fa fa-remove"></i> Cancelar regreso
+									</g:link>
+								</sec:ifAllGranted>
+								
 							</li>
 						</g:else>
 						
@@ -107,7 +119,7 @@
 								 value="${embarqueInstance?.regreso?.format('dd/MM/yyyy HH:mm')}" >
 							</div>
 						</div>
-						<div class="form-group">
+						%{-- <div class="form-group">
 							<label class="control-label col-sm-2">Valor</label>
 							<div class="col-sm-3">
 								<input type="text" class="form-control"
@@ -115,7 +127,7 @@
 							</div>
 							
 							
-						</div>
+						</div> --}%
 						<div class="form-group">
 							<label class="control-label col-sm-2">Comentario</label>
 							<div class="col-sm-8">

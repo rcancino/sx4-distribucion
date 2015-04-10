@@ -10,7 +10,7 @@ import grails.converters.JSON
 import org.codehaus.groovy.grails.web.json.JSONArray
 
 @Transactional(readOnly = true)
-@Secured(["hasAnyRole('GERENTE')"])
+@Secured(["hasAnyRole('EMBARQUE')"])
 class EmbarqueController {
 
 	def embarqueService
@@ -119,6 +119,7 @@ class EmbarqueController {
 
 
     @Transactional
+    @Secured(["hasAnyRole('SUPERVISOR_EMBARQUE')"])
     def registrarSalida(Embarque embarqueInstance){
         embarqueInstance=embarqueService.registrarSalida(embarqueInstance)
         flash.message="Salida de embarque: "+formatDate(date:embarqueInstance.salida,format:'dd/MM/yyyy HH:mm')
@@ -126,13 +127,21 @@ class EmbarqueController {
     }
 
     @Transactional
+    @Secured(["hasAnyRole('SUPERVISOR_EMBARQUE')"])
     def registrarRegreso(Embarque embarqueInstance){
+        def pendiente=embarqueInstance.partidas.find({!it.recepcion})
+        if(pendiente){
+            flash.message="Existen entregas pendientes de recepción no se puede registrar el regreso"
+            respond embarqueInstance, view:'show'
+            return
+        }
         embarqueInstance=embarqueService.registrarRegreso(embarqueInstance)
         flash.message="Regreso de embarque: "+formatDate(date:embarqueInstance.regreso,format:'dd/MM/yyyy HH:mm')
         respond embarqueInstance, view:'show'
     }
 
     @Transactional
+    @Secured(["hasAnyRole('SUPERVISOR_EMBARQUE')"])
     def cancelarSalida(Embarque embarqueInstance){
         def found=embarqueInstance.partidas.find{it.arribo!=null}
         if(found){
@@ -147,6 +156,7 @@ class EmbarqueController {
     }
 
     @Transactional
+    @Secured(["hasAnyRole('SUPERVISOR_EMBARQUE')"])
     def cancelarRegreso(Embarque embarqueInstance){
         def found=embarqueInstance.partidas.find{it.recepcion==null}
         embarqueInstance=embarqueService.cancelarRegreso(embarqueInstance)

@@ -13,8 +13,11 @@
 
 		<div class="row">
 			<div class="well">
-			  	<h2>Embarque ${embarqueInstance.documento}  (${embarqueInstance.chofer}) </h2>
-			  	<h3>Facturas pendietes</h3>
+				<g:link action="show" id="${embarqueInstance.id}">
+					<h2>Embarque ${embarqueInstance.documento}  (${embarqueInstance.chofer}) </h2>
+					<h3>Facturas pendietes</h3>
+				</g:link>
+			  	
 			</div>
 
 		</div> <!-- end .row -->
