@@ -65,6 +65,8 @@ class Surtido {
 
     Boolean cancelado=false
 
+    String clasificacion='SIN_VALE'
+
 
 
 
@@ -89,6 +91,7 @@ class Surtido {
         facturado nullable:true
         formaDeEntrega maxSize:20
         comentario nullable:true
+        clasificacion maxSize:30
 
     }
 
