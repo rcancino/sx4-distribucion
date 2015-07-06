@@ -52,7 +52,7 @@ class ImportadorDeSurtidoService {
     	select 	'FAC' AS forma,s.nombre as sucursal,p.folio as pedido,v.clave as cliente,v.nombre as nombre,date(p.fecha) as fecha
 		,p.MODIFICADO_USR as vendedor,v.modificado as facturado,v.creado as pedidoCreado,p.PEDIDO_ID as origen
 		,'ORDINARIO' as tipo,p.fentrega as formaDeEntrega,p.puesto,p.tpuesto as fechaPuesto,p.parcial
-		,v.docto as venta,v.origen as tipoDeVenta,v.comentario
+		,v.docto as venta,v.origen as tipoDeVenta,p.clasificacion_vale as clasificacion,v.comentario
 		from sx_ventas v
 		join sx_pedidos p on v.pedido_id=p.pedido_id
 		join sw_sucursales s on v.SUCURSAL_ID=s.SUCURSAL_ID
@@ -64,7 +64,7 @@ class ImportadorDeSurtidoService {
     	select 	'PST' AS forma,s.nombre as sucursal,p.folio as pedido,p.clave as cliente,p.nombre as nombre,date(p.fecha) as fecha
 		,p.MODIFICADO_USR as vendedor,v.modificado as facturado,p.tpuesto as pedidoCreado,p.PEDIDO_ID as origen
 		,'ORDINARIO' as tipo,p.fentrega as formaDeEntrega,p.puesto,p.tpuesto as fechaPuesto,p.parcial
-		,v.docto as venta,v.origen as tipoDeVenta,p.comentario
+		,v.docto as venta,v.origen as tipoDeVenta,p.clasificacion_vale as clasificacion,p.comentario
 		from sx_pedidos p
 		left join sx_ventas v on v.pedido_id=p.pedido_id
 		join sw_sucursales s on p.SUCURSAL_ID=s.SUCURSAL_ID
@@ -75,7 +75,7 @@ class ImportadorDeSurtidoService {
     	select 	'PST' AS forma,s.nombre as sucursal,p.folio as pedido,p.clave as cliente,p.nombre as nombre,date(p.fecha) as fecha
 		,p.MODIFICADO_USR as vendedor,v.modificado as facturado,p.creado as pedidoCreado,p.PEDIDO_ID as origen
 		,'ORDINARIO' as tipo,p.fentrega as formaDeEntrega,p.puesto,p.tpuesto as fechaPuesto,p.parcial
-		,v.docto as venta,v.origen as tipoDeVenta,v.comentario
+		,v.docto as venta,v.origen as tipoDeVenta,p.clasificacion_vale as clasificacion,v.comentario
 		from sx_pedidos p
 		left join sx_ventas v on v.pedido_id=p.pedido_id
 		join sw_sucursales s on p.SUCURSAL_ID=s.SUCURSAL_ID
@@ -86,7 +86,7 @@ class ImportadorDeSurtidoService {
         select 'SOL' AS forma,s.nombre as sucursal,p.documento as pedido,'1' as cliente,p.CREADO_USR as nombre,date(p.fecha) as fecha
 		,p.CREADO_USR as vendedor,P.modificado as facturado,p.creado as pedidoCreado,p.SOL_ID as origen
 		,'TRASLADO' as tipo,'ENVIO' as  formaDeEntrega,p.fecha as tpuesto,false as parcial
-		,p.DOCUMENTO as venta,'SOL' as tipoDeVenta
+		,p.DOCUMENTO as venta,'SOL' as tipoDeVenta,p.clasificacion
 		,(SELECT y.nombre FROM sx_solicitud_traslados x join sw_sucursales y on(y.SUCURSAL_ID=x.SUCURSAL_ID) where x.SOL_ID=p.sol_id) as comentario
 		from sx_solicitud_traslados p
 		join sw_sucursales s on P.ORIGEN_ID=s.SUCURSAL_ID		
