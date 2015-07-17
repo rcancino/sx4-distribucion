@@ -34,6 +34,8 @@
 							<th>Cliente</th>
 							<th>Org</th>
 							<th>Entrega</th>
+							<th>Solicitó</th>
+							<th>Clasificación</th>
 							<th>Hora</th>
 							<th>Partidas</th>
 							<th>Cortes</th>
@@ -81,6 +83,8 @@
 								</td>
 								<td>${fieldValue(bean:row,field:"forma")}</td>
 								<td>${fieldValue(bean:row,field:"formaDeEntrega")}</td>
+								<td>${fieldValue(bean:row,field:"comentario")}</td>
+								<td>${fieldValue(bean:row,field:"clasificacion")}</td>
 								<td><g:formatDate date="${row.pedidoCreado}" format="HH:mm (dd/MM)"/></td>
 								<td><g:formatNumber number="${row.partidas.size()}" format="####"/></td>
 								<td><g:formatNumber number="${row.cortes}" format="####"/></td>

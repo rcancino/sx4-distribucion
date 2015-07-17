@@ -15,6 +15,7 @@ hibernate {
 }
 
 dataSource_importacion{
+  url = 'jdbc:mysql://10.10.1.101/produccion'
   dialect = org.hibernate.dialect.MySQL5InnoDBDialect
   driverClassName = 'com.mysql.jdbc.Driver'
   username = 'root'
@@ -22,6 +23,7 @@ dataSource_importacion{
   dbCreate = ''
   readOnly=true
   pooled = false
+
   properties {
     
   }
@@ -32,8 +34,9 @@ environments {
     development {
         
         dataSource {
-            dbCreate="create-drop" // one of 'create', 'create-drop', 'update', 'validate', ''
-            //url="jdbc:mysql://localhost/sx4?autoReconnect=true"
+            dbCreate="update" // one of 'create', 'create-drop', 'update', 'validate', ''
+            //url="jdbc:mysql://10.10.1.228/sx4?autoReconnect=true"
+            url="jdbc:mysql://localhost/sx4?autoReconnect=true"
             driverClassName = "com.mysql.jdbc.Driver"
             dialect = org.hibernate.dialect.MySQL5InnoDBDialect
             username = "root"

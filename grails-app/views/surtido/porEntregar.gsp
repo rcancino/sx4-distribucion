@@ -36,7 +36,9 @@
 							<th>Partidas</th>
 							<th>Cortes</th>
 							<th>Surtidor</th>
-							<th  class="text-center"></th>
+							<th>
+								Acción
+							</th>
 							
 						</tr>
 					</thead>
@@ -56,7 +58,16 @@
 								<td><g:formatNumber number="${row.cortes}" format="####"/></td>
 								<td>${fieldValue(bean:row,field:"asignado")}</td>
 								<td>
-									<g:if test="${row.status=='POR ENTREGAR'}">
+									<g:if test="${row.status=='POR ENTREGAR' && (row.revision==null)  }">
+										<a href="" data-toggle="modal" class="btn btn-primary btn-lg btn-block"
+											data-target="#revisionDeSurtidoModal" 
+											data-whatever="${row.pedido}" 
+											data-surtido="${row.id}"
+											data-status="${row.status}">
+											REVISION
+										</a> 
+									</g:if>
+									<g:elseif test="${row.status=='POR ENTREGAR' && (row.revision!=null)  }">
 										<a href="" data-toggle="modal" class="btn btn-success btn-lg btn-block"
 											data-target="#entregaDeSurtidoModal" 
 											data-whatever="${row.pedido}" 
@@ -64,6 +75,11 @@
 											data-status="${row.status}">
 											ENTREGAR
 										</a> 
+									</g:elseif>
+								</td>
+								<td>
+									<g:if test="${row.status=='POR ENTREGAR'}">
+										
 									</g:if>
 								</td>
 
@@ -75,6 +91,7 @@
 
 		</div> <!-- end .row 2-->
 		<g:render template="entregarSurtidoDialog"/>
+		<g:render template="revizarSurtidoDialog"/>
 		
 
 	</div><!-- end .container-->

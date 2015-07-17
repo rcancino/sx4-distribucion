@@ -67,7 +67,9 @@ class Surtido {
 
     String clasificacion='SIN_VALE'
 
+    Date revision
 
+    String revisionUsuario
 
 
 	static hasMany = [partidas: SurtidoDet,auxiliares:AuxiliarDeSurtido]
@@ -91,7 +93,9 @@ class Surtido {
         facturado nullable:true
         formaDeEntrega maxSize:20
         comentario nullable:true
-        clasificacion maxSize:30
+        clasificacion maxSize:30,nullable:true
+        revision nullable:true
+        revisionUsuario nullable:true,maxSize:40
 
     }
 

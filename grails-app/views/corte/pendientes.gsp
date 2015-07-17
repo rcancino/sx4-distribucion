@@ -31,6 +31,7 @@
 							<th>Producto</th>
 							<th>Descripcion</th>
 							<th>Fecha</th>
+							<th>Clasificación</th>
 							<th>Cortes</th>
 							<th>Asignado</th>
 							<th>S</th>
@@ -53,6 +54,7 @@
 								<td>${fieldValue(bean:row,field:"producto")}</td>
 								<td>${fieldValue(bean:row,field:"descripcion")}</td>
 								<td><g:formatDate date="${row.dateCreated}" format="hh:mm (dd-MM)"/></td>
+								<td>${fieldValue(bean:row,field:"surtidoDet.surtido.clasificacion")}</td>
 								<td><g:formatNumber number="${row.cortes}" format="####"/></td>
 								<td>
 									<g:if test="${row.asignado}">
