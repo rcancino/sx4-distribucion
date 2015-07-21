@@ -102,6 +102,10 @@ class ImportadorDeSurtidoService {
     	where P.SOL_ID=?
     """
 
+    def SQL_CANCELADOS="""
+    	
+    """
+
 
     def importar(Date fecha){
     	actualizarSurtidosPuestos fecha
