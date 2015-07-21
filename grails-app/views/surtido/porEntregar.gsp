@@ -103,15 +103,16 @@
 
 				setInterval(function(){
 
-					var modal=$('#entregaDeSurtidoModal');
+					var modal1=$('#entregaDeSurtidoModal');
+					var modal2=$('#revisionDeSurtidoModal')
 
-					if (!modal.is(':visible') ) {
+					if (!modal.is(':visible') && !modal2.is(':visible')) {
 	    				console.log('Actualizar consulta...'+count);
 	    				window.location.reload();
 					}
 					count++;
 
-				},10000);
+				},20000);
 			});
 		</script>
 	
