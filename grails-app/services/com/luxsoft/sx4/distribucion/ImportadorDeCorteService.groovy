@@ -43,7 +43,8 @@ class ImportadorDeCorteService {
 		join sx_solicitud_traslados ped on p.sol_id=ped.sol_id
 		 JOIN sx_productos X ON(X.PRODUCTO_ID=P.PRODUCTO_ID) join sx_unidades u on(u.UNIDAD=x.UNIDAD)
 		join sw_sucursales s on PED.ORIGEN_ID=s.SUCURSAL_ID
-		where p.CORTES_INSTRUCCION is not null and p.CORTES_INSTRUCCION <>'' and concat(p.sol_id,'-',convert(p.renglon,char))=:origen
+		where p.CORTES_INSTRUCCION is not null and p.CORTES_INSTRUCCION <>'' and ped.CLASIFICACION NOT IN('EXISTENCIA_VENTA','EXISTENCIA')
+		 and concat(p.sol_id,'-',convert(p.renglon,char))=:origen
     """
 
     def importar(Surtido surtido){
