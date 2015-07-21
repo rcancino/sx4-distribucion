@@ -212,5 +212,6 @@ environments{
 }
 
 grails.plugins.twitterbootstrap.fixtaglib = true
-
+grails.plugin.databasemigration.updateOnStart = true
+grails.plugin.databasemigration.updateOnStartFileNames = ['changelog.groovy']
 

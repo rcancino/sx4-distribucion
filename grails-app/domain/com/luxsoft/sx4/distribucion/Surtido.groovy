@@ -63,13 +63,14 @@ class Surtido {
 
     String comentario
 
-    Boolean cancelado=false
-
     String clasificacion='SIN_VALE'
 
     Date revision
 
     String revisionUsuario
+
+    Date cancelado
+    String canceladoUser
 
 
 	static hasMany = [partidas: SurtidoDet,auxiliares:AuxiliarDeSurtido]
@@ -96,14 +97,19 @@ class Surtido {
         clasificacion maxSize:30,nullable:true
         revision nullable:true
         revisionUsuario nullable:true,maxSize:40
+        cancelado nullable:true
+        canceladoUser nullable:true,maxSize:50
 
     }
 
     static mapping = {
+        //id generator:'guid'
     	fecha type:'date'
+        cancelado type:'date'
         partidas cascade: "all-delete-orphan"
         auxiliares cascade: "all-delete-orphan"
     }
+
 
     static transients = ['cortes','status','empacadoTerminado','analisis']
 

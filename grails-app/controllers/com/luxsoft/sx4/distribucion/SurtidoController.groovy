@@ -52,7 +52,7 @@ class SurtidoController {
         //params.max = 100
         params.sort='pedidoCreado'
         params.order='asc'
-        def query=Surtido.where{asignado==null && cancelado==false}
+        def query=Surtido.where{ (asignado==null && cancelado==false) || cancelado==null}
        
         respond query.list(params), model:[surtidoInstanceCount:query.count()]
         //respond Surtido.list(params), model:[surtidoInstanceCount:Surtido.count()]

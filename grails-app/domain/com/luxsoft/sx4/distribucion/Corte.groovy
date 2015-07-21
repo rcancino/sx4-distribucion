@@ -31,6 +31,8 @@ class Corte {
 	String origen
 	Date dateCreated
 	Date lastUpdated
+    Date cancelado
+    String canceladoUser
 
     /** Transiente properties ***/
     String status
@@ -57,12 +59,16 @@ class Corte {
     	empacadoFin nullable:true
     	empacador nullable:true
         instruccion nullable:true
+        cancelado nullable:true
+        canceladoUser nullable:true,maxSize:50
     }
 
     static transients = ['status','surtidor','statusCorte','statusEmpaque']
 
     static mapping = {
         auxiliares cascade: "all-delete-orphan"
+        cancelado type:'date'
+        
     }
 
 

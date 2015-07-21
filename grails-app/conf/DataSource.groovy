@@ -34,7 +34,7 @@ environments {
     development {
         
         dataSource {
-            dbCreate="update" // one of 'create', 'create-drop', 'update', 'validate', ''
+            dbCreate="" // one of 'create', 'create-drop', 'update', 'validate', ''
             //url="jdbc:mysql://10.10.1.228/sx4?autoReconnect=true"
             url="jdbc:mysql://localhost/sx4?autoReconnect=true"
             driverClassName = "com.mysql.jdbc.Driver"
@@ -66,7 +66,7 @@ environments {
     production {
        dataSource {
               pooled = true
-              dbCreate="update"
+              dbCreate=""
               url="jdbc:mysql://10.10.1.228/sx4?autoReconnect=true"
               driverClassName = "com.mysql.jdbc.Driver"
               dialect = org.hibernate.dialect.MySQL5InnoDBDialect
