@@ -20,9 +20,7 @@ class ImportadorDeSurtidoService {
 	def dataSource_importacion
 
 	def importadorDeCorteService
-
 	
-
     String SQL_DETALLE="""
 		select clave as producto,descripcion,cantidad,factoru as factor,kilos,pedidodet_id as origen from sx_pedidosdet p
     	where p.pedido_id=? 
@@ -102,8 +100,17 @@ class ImportadorDeSurtidoService {
     	where P.SOL_ID=?
     """
 
+    /*
+	-- columna de usuario clave para el surtido de soles en el campo de cliente
+	,(SELECT u.username FROM sx_usuarios u where concat(RTRIM(u.first_name),' ',u.last_name)=p.creado_usr) as username
+	*/
+
     def SQL_CANCELADOS="""
-    	
+    	SELECT 'FAC' as tipo,c.cargo_id as origen_id,c.creado_userid as cancelado_user,c.creado as cancelado FROM sx_cxc_cargos_cancelados c where date(c.fecha)=CURRENT_DATE 
+		union
+		SELECT 'SOL' as tipo,s.sol_id as origen_id,s.cancelacion_usr as cancelado_user,s.modificado as cancelado 
+		FROM sx_solicitud_traslados s where date(s.fecha)=CURRENT_DATE 
+		and comentario  like 'CANCELACION AUTOMATICA'
     """
 
 
@@ -226,6 +233,28 @@ class ImportadorDeSurtidoService {
 				importadorDeCorteService.importar(surtido)
 				event('registroDeSurtido', surtido)
 
+			}
+		}
+	}
+
+	def actualizarSurtidosCancelados(Date fecha){
+		log.debug "Actualizando surtidos cancelados  fecha:"+fecha.format('dd/MM/yyyy')
+		def sucursal=findSucursal()
+		assert sucursal,'No hay sucursal registrada'
+		def db = new Sql(dataSource_importacion)
+		db.eachRow( [sucursal:sucursal,fecha:Sql.DATE(fecha)],SQL_CANCELADOS) { row->
+			def surtido=Surtido.findByOrigen(row.origen)
+			if(!surtido){
+				surtido.cancelado=row.cancelado
+				surtido.canceladoUser=row.cancelado_user
+				surtido.partidas.each{ sdet->
+					if(sdet.corte){ 
+						sdet.corte.cancelado=row.cancelado
+						sdet.corte.canceladoUser=row.cancelado_user
+					}
+				}
+				surtido.save(flush:true,failOnError:true)
+				event('surtidoCancelado', surtido)
 			}
 		}
 	}
