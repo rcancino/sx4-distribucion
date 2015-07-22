@@ -36,7 +36,7 @@ environments {
         dataSource {
             dbCreate="" // one of 'create', 'create-drop', 'update', 'validate', ''
             //url="jdbc:mysql://10.10.1.228/sx4?autoReconnect=true"
-            url="jdbc:mysql://localhost/sx4?autoReconnect=true"
+            url="jdbc:mysql://10.10.1.76/sx4_dev?autoReconnect=true"
             driverClassName = "com.mysql.jdbc.Driver"
             dialect = org.hibernate.dialect.MySQL5InnoDBDialect
             username = "root"
@@ -67,11 +67,11 @@ environments {
        dataSource {
               pooled = true
               dbCreate=""
-              url="jdbc:mysql://10.10.1.228/sx4?autoReconnect=true"
+              url="jdbc:mysql://10.10.1.76/sx4?autoReconnect=true"
               driverClassName = "com.mysql.jdbc.Driver"
               dialect = org.hibernate.dialect.MySQL5InnoDBDialect
               username = "root"
-              password = "sys"
+              password = "sys1"
               properties {
                   maxActive = 10
                   maxIdle = 10
