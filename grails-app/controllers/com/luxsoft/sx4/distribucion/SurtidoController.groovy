@@ -52,7 +52,7 @@ class SurtidoController {
         //params.max = 100
         params.sort='pedidoCreado'
         params.order='asc'
-        def query=Surtido.where{ (asignado==null && cancelado==false) || cancelado==null}
+        def query=Surtido.where{ (asignado==null && cancelado==null)}
        
         respond query.list(params), model:[surtidoInstanceCount:query.count()]
         //respond Surtido.list(params), model:[surtidoInstanceCount:Surtido.count()]
@@ -364,7 +364,7 @@ class SurtidoController {
     def cancelarTraslado(Surtido surtido) {
       assert surtido.forma=='SOL','No es un surtido de traslado'
       if(!surtido.cancelado){
-        surtido.cancelado=true
+        surtido.cancelado=new Date()
         surtido.save flush:true
       }
       redirect action:'traslados'

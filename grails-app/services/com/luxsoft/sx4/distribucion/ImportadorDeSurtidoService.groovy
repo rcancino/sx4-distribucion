@@ -81,7 +81,9 @@ class ImportadorDeSurtidoService {
     """
 
     def SQL_TRASLADOS="""
-        select 'SOL' AS forma,s.nombre as sucursal,p.documento as pedido,'1' as cliente,p.CREADO_USR as nombre,date(p.fecha) as fecha
+        select 'SOL' AS forma,s.nombre as sucursal,p.documento as pedido
+        ,(SELECT u.username FROM sx_usuarios u where concat(RTRIM(u.first_name),' ',u.last_name)=p.creado_usr) as cliente
+        ,p.CREADO_USR as nombre,date(p.fecha) as fecha
 		,p.CREADO_USR as vendedor,P.modificado as facturado,p.creado as pedidoCreado,p.SOL_ID as origen
 		,'TRASLADO' as tipo,'ENVIO' as  formaDeEntrega,p.fecha as tpuesto,false as parcial
 		,p.DOCUMENTO as venta,'SOL' as tipoDeVenta,p.clasificacion
