@@ -35,7 +35,7 @@ environments {
         
         dataSource {
             dbCreate="" // one of 'create', 'create-drop', 'update', 'validate', ''
-            url="jdbc:mysql://10.10.1.225/sx4?autoReconnect=true"
+            url="jdbc:mysql://localhost/sx4?autoReconnect=true"
             driverClassName = "com.mysql.jdbc.Driver"
             dialect = org.hibernate.dialect.MySQL5InnoDBDialect
             username = "root"
