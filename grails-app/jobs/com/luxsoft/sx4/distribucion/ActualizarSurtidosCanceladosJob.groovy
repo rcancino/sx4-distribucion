@@ -20,10 +20,10 @@ class ActualizarSurtidosCanceladosJob {
       	try {
             def counter = context.jobDetail.jobDataMap['counter'] ?: 0
             counter++
-      		def fecha=new Date() 
-      		def time=fecha.format('dd/MM/yyyy HH:mm:ss')
-      		log.debug "Actualizando  surtidos cancelados ($counter) las time: "+context.jobDetail.jobDataMap['lastJob']
-      		importadorDeSurtidoService.actualizarSurtidosCancelados(fecha)
+      		  def fecha=new Date() 
+      		  def time=fecha.format('dd/MM/yyyy HH:mm:ss')
+      		  log.debug "Actualizando  surtidos cancelados ($counter) las time: "+context.jobDetail.jobDataMap['lastJob']
+      		  //importadorDeSurtidoService.actualizarSurtidosCancelados(fecha)
             context.jobDetail.jobDataMap['counter'] = counter
             def end=new Date()
             context.jobDetail.jobDataMap['lastJob'] = end
