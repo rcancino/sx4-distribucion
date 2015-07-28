@@ -239,7 +239,7 @@ class SurtidoController {
     def porEntregarAnalisis() {
         params.sort='pedidoCreado'
         params.order='asc'
-        def query=Surtido.where{entregado==null}
+        def query=Surtido.where{entregado==null && fecha== new Date()}
         def res=query.list(params).collect({new SurtidoAnalisis(surtido:it)})
         //respond surtidores, model:[surtidoInstanceCount:query.count()]
         [surtidoInstanceList:res]
@@ -250,7 +250,8 @@ class SurtidoController {
         params.max = Math.min(max ?: 20, 100)
         params.sort='pedidoCreado'
         params.order='asc'
-        def query=Surtido.where{entregado!=null}
+        def query=Surtido.where{entregado!=null && fecha== new Date()}
+       // def query=Surtido.where{entregado.toDate == new Date()}
         respond query.list(params), model:[surtidoInstanceCount:query.count()]
     }
 

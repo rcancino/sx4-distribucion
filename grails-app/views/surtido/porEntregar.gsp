@@ -19,11 +19,7 @@
 						<h4 class="text-center">${flash.error}</h4>
 					</div>
 				</g:if>
-				%{-- <g:if test="${flash.success}">
-					<div class="alert alert-success">
-						<h4 class="text-center">${flash.success}</h4>
-					</div>
-				</g:if> --}%
+				
 				
 				<table class="table table-striped table-bordered table-condensed ">
 					<thead>
@@ -106,7 +102,7 @@
 					var modal1=$('#entregaDeSurtidoModal');
 					var modal2=$('#revisionDeSurtidoModal')
 
-					if (!modal.is(':visible') && !modal2.is(':visible')) {
+					if (!modal1.is(':visible') && !modal2.is(':visible')) {
 	    				console.log('Actualizar consulta...'+count);
 	    				window.location.reload();
 					}

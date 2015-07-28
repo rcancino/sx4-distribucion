@@ -137,6 +137,42 @@ class CorteController {
       redirect action:'pendientes'
     }
 
+    @Transactional
+    def iniciarCorte2(Corte corte){
+      
+      def cortador=getAuthenticatedUser()
+      assert cortador,'No esta firmado al sistema'
+      assert validarOperacionDeCortado(),'El sistema esta registrado sin rol de CORTADOR'
+      assert corte.statusCorte=='PENDIENTE'
+      
+      corte.inicio=new Date()
+      corte.empacadoInicio=corte.inicio
+      corte.asignado=cortador.username
+      corte.save(flush:true)
+      //Actualizando el inicio del corte en surtido
+      corteService.registrarInicioDeCorteEnSurtido corte
+      //event('corteIniciado', corte)
+      if(params.cortes){
+        def adicionales=params.cortes.findAll({it.toLong()!=corte.id})
+        adicionales.each{
+          def ca=Corte.get(it)
+          if(ca.asignado==corte.asignado && (ca.inicio==null) ){
+              ca.inicio=new Date()
+              ca.empacadoInicio=corte.inicio
+              ca.asignado=cortador.username
+              ca.save(flush:true)
+              //event('corteIniciado', ca)
+              corteService.registrarInicioDeCorteEnSurtido ca
+          }
+        }
+        //print 'Surtidos adicionales: '+adicionales
+      }
+      
+      log.info " Corte de producto  $corte.producto iniciado por:$cortador.username "
+      flash.success=  " Corte de producto  $corte.producto iniciado por:$cortador.username " 
+      redirect action:'pendientes'
+    }
+
 
     @Transactional
     def terminarCorte(Corte corte){
@@ -181,6 +217,34 @@ class CorteController {
       redirect action:'pendientes'
     }
 
+    @Transactional
+    def terminarCorte2(Corte corte){
+      assert corte, 'Corte nulo no puede ser terminado'
+      assert corte.statusCorte=='EN CORTE','Corte con estatus incorrecto'
+      def cortador=getAuthenticatedUser()
+      corte.fin=new Date()
+      //corte.asignado=cortador.username
+      corte.save(flush:true)
+
+      log.info "Corte terminado para  $corte.producto entregado por:  $cortador.nombre "
+      flash.success= "Corte terminado para  $corte.producto. Entregado por:  $cortador.nombre " 
+
+      if(params.cortes){ // cortes adicionales
+        def adicionales=params.cortes.findAll({it.toLong()!=corte.id})
+        adicionales.each{
+          def ca=Corte.get(it)
+          if(ca.asignado==corte.asignado && (ca.fin==null) ){
+            ca.fin=new Date()
+            //ca.asignado=cortador.username
+            ca.save(flush:true)
+                  //corteService.registrarFinDeCorteEnSurtido(ca)
+                  //event('corteTerminado', ca)
+          }
+        }
+            //print 'Surtidos adicionales: '+adicionales
+      }
+      redirect action:'pendientes'
+    }
 
     @Transactional
     def iniciarEmpacado(Corte corte){

@@ -30,9 +30,9 @@
 							<th>T</th>
 							<th>Producto</th>
 							<th>Descripcion</th>
-							<th>Fecha</th>
-							<th>Clasificación</th>
+							
 							<th>Cortes</th>
+							<th>Instrucción</th>
 							<th>Asignado</th>
 							<th>S</th>
 							<th class="text-center">Surtido</th>
@@ -53,9 +53,10 @@
 								<td>${fieldValue(bean:row,field:"surtidoDet.surtido.forma")}</td>
 								<td>${fieldValue(bean:row,field:"producto")}</td>
 								<td>${fieldValue(bean:row,field:"descripcion")}</td>
-								<td><g:formatDate date="${row.dateCreated}" format="hh:mm (dd-MM)"/></td>
-								<td>${fieldValue(bean:row,field:"surtidoDet.surtido.clasificacion")}</td>
+								
+								
 								<td><g:formatNumber number="${row.cortes}" format="####"/></td>
+								<td>${row.instruccion}</td>
 								<td>
 									<g:if test="${row.asignado}">
 										${fieldValue(bean:row,field:"asignado")}
@@ -91,6 +92,7 @@
 								</td>
 								<td class="text-center">
 									<g:if test="${row.asignado}">
+										<%--
 										<a href="" data-toggle="modal" 
 											class="btn btn-warning btn-lg btn-block"
 											data-target="#corteModal"
@@ -105,8 +107,24 @@
 											data-cortador="${row.asignado}"
 											data-empacador="${row.empacador}"
 											data-status="${row.statusCorte}">
-											${row.statusCorte}
+											${row.statusCorte=='PENDIENTE'?'INICIAR':row.statusCorte}
 										</a>
+										--%>
+										<g:if test="${row.statusCorte=='PENDIENTE'}">
+											<g:link action="iniciarCorte2" id="${row.id}" class="btn btn-warning btn-lg btn-block">
+												INICIAR<%-- ${row.statusCorte=='PENDIENTE'?'INICIAR':row.statusCorte} --%>
+											</g:link>
+										</g:if>
+										<g:elseif test="${row.statusCorte=='EN CORTE'}">
+											<g:if test="${sec.loggedInUserInfo(field:"username")==row.asignado}">
+												<g:link action="terminarCorte2" id="${row.id}" class="btn btn-warning btn-lg btn-block">
+													${row.statusCorte}<%-- ${row.statusCorte=='PENDIENTE'?'INICIAR':row.statusCorte} --%>
+												</g:link>
+											</g:if>
+											<g:else>
+												${sec.loggedInUserInfo(field:"username")}
+											</g:else>
+										</g:elseif>
 									</g:if>
 								</td>
 								

@@ -82,7 +82,7 @@ class ImportadorDeSurtidoService {
 
     def SQL_TRASLADOS="""
         select 'SOL' AS forma,s.nombre as sucursal,p.documento as pedido
-        ,(SELECT u.username FROM sx_usuarios u where concat(RTRIM(u.first_name),' ',u.last_name)=p.creado_usr) as cliente
+        ,ifnull((SELECT u.username FROM sx_usuarios u where concat(RTRIM(u.first_name),' ',u.last_name)=p.creado_usr),'N/D' ) as cliente
         ,p.CREADO_USR as nombre,date(p.fecha) as fecha
 		,p.CREADO_USR as vendedor,P.modificado as facturado,p.creado as pedidoCreado,p.SOL_ID as origen
 		,'TRASLADO' as tipo,'ENVIO' as  formaDeEntrega,p.fecha as tpuesto,false as parcial
@@ -108,19 +108,22 @@ class ImportadorDeSurtidoService {
 	*/
 
     def SQL_CANCELADOS="""
-    	SELECT 'FAC' as tipo,c.cargo_id as origen_id,c.creado_userid as cancelado_user,c.creado as cancelado FROM sx_cxc_cargos_cancelados c where date(c.fecha)=CURRENT_DATE 
+    	SELECT 'FAC' as tipo,c.cargo_id as origen,c.creado_userid as cancelado_user,c.creado as cancelado FROM sx_cxc_cargos_cancelados c where date(c.fecha)=CURRENT_DATE 
 		union
-		SELECT 'SOL' as tipo,s.sol_id as origen_id,s.cancelacion_usr as cancelado_user,s.modificado as cancelado 
-		FROM sx_solicitud_traslados s where date(s.fecha)=CURRENT_DATE 
+		SELECT 'SOL' as tipo,s.sol_id as origen,s.cancelacion_usr as cancelado_user,s.modificado as cancelado 
+		FROM sx_solicitud_traslados s where date(s.modificado)=CURRENT_DATE 
 		and comentario  like 'CANCELACION AUTOMATICA'
     """
 
 
     def importar(Date fecha){
+
     	actualizarSurtidosPuestos fecha
     	importarFacturados fecha
     	importarPuestos fecha
     	importarTraslados fecha
+
+
 	}
 
 	def importarFacturados(Date fecha){
@@ -244,17 +247,23 @@ class ImportadorDeSurtidoService {
 		def sucursal=findSucursal()
 		assert sucursal,'No hay sucursal registrada'
 		def db = new Sql(dataSource_importacion)
-		db.eachRow( [sucursal:sucursal,fecha:Sql.DATE(fecha)],SQL_CANCELADOS) { row->
+		db.eachRow( SQL_CANCELADOS) { row->
+			
 			def surtido=Surtido.findByOrigen(row.origen)
-			if(!surtido){
+
+			if(surtido){
+
 				surtido.cancelado=row.cancelado
 				surtido.canceladoUser=row.cancelado_user
+				
 				surtido.partidas.each{ sdet->
 					if(sdet.corte){ 
 						sdet.corte.cancelado=row.cancelado
 						sdet.corte.canceladoUser=row.cancelado_user
+						sdet.save flush:true
 					}
 				}
+				//println 'Cancelando: '+surtido
 				surtido.save(flush:true,failOnError:true)
 				event('surtidoCancelado', surtido)
 			}

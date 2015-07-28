@@ -7,7 +7,7 @@ class ActualizarSurtidosCanceladosJob {
       def importadorDeSurtidoService
       
       static triggers = {
-        cron cronExpression:"0 0/5 8-19 ? * MON-SAT"
+        cron cronExpression:"0 0/1 8-19 ? * MON-SAT"
       }
 
       def group = "sx4-importadores"
@@ -23,7 +23,7 @@ class ActualizarSurtidosCanceladosJob {
       		  def fecha=new Date() 
       		  def time=fecha.format('dd/MM/yyyy HH:mm:ss')
       		  log.debug "Actualizando  surtidos cancelados ($counter) las time: "+context.jobDetail.jobDataMap['lastJob']
-      		  //importadorDeSurtidoService.actualizarSurtidosCancelados(fecha)
+      		  importadorDeSurtidoService.actualizarSurtidosCancelados(fecha)
             context.jobDetail.jobDataMap['counter'] = counter
             def end=new Date()
             context.jobDetail.jobDataMap['lastJob'] = end
