@@ -139,6 +139,7 @@ class CorteController {
 
     @Transactional
     def iniciarCorte2(Corte corte){
+      //println 'Inicinado corte: '+params
       
       def cortador=getAuthenticatedUser()
       assert cortador,'No esta firmado al sistema'
@@ -153,8 +154,10 @@ class CorteController {
       corteService.registrarInicioDeCorteEnSurtido corte
       //event('corteIniciado', corte)
       if(params.cortes){
+        
         def adicionales=params.cortes.findAll({it.toLong()!=corte.id})
         adicionales.each{
+
           def ca=Corte.get(it)
           if(ca.asignado==corte.asignado && (ca.inicio==null) ){
               ca.inicio=new Date()
@@ -170,6 +173,7 @@ class CorteController {
       
       log.info " Corte de producto  $corte.producto iniciado por:$cortador.username "
       flash.success=  " Corte de producto  $corte.producto iniciado por:$cortador.username " 
+      
       redirect action:'pendientes'
     }
 

@@ -111,7 +111,8 @@
 										</a>
 										--%>
 										<g:if test="${row.statusCorte=='PENDIENTE'}">
-											<g:link action="iniciarCorte2" id="${row.id}" class="btn btn-warning btn-lg btn-block">
+											<g:link 
+												action="iniciarCorte2" id="${row.id}" class="btn btn-warning btn-lg btn-block seleccion">
 												INICIAR<%-- ${row.statusCorte=='PENDIENTE'?'INICIAR':row.statusCorte} --%>
 											</g:link>
 										</g:if>
@@ -159,6 +160,24 @@
 				count++;
 
 			},20000);
+
+			$('.seleccion').on('click',function(e){
+				var link=$(this);
+				var href=link.attr("href");
+				$('input:checked').each(function(){
+				    var corte=$(this).data('corte');
+				    if (href.indexOf('?') != -1) {
+				        href=href+'&cortes='+corte;
+				    }
+				    else {
+				        href=href+'?cortes='+corte;
+				    }
+				    link.attr("href", href);
+					
+				 });
+				console.log('href: '+link.attr("href"));
+				//e.preventDefault();
+			});
 		});
 	</script>	
 
