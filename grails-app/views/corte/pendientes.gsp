@@ -118,7 +118,8 @@
 										</g:if>
 										<g:elseif test="${row.statusCorte=='EN CORTE'}">
 											<g:if test="${sec.loggedInUserInfo(field:"username")==row.asignado}">
-												<g:link action="terminarCorte2" id="${row.id}" class="btn btn-warning btn-lg btn-block">
+												<g:link 
+													action="terminarCorte2" id="${row.id}" class="btn btn-warning btn-lg btn-block seleccion">
 													${row.statusCorte}<%-- ${row.statusCorte=='PENDIENTE'?'INICIAR':row.statusCorte} --%>
 												</g:link>
 											</g:if>
