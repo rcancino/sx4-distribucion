@@ -112,15 +112,17 @@
 										--%>
 										<g:if test="${row.statusCorte=='PENDIENTE'}">
 											<g:link 
-												action="iniciarCorte2" id="${row.id}" class="btn btn-warning btn-lg btn-block seleccion">
+												action="iniciarCorte2" id="${row.id}" 
+												class="btn ${sec.loggedInUserInfo(field:"username")==row.asignado?'btn-success':'btn-warning'}  btn-lg btn-block seleccion">
 												INICIAR<%-- ${row.statusCorte=='PENDIENTE'?'INICIAR':row.statusCorte} --%>
 											</g:link>
 										</g:if>
 										<g:elseif test="${row.statusCorte=='EN CORTE'}">
 											<g:if test="${sec.loggedInUserInfo(field:"username")==row.asignado}">
 												<g:link 
-													action="terminarCorte2" id="${row.id}" class="btn btn-warning btn-lg btn-block seleccion">
-													${row.statusCorte}<%-- ${row.statusCorte=='PENDIENTE'?'INICIAR':row.statusCorte} --%>
+													action="terminarCorte2" id="${row.id}" 
+													class="btn ${sec.loggedInUserInfo(field:"username")==row.asignado?'btn-success':'btn-warning'}  btn-lg btn-block seleccion">
+													${row.statusCorte=='PENDIENTE'?'INICIAR':row.statusCorte}
 												</g:link>
 											</g:if>
 											<g:else>

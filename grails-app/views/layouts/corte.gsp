@@ -70,9 +70,12 @@
                                 <g:else>PRODUCCION</g:else>
                             </a>
                         </p>
+
                         <p class="navbar-text navbar-right">Sucursal: 
                             <a href="#" class="navbar-link">${grailsApplication.config.luxor.sx4.sucursal}</a>
+                            (<sec:loggedInUserInfo field="username"/>)
                         </p>
+
                     </ul>
                 </div>
                 

@@ -236,23 +236,41 @@ class SurtidoController {
 
 
     @Secured(["hasAnyRole('GERENTE')"])
+    def pendientesAnalisis() {
+        params.sort='pedidoCreado'
+        params.order='asc'
+        def query=Surtido.where{iniciado==null && cancelado == null}
+        def res=query.list(params).collect({new SurtidoAnalisis(surtido:it)})
+        [surtidoInstanceList:res]
+    }
+   
+    @Secured(["hasAnyRole('GERENTE')"])
+    def revisadosAnalisis() {
+        params.sort='pedidoCreado'
+        params.order='asc'
+        def query=Surtido.where{iniciado!=null && cancelado == null && revision!=null && entregado==null} 
+        def res=query.list(params).collect({new SurtidoAnalisis(surtido:it)})
+        [surtidoInstanceList:res]
+    }
+
+
+    @Secured(["hasAnyRole('GERENTE')"])
     def porEntregarAnalisis() {
         params.sort='pedidoCreado'
         params.order='asc'
-        def query=Surtido.where{entregado==null && fecha== new Date()}
+        def query=Surtido.where{entregado==null && cancelado == null }
         def res=query.list(params).collect({new SurtidoAnalisis(surtido:it)})
-        //respond surtidores, model:[surtidoInstanceCount:query.count()]
         [surtidoInstanceList:res]
     }
         
     @Secured(['permitAll'])
     def entregados(Integer max) {
-        params.max = Math.min(max ?: 20, 100)
+        //params.max = Math.min(max ?: 20, 100)
         params.sort='pedidoCreado'
         params.order='asc'
-        def query=Surtido.where{entregado!=null && fecha== new Date()}
-       // def query=Surtido.where{entregado.toDate == new Date()}
-        respond query.list(params), model:[surtidoInstanceCount:query.count()]
+        def list=Surtido.findAll("from Surtido s where date(s.entregado)=?",[new Date()],params)
+
+        respond list,model:[surtidoInstanceCount:list.size()]
     }
 
      @Secured(["hasAnyRole('GERENTE')"])
@@ -388,11 +406,18 @@ class SurtidoController {
         redirect action:'enProceso'
         return 
       }
-       if(surtidor.username!=surtido.asignado){
+
+      if(!surtidor.getAuthorities().find{it.authority=='SUPERVISOR_SURTIDO'}){
+        flash.error="No tiene el ROL de SUPERVISOR_SURTIDO verifique su NIP "
+        redirect action:'pendientes'
+        return 
+      }
+
+      /* if(surtidor.username!=surtido.asignado){
         flash.error="La asignacion del surtido para el pedido: $surtido.pedido  solo puede ser cancelada por:$surtido.asignado"
         redirect action:'enProceso'
         return 
-      }
+      }*/
       surtido.asignado=null
       surtido.iniciado=null
       surtido.save(flush:true,failOnError:true)

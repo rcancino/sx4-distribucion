@@ -12,17 +12,16 @@
 		<div class="row">
 			<div class="col-md-12">
 				<ul class="nav nav-tabs">
-					<li>
+					<li class="active">
 						<g:link action="pendientesAnalisis" >Pendientes</g:link>
 					</li>
-					<li class="active">
+						<li>
 						<g:link action="porEntregarAnalisis" >En Proceso</g:link>
 					</li>
-
 					<li>
 						<g:link action="revisadosAnalisis" >Revisados</g:link>
 					</li>
-					
+				
 					<li>
 						<g:link action="entregados" >Entregados</g:link>
 					</li>
@@ -57,9 +56,8 @@
 							<th>Partidas</th>
 							<th>Corte</th>
 							<th>Cortes</th>
-							<th>Asignado</th>
 							<th>T. Total</th>
-							<th>Status</th>
+							
 
 							
 						</tr>
@@ -84,12 +82,9 @@
 									<g:if test="${row.surtido.cortes}"><i class="fa fa-scissors"></i></g:if>
 								</td>
 								<td><g:formatNumber number="${row.surtido.cortes}" format="####"/></td>
-								<td>
-									${fieldValue(bean:row,field:"ultimoAsignado")}	
-								</td>
 								<td>${fieldValue(bean:row,field:"tiempoAcumulado")}</td>
 								
-								<td>${fieldValue(bean:row,field:"status")}</td>
+							
 								
 							</tr>
 						</g:each>

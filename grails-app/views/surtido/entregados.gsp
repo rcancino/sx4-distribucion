@@ -12,10 +12,17 @@
 		<div class="row">
 					<div class="col-md-12">
 						<ul class="nav nav-tabs">
-							<li class="active">
-								<g:link action="porEntregarAnalisis" >Por Entregar</g:link>
-							</li>
 							<li>
+								<g:link action="pendientesAnalisis" >Pendientes</g:link>
+							</li>
+							<li >
+								<g:link action="porEntregarAnalisis" >En Proceso</g:link>
+							</li>
+							<li >
+								<g:link action="revisadosAnalisis" >Revisados</g:link>
+							</li>
+							
+							<li class="active">
 								<g:link action="entregados" >Entregados</g:link>
 							</li>
 						</ul>
@@ -39,6 +46,7 @@
 					<thead>
 						<tr >
 							<th class="text-center">Tipo</th>
+							<th>Tipo</th>
 							<th class="text-center">Cliente</th>
 							<th class="text-center">Entrega</th>
 							<th class="text-center">Pedido</th>
@@ -66,6 +74,7 @@
 						<g:each in="${surtidoInstanceList}" var="row">
 							<tr >
 								<td>${fieldValue(bean:row,field:"tipoDeVenta")}</td>
+								<td>${fieldValue(bean:row,field:"forma")}</td>
 								<td>
 									<abbr title="${row.nombre}">
 									${org.apache.commons.lang.StringUtils.substring(row.nombre,0,20)}

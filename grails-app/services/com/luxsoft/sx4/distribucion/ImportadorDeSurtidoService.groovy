@@ -77,7 +77,7 @@ class ImportadorDeSurtidoService {
 		from sx_pedidos p
 		left join sx_ventas v on v.pedido_id=p.pedido_id
 		join sw_sucursales s on p.SUCURSAL_ID=s.SUCURSAL_ID
-		where p.id=?
+		where p.pedido_id=?
     """
 
     def SQL_TRASLADOS="""
@@ -113,6 +113,8 @@ class ImportadorDeSurtidoService {
 		SELECT 'SOL' as tipo,s.sol_id as origen,s.cancelacion_usr as cancelado_user,s.modificado as cancelado 
 		FROM sx_solicitud_traslados s where date(s.modificado)=CURRENT_DATE 
 		and comentario  like 'CANCELACION AUTOMATICA'
+		union
+		SELECT 'PED' as tipo,c.pedido_id as origen,c.creado_usr as cancelado_user,c.creado as cancelado FROM sx_pedidos_borrados c where date(c.CREADO)=CURRENT_DATE and c.puesto is true
     """
 
 
@@ -213,30 +215,33 @@ class ImportadorDeSurtidoService {
 	}
 
 	def actualizarSurtidosPuestos(Date fecha){
-		def surtidos=Surtido.findAll("from Surtido s where s.fecha=? and s.forma=? and s.venta=null",[fecha,'FAC'])
+		def surtidos=Surtido.findAll("from Surtido s where  s.forma=? and s.venta=null",['PST'])
 		if(surtidos){
 			def db = new Sql(dataSource_importacion)
-			surtido.each{ surtido->
+			surtidos.each{ surtido->
 				def row=db.firstRow(SQL_PUESTOS_POR_ID,[surtido.origen])
-				if(row.venta){
-					surtido.venta=row.venta
-					surtido.facturado=row.facturado
-					surtido.tipoVenta=row.tipoVenta
-					surtido.save()
-				}
-				db.eachRow(SQL_DETALLE,[row.origen]){ det->
-					def sdet=new SurtidoDet(det.toRowResult())
-					if(!surtido.partidas.find{it.origen==sdet.origen}){
-						surtido.addToPartidas(sdet)
+				if(row){
+					if(row.venta){
+						surtido.venta=row.venta
+						surtido.facturado=row.facturado
+						surtido.tipoDeVenta=row.tipoDeVenta  
+						surtido.save()
 					}
+					db.eachRow(SQL_DETALLE,[row.origen]){ det->
+						def sdet=new SurtidoDet(det.toRowResult())
+						if(!surtido.partidas.find{it.origen==sdet.origen}){
+							surtido.addToPartidas(sdet)
+						}
+					}
+					surtido.partidas.each{ sdet->
+						def sectores=db.rows(SQL_SECTORES,[sdet.producto])
+						sdet.sectores=sectores.collect{it.sector}.join(',')
+					}
+					surtido.save(flush:true,failOnError:true)
+					importadorDeCorteService.importar(surtido)
+					event('registroDeSurtido', surtido)
 				}
-				surtido.partidas.each{ sdet->
-					def sectores=db.rows(SQL_SECTORES,[sdet.producto])
-					sdet.sectores=sectores.collect{it.sector}.join(',')
-				}
-				surtido.save(flush:true,failOnError:true)
-				importadorDeCorteService.importar(surtido)
-				event('registroDeSurtido', surtido)
+				
 
 			}
 		}

@@ -15,11 +15,11 @@
 					<li>
 						<g:link action="pendientesAnalisis" >Pendientes</g:link>
 					</li>
-					<li class="active">
+					<li>
 						<g:link action="porEntregarAnalisis" >En Proceso</g:link>
 					</li>
 
-					<li>
+					<li class="active">
 						<g:link action="revisadosAnalisis" >Revisados</g:link>
 					</li>
 					
@@ -59,7 +59,7 @@
 							<th>Cortes</th>
 							<th>Asignado</th>
 							<th>T. Total</th>
-							<th>Status</th>
+							
 
 							
 						</tr>
@@ -89,7 +89,7 @@
 								</td>
 								<td>${fieldValue(bean:row,field:"tiempoAcumulado")}</td>
 								
-								<td>${fieldValue(bean:row,field:"status")}</td>
+								
 								
 							</tr>
 						</g:each>
