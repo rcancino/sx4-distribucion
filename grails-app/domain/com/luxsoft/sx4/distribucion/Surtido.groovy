@@ -118,18 +118,22 @@ class Surtido {
     }
 
     def getStatus(){
-        if(entregado){
-    		return 'ENTREGADO'
-    	}
+        if(entregado && formaDeEntrega=='LOCAL'){
+            return 'ENTREGADO'
+        }
 
-    	if(getCortes()>0){
-    		if(corteFin!=null)
-    			return 'POR ENTREGAR'
-    		if(corteInicio!=null)
-    			return 'EN CORTE'
+        if(revision && formaDeEntrega=='ENVIO'){
+            return 'ENTREGADO'
+        }
+
+        if(getCortes()>0){
+            if(corteFin!=null)
+                return 'POR ENTREGAR'
+            if(corteInicio!=null)
+                return 'EN CORTE'
             else
                 return 'PENDIENTE'
-    	}else{
+        }else{
             return asignado?'POR ENTREGAR':'PENDIENTE'
         }
     }

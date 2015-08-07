@@ -66,7 +66,7 @@ class ImportadorDeSurtidoService {
 		from sx_pedidos p
 		left join sx_ventas v on v.pedido_id=p.pedido_id
 		join sw_sucursales s on p.SUCURSAL_ID=s.SUCURSAL_ID
-		where s.nombre=:sucursal and date(p.fecha)=:fecha and p.puesto is true
+		where s.nombre=:sucursal and date(p.modificado)=:fecha and p.puesto is true
     """
 
     def SQL_PUESTOS_POR_ID="""
@@ -114,7 +114,7 @@ class ImportadorDeSurtidoService {
 		FROM sx_solicitud_traslados s where date(s.modificado)=CURRENT_DATE 
 		and comentario  like 'CANCELACION AUTOMATICA'
 		union
-		SELECT 'PED' as tipo,c.pedido_id as origen,c.creado_usr as cancelado_user,c.creado as cancelado FROM sx_pedidos_borrados c where date(c.CREADO)=CURRENT_DATE and c.puesto is true
+		SELECT 'PED' as tipo,c.pedido_id as origen,c.modificado_usr as cancelado_user,c.creado as cancelado FROM sx_pedidos_borrados c where date(c.CREADO)=CURRENT_DATE and c.puesto is true
     """
 
 

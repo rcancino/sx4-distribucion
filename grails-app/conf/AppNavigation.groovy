@@ -60,6 +60,7 @@ navigation={
 		//traslados(controller:'surtido')
 		enProceso(controller:'surtido')
 		porEntregar(controller:'surtido'){}
+		porEntregarEnvio(controller:'surtido'){}
 
 		
 	}

@@ -64,7 +64,17 @@ class SurtidoController {
     def porEntregar() {
         params.sort='pedidoCreado'
         params.order='asc'
-        def list=Surtido.where{asignado!=null}.list(params)
+        def list=Surtido.where{asignado!=null && formaDeEntrega=='LOCAL'}.list(params)
+        def res=list.findAll{it.getStatus()=='POR ENTREGAR'}
+        respond res, model:[surtidoInstanceCount:res.size()]
+        //respond Surtido.list(params), model:[surtidoInstanceCount:Surtido.count()]
+    }
+
+    @Secured(['permitAll'])
+    def porEntregarEnvio() {
+        params.sort='pedidoCreado'
+        params.order='asc'
+        def list=Surtido.where{asignado!=null && (formaDeEntrega=='ENVIO' || formaDeEntrega=='ENVIO_FORANEO')  }.list(params)
         def res=list.findAll{it.getStatus()=='POR ENTREGAR'}
         respond res, model:[surtidoInstanceCount:res.size()]
         //respond Surtido.list(params), model:[surtidoInstanceCount:Surtido.count()]
@@ -175,18 +185,30 @@ class SurtidoController {
       String nip=params.nip
       if(!nip){
         flash.error="Digite su NIP para proceder con operación"
-        redirect action:'porEntregar'
+         if(surtido.formaDeEntrega=='ENVIO'){
+              redirect action:'porEntregarEnvio'    
+          }else{
+            redirect action:'porEntregar'    
+          }
         return
       }
       def surtidor=Usuario.findByNip(nip)
       if(!surtidor){
         flash.error="Operador no encontrado verifique su NIP "
-        redirect action:'porEntregar'
+         if(surtido.formaDeEntrega=='ENVIO'){
+              redirect action:'porEntregarEnvio'    
+          }else{
+            redirect action:'porEntregar'    
+          }
         return 
       }
       if(!surtidor.getAuthorities().find{it.authority=='SURTIDOR'}){
         flash.error="No tiene el ROL de SURTIDOR verifique su NIP "
-        redirect action:'porEntregar'
+        if(surtido.formaDeEntrega=='ENVIO'){
+              redirect action:'porEntregarEnvio'    
+          }else{
+            redirect action:'porEntregar'    
+          }
         return 
       }
       surtido.entrego=surtidor.username
@@ -195,7 +217,11 @@ class SurtidoController {
       event('surtidoEntregado',surtido.id)
       log.info "Surtido de pedido: $surtido.pedido entregado por  $surtidor.nombre "
       flash.success="Surtido de pedido: $surtido.pedido entregado por  $surtidor.nombre "
-      redirect action:'porEntregar'
+       if(surtido.formaDeEntrega=='ENVIO'){
+              redirect action:'porEntregarEnvio'    
+          }else{
+            redirect action:'porEntregar'    
+          }
 
     }
 
@@ -208,18 +234,30 @@ class SurtidoController {
       String nip=params.nip
       if(!nip){
         flash.error="Digite su NIP para proceder con operación"
-        redirect action:'porEntregar'
+         if(surtido.formaDeEntrega=='ENVIO'){
+              redirect action:'porEntregarEnvio'    
+          }else{
+            redirect action:'porEntregar'    
+          }
         return
       }
       def supervisor=Usuario.findByNip(nip)
       if(!supervisor){
         flash.error="Supervisor no encontrado verifique su NIP "
-        redirect action:'porEntregar'
+         if(surtido.formaDeEntrega=='ENVIO'){
+              redirect action:'porEntregarEnvio'    
+          }else{
+            redirect action:'porEntregar'    
+          }
         return 
       }
       if(!supervisor.getAuthorities().find{it.authority=='SUPERVISOR_ENTREGA'}){
         flash.error="No tiene el ROL de SUPERVISOR_ENTREGA verifique su NIP "
-        redirect action:'porEntregar'
+         if(surtido.formaDeEntrega=='ENVIO'){
+              redirect action:'porEntregarEnvio'    
+          }else{
+            redirect action:'porEntregar'    
+          }
         return 
       }
       surtido.revisionUsuario=supervisor.username
@@ -228,8 +266,11 @@ class SurtidoController {
       event('surtidoRevizado',surtido.id)
       log.info "Surtido de pedido: $surtido.pedido revizado por  $supervisor.nombre "
       flash.success="Surtido de pedido: $surtido.pedido entregado por  $supervisor.nombre "
-      redirect action:'porEntregar'
-
+       if(surtido.formaDeEntrega=='ENVIO'){
+              redirect action:'porEntregarEnvio'    
+          }else{
+            redirect action:'porEntregar'    
+          }
     }
 
 
