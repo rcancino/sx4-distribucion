@@ -35,6 +35,7 @@
 							<th>
 								Acción
 							</th>
+							<th>D</th>
 							
 						</tr>
 					</thead>
@@ -77,11 +78,19 @@
 									</g:elseif>
 									
 								</td>
+								
 								<td>
-									<g:if test="${row.status=='POR ENTREGAR'}">
-										
+									<g:if test="${row.status=='POR ENTREGAR' && (row.depurado==null)  }">
+										<a href="" data-toggle="modal" class="btn btn-danger btn-lg btn-block"
+											data-target="#depuracionDeSurtidoModal" 
+											data-whatever="${row.pedido}" 
+											data-surtido="${row.id}"
+											data-status="${row.status}">
+											<i class="fa fa-power-off"></i>
+										</a> 
 									</g:if>
 								</td>
+
 
 							</tr>
 						</g:each>
@@ -92,7 +101,7 @@
 		</div> <!-- end .row 2-->
 		<g:render template="entregarSurtidoDialog"/>
 		<g:render template="revizarSurtidoDialog"/>
-		
+		<g:render template="depurarSurtidoDialog"/>
 
 	</div><!-- end .container-->
 
@@ -104,9 +113,10 @@
 				setInterval(function(){
 
 					var modal1=$('#entregaDeSurtidoModal');
-					var modal2=$('#revisionDeSurtidoModal')
+					var modal2=$('#revisionDeSurtidoModal');
+					var modal3=$('#depuracionDeSurtidoModal');
 
-					if (!modal1.is(':visible') && !modal2.is(':visible')) {
+					if (!modal1.is(':visible') && !modal2.is(':visible')  && !modal3.is(':visible')) {
 	    				console.log('Actualizar consulta...'+count);
 	    				window.location.reload();
 					}

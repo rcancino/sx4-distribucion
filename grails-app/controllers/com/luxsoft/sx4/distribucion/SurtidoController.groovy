@@ -64,7 +64,7 @@ class SurtidoController {
     def porEntregar() {
         params.sort='pedidoCreado'
         params.order='asc'
-        def list=Surtido.where{asignado!=null && formaDeEntrega=='LOCAL'}.list(params)
+        def list=Surtido.where{asignado!=null && formaDeEntrega=='LOCAL' && depurado==null}.list(params)
         def res=list.findAll{it.getStatus()=='POR ENTREGAR'}
         respond res, model:[surtidoInstanceCount:res.size()]
         //respond Surtido.list(params), model:[surtidoInstanceCount:Surtido.count()]
@@ -74,7 +74,7 @@ class SurtidoController {
     def porEntregarEnvio() {
         params.sort='pedidoCreado'
         params.order='asc'
-        def list=Surtido.where{asignado!=null && (formaDeEntrega=='ENVIO' || formaDeEntrega=='ENVIO_FORANEO')  }.list(params)
+        def list=Surtido.where{asignado!=null && (formaDeEntrega=='ENVIO' || formaDeEntrega=='ENVIO_FORANEO') && depurado==null }.list(params)
         def res=list.findAll{it.getStatus()=='POR ENTREGAR'}
         respond res, model:[surtidoInstanceCount:res.size()]
         //respond Surtido.list(params), model:[surtidoInstanceCount:Surtido.count()]
@@ -463,6 +463,34 @@ class SurtidoController {
       surtido.iniciado=null
       surtido.save(flush:true,failOnError:true)
       redirect action:'enProceso'
+    }
+
+    @Secured(['permitAll']) 
+    @Transactional
+    def depurar(Surtido surtido){
+      String nip=params.nip
+      if(!nip){
+        flash.error="Digite su NIP para depurar surtido $surtido.id"
+        redirect(uri: request.getHeader('referer') )
+        return
+      }
+      def user=Usuario.findByNip(nip)
+      if(!user){
+        flash.error="Operador no encontrado verifique su NIP "
+        redirect(uri: request.getHeader('referer') )
+        return 
+      }
+      if(!user.getAuthorities().find{it.authority=='SUPERVISOR_SURTIDO'}){
+        flash.error="No tiene tiene autorización para esta operación "
+        redirect(uri: request.getHeader('referer') )
+        return 
+      }
+      surtido.depurado=new Date()
+      surtido.depuradoUser=user.username
+      surtido.save(flush:true,failOnError:true)
+      log.info "Surtido de pedido: $surtido.pedido depurado $surtido.depurado   $surtido.depuradoUser "
+      flash.success="Surtido de pedido: $surtido.pedido depurado por   $user.nombre "
+      redirect(uri: request.getHeader('referer') )
     }
 
     

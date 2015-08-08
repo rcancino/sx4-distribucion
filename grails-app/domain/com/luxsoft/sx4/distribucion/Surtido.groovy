@@ -72,6 +72,9 @@ class Surtido {
     Date cancelado
     String canceladoUser
 
+    Date depurado
+    String depuradoUser
+
 
 	static hasMany = [partidas: SurtidoDet,auxiliares:AuxiliarDeSurtido]
 
@@ -99,6 +102,8 @@ class Surtido {
         revisionUsuario nullable:true,maxSize:40
         cancelado nullable:true
         canceladoUser nullable:true,maxSize:50
+        depurado nullable:true
+        depuradoUser nullable:true,maxSize:50
 
     }
 
