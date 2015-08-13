@@ -32,6 +32,7 @@
 							<th>Partidas</th>
 							<th>Cortes</th>
 							<th>Surtidor</th>
+							<th>S</th>
 							<th>
 								Acción
 							</th>
@@ -54,6 +55,13 @@
 								<td><g:formatNumber number="${row.partidas.size()}" format="####"/></td>
 								<td><g:formatNumber number="${row.cortes}" format="####"/></td>
 								<td>${fieldValue(bean:row,field:"asignado")}</td>
+
+								<td>
+									<input class="seleccionMultiple" type="checkbox" name="surtidos" value="item1"
+											data-surtido="{row.id}" data-toggle="tooltip" title="Surtido: ${row.id} ">
+
+								</td>
+
 								<td>
 									
 									<g:if test="${row.status=='POR ENTREGAR' && (row.entregado==null)  }">

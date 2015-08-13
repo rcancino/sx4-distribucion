@@ -108,7 +108,7 @@ class ImportadorDeSurtidoService {
 	*/
 
     def SQL_CANCELADOS="""
-    	SELECT 'FAC' as tipo,c.cargo_id as origen,c.creado_userid as cancelado_user,c.creado as cancelado FROM sx_cxc_cargos_cancelados c where date(c.fecha)=CURRENT_DATE 
+    	SELECT 'FAC' as tipo,v.pedido_id as origen,c.creado_userid as cancelado_user,c.creado as cancelado FROM sx_cxc_cargos_cancelados c join sx_ventas v on (v.CARGO_ID=c.CARGO_ID) where date(c.fecha)=CURRENT_DATE 
 		union
 		SELECT 'SOL' as tipo,s.sol_id as origen,s.cancelacion_usr as cancelado_user,s.modificado as cancelado 
 		FROM sx_solicitud_traslados s where date(s.modificado)=CURRENT_DATE 
@@ -225,6 +225,7 @@ class ImportadorDeSurtidoService {
 						surtido.venta=row.venta
 						surtido.facturado=row.facturado
 						surtido.tipoDeVenta=row.tipoDeVenta  
+						surtido.formaDeEntrega=row.formaDeEntrega
 						surtido.save()
 					}
 					db.eachRow(SQL_DETALLE,[row.origen]){ det->

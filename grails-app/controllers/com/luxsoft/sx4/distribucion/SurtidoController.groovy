@@ -217,6 +217,22 @@ class SurtidoController {
       event('surtidoEntregado',surtido.id)
       log.info "Surtido de pedido: $surtido.pedido entregado por  $surtidor.nombre "
       flash.success="Surtido de pedido: $surtido.pedido entregado por  $surtidor.nombre "
+
+      if(params.surtidos){
+        println 'Estoy dentro de la Seleccion Multiple'
+            def adicionales=params.surtidos.findAll({it.toLong()!=surtido.id})
+              adicionales.each{
+
+              def ca=Surtido.get(it)
+              println 'Seleccion Multiple'+it
+                  surtido.entrego=surtidor.username
+                  surtido.entregado=new Date()
+                  ca.save(flush:true)
+                
+            }
+      }
+
+
        if(surtido.formaDeEntrega=='ENVIO'){
               redirect action:'porEntregarEnvio'    
           }else{
@@ -299,7 +315,7 @@ class SurtidoController {
     def porEntregarAnalisis() {
         params.sort='pedidoCreado'
         params.order='asc'
-        def query=Surtido.where{entregado==null && cancelado == null }
+        def query=Surtido.where{ cancelado == null  &&((formaDeEntrega=='ENVIO' && revision==null) || (formaDeEntrega=='LOCAL' && entregado==null))}
         def res=query.list(params).collect({new SurtidoAnalisis(surtido:it)})
         [surtidoInstanceList:res]
     }

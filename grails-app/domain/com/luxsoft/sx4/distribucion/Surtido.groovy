@@ -127,7 +127,7 @@ class Surtido {
             return 'ENTREGADO'
         }
 
-        if(revision && formaDeEntrega=='ENVIO'){
+        if(revision && (formaDeEntrega=='ENVIO' || formaDeEntrega=='ENVIO_FORANEO')){
             return 'ENTREGADO'
         }
 
