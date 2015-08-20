@@ -305,8 +305,14 @@ class SurtidoController {
     def revisadosAnalisis() {
         params.sort='pedidoCreado'
         params.order='asc'
-        def query=Surtido.where{iniciado!=null && cancelado == null && revision!=null && entregado==null} 
+        def query=Surtido.where{iniciado!=null && cancelado == null && revision!=null && entregado==null && formaDeEntrega=='LOCAL'} 
+
+        
+
         def res=query.list(params).collect({new SurtidoAnalisis(surtido:it)})
+        def envio=Surtido.where{iniciado!=null && cancelado == null && entregado!=null && revision==null && formaDeEntrega=='ENVIO'} 
+        def res2=envio.list().collect({new SurtidoAnalisis(surtido:it)})
+        res<<res2
         [surtidoInstanceList:res]
     }
 
