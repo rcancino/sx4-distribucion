@@ -90,7 +90,7 @@ class ImportadorDeSurtidoService {
 		,(SELECT y.nombre FROM sx_solicitud_traslados x join sw_sucursales y on(y.SUCURSAL_ID=x.SUCURSAL_ID) where x.SOL_ID=p.sol_id) as comentario
 		from sx_solicitud_traslados p
 		join sw_sucursales s on P.ORIGEN_ID=s.SUCURSAL_ID		
-		where s.nombre=:sucursal and date(p.fecha)=:fecha
+		where s.nombre=:sucursal and date(p.fecha)=:fecha and p.clasificacion not in('CONTRAVALE')
     """
 
     def SQL_TRASLADOS_DET="""
