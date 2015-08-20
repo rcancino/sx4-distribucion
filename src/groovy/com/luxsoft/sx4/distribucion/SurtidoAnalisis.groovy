@@ -50,6 +50,7 @@ class SurtidoAnalisis {
 			return TimeCategory.minus(surtido.entregado, surtido.iniciado)
 		}
 
+		/*
 		def start = surtido.iniciado?:surtido.pedidoCreado
 		def stop = new Date() 
 		if(surtido.cortes){
@@ -60,7 +61,9 @@ class SurtidoAnalisis {
 		}else if(surtido.asignado){
 			start=surtido.iniciado
 		}
-		
+		*/
+		def start = surtido.pedidoCreado
+		def stop = new Date() 
 		TimeDuration duration = TimeCategory.minus(stop, start)
 		def dias=duration.getDays()?duration.getDays()+' dias':''
 		def horas=duration.getHours()?duration.getHours()+ 'hrs':''
