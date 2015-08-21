@@ -211,7 +211,7 @@ class CorteController {
               if(ca.asignado==corte.asignado && (ca.fin==null) ){
                   ca.fin=new Date()
                   ca.save(flush:true)
-                  //corteService.registrarFinDeCorteEnSurtido(ca)
+                  corteService.registrarFinDeCorteEnSurtido(ca)
                   //event('corteTerminado', ca)
               }
             }
@@ -243,7 +243,7 @@ class CorteController {
             ca.fin=new Date()
             //ca.asignado=cortador.username
             ca.save(flush:true)
-                  //corteService.registrarFinDeCorteEnSurtido(ca)
+          corteService.registrarFinDeCorteEnSurtido(ca)
                   //event('corteTerminado', ca)
           }
         }
