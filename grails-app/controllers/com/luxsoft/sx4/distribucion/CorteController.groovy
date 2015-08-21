@@ -70,6 +70,7 @@ class CorteController {
       }
 
       corte.asignado=cortador.username
+      corte.asignado=new Date()
       corte.save(flush:true)
       event('surtidoEntregadoACorte', corte)
 
@@ -79,6 +80,7 @@ class CorteController {
           def ca=Corte.get(it)
           if(ca.surtidor==corte.surtidor ){
               ca.asignado=cortador.username
+              ca.asignado=new Date()
               ca.save(flush:true)
               event('surtidoEntregadoACorte', ca)
           }

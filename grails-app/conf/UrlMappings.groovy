@@ -8,20 +8,13 @@ class UrlMappings {
         }
 
         //"/"(view:"/index")
-         "/"(controller:"home")
+        "/"(controller:"home")
          //"/reportes"(controller:'report')
-		 "/info"(view:"/index")
+		"/info"(view:"/index")
+        //"api/surtidos"(resources:"surtidoRest")
+
         "500"(view:'/error')
 	}
 
-	// static mappings = {
- //        "/$controller/$action?/$id?(.$format)?"{
- //            constraints {
-                
- //            }
- //        }
-
- //        "/"(view:"/index")
- //        "500"(view:'/error')
-	// }
+	
 }

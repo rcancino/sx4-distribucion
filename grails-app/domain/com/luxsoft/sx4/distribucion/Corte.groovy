@@ -23,6 +23,7 @@ class Corte {
 	Date fin
 
 	String asignado
+    Date asignacion
 
 	Date empacadoInicio
 	Date empacadoFin
@@ -61,6 +62,7 @@ class Corte {
         instruccion nullable:true
         cancelado nullable:true
         canceladoUser nullable:true,maxSize:50
+        asignacion nullable:true
     }
 
     static transients = ['status','surtidor','statusCorte','statusEmpaque']
