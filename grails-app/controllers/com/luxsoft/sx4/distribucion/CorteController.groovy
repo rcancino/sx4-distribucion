@@ -70,7 +70,7 @@ class CorteController {
       }
 
       corte.asignado=cortador.username
-      corte.asignado=new Date()
+      corte.asignacion=new Date()
       corte.save(flush:true)
       event('surtidoEntregadoACorte', corte)
 
@@ -80,7 +80,7 @@ class CorteController {
           def ca=Corte.get(it)
           if(ca.surtidor==corte.surtidor ){
               ca.asignado=cortador.username
-              ca.asignado=new Date()
+              ca.asignacion=new Date()
               ca.save(flush:true)
               event('surtidoEntregadoACorte', ca)
           }
@@ -243,7 +243,8 @@ class CorteController {
             ca.fin=new Date()
             //ca.asignado=cortador.username
             ca.save(flush:true)
-          corteService.registrarFinDeCorteEnSurtido(ca)
+            //println 'Registrando fin de corte.....'
+            //corteService.registrarFinDeCorteEnSurtido(ca)
                   //event('corteTerminado', ca)
           }
         }

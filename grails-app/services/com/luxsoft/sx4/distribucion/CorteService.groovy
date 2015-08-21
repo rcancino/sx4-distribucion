@@ -79,7 +79,6 @@ class CorteService {
 
 		if(found==null){
 			log.info 'Actualizando  fin del proceso de corte en el surtido '+surtido.id
-			println 'Actualizando  fin del proceso de corte en el surtido '+surtido.id
 			surtido.corteFin=new Date()
 			surtido.save(flush:true)
 		}

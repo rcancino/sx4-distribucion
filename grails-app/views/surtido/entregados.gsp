@@ -56,18 +56,14 @@
 							<th>Partidas</th>
 							<th>Corte</th>
 							<th>T Surtido</th>
+							<th>Espera</th>
 							<th>Surtio</th>
-
 							<th>T Corte</th>
 							<th>Cortador</th>
 							<th>Cortes</th>
-
-							
 							<th>Entregó</th>
 							<th>Entregado</th>
 							<th>T. Total</th>
-
-							
 						</tr>
 					</thead>
 					<tbody>
@@ -88,6 +84,9 @@
 								<td><g:formatNumber number="${row.partidas.size()}" format="####"/></td>
 								<td>
 									<g:if test="${row.cortes}"><i class="fa fa-scissors"></i></g:if>
+								</td>
+								<td>
+									PEND
 								</td>
 								<td>
 									<g:if test="${row.cortes}">
