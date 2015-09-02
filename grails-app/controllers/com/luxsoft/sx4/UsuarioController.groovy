@@ -34,7 +34,7 @@ class UsuarioController {
     	def term=params.term?:''
     	term=term.toLowerCase()
     	def sql=sql()
-    	def rows=sql.rows("""
+    /*	def rows=sql.rows("""
     		select u.clave as sucursal,pu.clave as puesto, e.id, e.apellido_paterno,e.apellido_materno,e.nombres
     		from empleado e
 			join perfil_de_empleado p on e.id=p.empleado_id
@@ -43,7 +43,17 @@ class UsuarioController {
     		where lower(e.apellido_paterno) like ?
     		  and u.clave in (?) 
     		LIMIT 50
-    		""",[term.toLowerCase()+'%',findSucursal()])
+    		""",[term.toLowerCase()+'%',findSucursal()])*/
+
+    def rows=sql.rows("""
+            select u.clave as sucursal,pu.clave as puesto, e.id, e.apellido_paterno,e.apellido_materno,e.nombres
+            from empleado e
+            join perfil_de_empleado p on e.id=p.empleado_id
+            join ubicacion u on p.ubicacion_id=u.id
+            join puesto pu on p.puesto_id=pu.id
+            where lower(e.apellido_paterno) like ?
+            LIMIT 50
+            """,[term.toLowerCase()+'%'])
 		
 		
 		def list=rows.collect{ c->

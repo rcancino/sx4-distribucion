@@ -44,7 +44,7 @@
 						<g:each in="${surtidoInstanceList}" var="row">
 							<tr class="text-center">
 								<td class="">
-									<a href="" class="btn btn-warning btn-lg btn-block">
+									<a href="" class="btn btn-success btn-lg btn-block">
 										<g:formatNumber number="${row.pedido}" format="####"/>
 									</a>
 								</td>
@@ -65,7 +65,7 @@
 								<td>
 									
 									<g:if test="${row.status=='POR ENTREGAR' && (row.entregado==null)  }">
-										<a href="" data-toggle="modal" class="btn btn-success btn-lg btn-block"
+										<a href="" data-toggle="modal" class="btn btn-warning  btn-lg btn-block"
 											data-target="#entregaDeSurtidoModal" 
 											data-whatever="${row.pedido}" 
 											data-surtido="${row.id}"
@@ -75,7 +75,7 @@
 									</g:if>
 									<g:elseif test="${row.status=='POR ENTREGAR' && (row.entregado!=null)  }">
 
-										<a href="" data-toggle="modal" class="btn btn-primary btn-lg btn-block"
+										<a href="" data-toggle="modal" class="btn btn-info btn-lg btn-block"
 											data-target="#revisionDeSurtidoModal" 
 											data-whatever="${row.pedido}" 
 											data-surtido="${row.id}"

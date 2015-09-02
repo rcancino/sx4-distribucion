@@ -95,7 +95,7 @@
 									</g:if>
 									%{-- <g:formatDate date="${row.iniciado}" format="HH:mm"/> --}%
 								</td>
-								<td>${fieldValue(bean:row,field:"asignado")}</td>
+								<td>${fieldValue(bean:row,field:"asignacion")}</td>
 
 								<td>
 									<g:if test="${row.cortes && row.corteFin && row.corteInicio}">

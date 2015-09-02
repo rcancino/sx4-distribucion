@@ -325,7 +325,7 @@ class SurtidoController {
     def porEntregarAnalisis() {
         params.sort='pedidoCreado'
         params.order='asc'
-        def query=Surtido.where{ cancelado == null  &&((formaDeEntrega=='ENVIO' && revision==null) || (formaDeEntrega=='LOCAL' && entregado==null))}
+        def query=Surtido.where{ cancelado==null && depurado == null  &&((formaDeEntrega=='ENVIO' && revision==null) || (formaDeEntrega=='LOCAL' && entregado==null))}
         def res=query.list(params).collect({new SurtidoAnalisis(surtido:it)})
         [surtidoInstanceList:res]
     }
@@ -335,7 +335,8 @@ class SurtidoController {
         //params.max = Math.min(max ?: 20, 100)
         params.sort='pedidoCreado'
         params.order='asc'
-        def list=Surtido.findAll("from Surtido s where date(s.entregado)=?",[new Date()],params)
+         def list=Surtido.findAll("from Surtido s where date(s.entregado)=? and s.depurado is null",[new Date()],params)
+        // def list=Surtido.findAll("from Surtido s where date(s.entregado) between '2015/08/20' and '2015/08/21'")
 
         respond list,model:[surtidoInstanceCount:list.size()]
     }
