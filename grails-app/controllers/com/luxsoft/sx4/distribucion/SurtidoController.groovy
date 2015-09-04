@@ -245,48 +245,65 @@ class SurtidoController {
     @Secured(['permitAll'])
     @Transactional
     def revizarSurtido(Surtido surtido){
-      assert surtido.status=='POR ENTREGAR','El surtido no esta listo para entregar Status: '+surtido.getStatus()
-      assert surtido.revision==null,'Surtido ya revizado para su entrega'
-      String nip=params.nip
-      if(!nip){
-        flash.error="Digite su NIP para proceder con operación"
-         if(surtido.formaDeEntrega=='ENVIO'){
+      
+          
+          assert surtido.status=='POR ENTREGAR','El surtido no esta listo para entregar Status: '+surtido.getStatus()
+          assert surtido.revision==null,'Surtido ya revizado para su entrega'
+          String nip=params.nip
+          if(!nip){
+            flash.error="Digite su NIP para proceder con operación"
+             if(surtido.formaDeEntrega=='ENVIO'){
+                  redirect action:'porEntregarEnvio'    
+              }else{
+                redirect action:'porEntregar'    
+              }
+            return
+          }
+          def supervisor=Usuario.findByNip(nip)
+          if(!supervisor){
+            flash.error="Supervisor no encontrado verifique su NIP "
+             if(surtido.formaDeEntrega=='ENVIO'){
+                  redirect action:'porEntregarEnvio'    
+              }else{
+                redirect action:'porEntregar'    
+              }
+            return 
+          }
+          if(!supervisor.getAuthorities().find{it.authority=='SUPERVISOR_ENTREGA'}){
+            flash.error="No tiene el ROL de SUPERVISOR_ENTREGA verifique su NIP "
+             if(surtido.formaDeEntrega=='ENVIO'){
+                  redirect action:'porEntregarEnvio'    
+              }else{
+                redirect action:'porEntregar'    
+              }
+            return 
+          }
+          surtido.revisionUsuario=supervisor.username
+          surtido.revision=new Date()
+          surtido.save(flush:true)
+          event('surtidoRevizado',surtido.id)
+
+          if(params.surtidos){
+            def adicionales=params.surtidos.findAll({it.toLong()!=surtido.id})
+            adicionales.each{
+              def s2=Surtido.get(it.toLong())
+              if(s2.formaDeEntrega=='ENVIO'){
+                  s2.revisionUsuario=supervisor.username
+                  s2.revision=new Date()
+                  s2.save(flush:true)
+                  event('surtidoRevizado',surtido.id)
+              }
+            }
+          }
+
+          log.info "Surtido de pedido: $surtido.pedido revizado por  $supervisor.nombre "
+          flash.success="Surtido de pedido: $surtido.pedido entregado por  $supervisor.nombre "
+          if(surtido.formaDeEntrega=='ENVIO'){
               redirect action:'porEntregarEnvio'    
           }else{
-            redirect action:'porEntregar'    
+              redirect action:'porEntregar'    
           }
-        return
-      }
-      def supervisor=Usuario.findByNip(nip)
-      if(!supervisor){
-        flash.error="Supervisor no encontrado verifique su NIP "
-         if(surtido.formaDeEntrega=='ENVIO'){
-              redirect action:'porEntregarEnvio'    
-          }else{
-            redirect action:'porEntregar'    
-          }
-        return 
-      }
-      if(!supervisor.getAuthorities().find{it.authority=='SUPERVISOR_ENTREGA'}){
-        flash.error="No tiene el ROL de SUPERVISOR_ENTREGA verifique su NIP "
-         if(surtido.formaDeEntrega=='ENVIO'){
-              redirect action:'porEntregarEnvio'    
-          }else{
-            redirect action:'porEntregar'    
-          }
-        return 
-      }
-      surtido.revisionUsuario=supervisor.username
-      surtido.revision=new Date()
-      surtido.save(flush:true)
-      event('surtidoRevizado',surtido.id)
-      log.info "Surtido de pedido: $surtido.pedido revizado por  $supervisor.nombre "
-      flash.success="Surtido de pedido: $surtido.pedido entregado por  $supervisor.nombre "
-       if(surtido.formaDeEntrega=='ENVIO'){
-              redirect action:'porEntregarEnvio'    
-          }else{
-            redirect action:'porEntregar'    
-          }
+          
     }
 
 

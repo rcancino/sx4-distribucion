@@ -90,12 +90,12 @@
 								</td>
 								<td>
 									<g:if test="${row.cortes}">
-										<g:formatNumber number="${((row?.asignacion?.getTime()-row.iniciado.getTime()) /1000)/60}" format="#### min"/>
-										
+										<%--
+										<g:formatNumber number="${((row?.corte?.asignacion?.getTime()-row.iniciado.getTime()) /1000)/60}" format="#### min"/>
+										--%>
 									</g:if>
-									%{-- <g:formatDate date="${row.iniciado}" format="HH:mm"/> --}%
 								</td>
-								<td>${fieldValue(bean:row,field:"asignacion")}</td>
+								<td>${fieldValue(bean:row,field:"asignado")}</td>
 
 								<td>
 									<g:if test="${row.cortes && row.corteFin && row.corteInicio}">

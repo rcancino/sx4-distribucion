@@ -6,7 +6,7 @@
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <h4 class="modal-title" id="revisionDeSurtidoModal">Revisión  de surtido</h4>
       </div>
-      <g:form  action="revizarSurtido" >
+      <g:form  name="revisionForm" action="revizarSurtido" >
 
       <div class="modal-body">
         	<g:hiddenField id="surtidoField" name="id"/>
@@ -45,6 +45,21 @@
       
       $('body').on('shown.bs.modal', '.modal', function () {
           $('[id$=recipient-name]').focus();
+      });
+
+      $("form[name=revisionForm]").submit(function(e){
+          var form=this;
+          $('input:checked').each(function(){
+
+              var surtido=$(this).data('surtido')
+              console.log('Agregando surtido:'+surtido);
+              $('<input />').attr('type', 'hidden')
+                .attr('name', "surtidos")
+              .attr('value', surtido)
+              .appendTo(form);
+           });
+          console.log('Mandando a revisar...');
+          //e.preventDefault(); //STOP default action
       });
 
     });
