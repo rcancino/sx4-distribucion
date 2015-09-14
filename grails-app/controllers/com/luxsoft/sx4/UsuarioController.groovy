@@ -34,26 +34,17 @@ class UsuarioController {
     	def term=params.term?:''
     	term=term.toLowerCase()
     	def sql=sql()
-    /*	def rows=sql.rows("""
-    		select u.clave as sucursal,pu.clave as puesto, e.id, e.apellido_paterno,e.apellido_materno,e.nombres
-    		from empleado e
-			join perfil_de_empleado p on e.id=p.empleado_id
-			join ubicacion u on p.ubicacion_id=u.id
-			join puesto pu on p.puesto_id=pu.id
-    		where lower(e.apellido_paterno) like ?
-    		  and u.clave in (?) 
-    		LIMIT 50
-    		""",[term.toLowerCase()+'%',findSucursal()])*/
+  
 
     def rows=sql.rows("""
-            select u.clave as sucursal,pu.clave as puesto, e.id, e.apellido_paterno,e.apellido_materno,e.nombres
+            select u.clave as sucursal,pu.clave as puesto, e.id, ifnull(e.apellido_paterno,'') as apellido_paterno,ifnull(e.apellido_materno,'') as apellido_materno,e.nombres
             from empleado e
             join perfil_de_empleado p on e.id=p.empleado_id
             join ubicacion u on p.ubicacion_id=u.id
             join puesto pu on p.puesto_id=pu.id
-            where lower(e.apellido_paterno) like ?
+            where lower(e.apellido_paterno) like ? or lower(e.apellido_materno) like ?
             LIMIT 50
-            """,[term.toLowerCase()+'%'])
+            """,[term.toLowerCase()+'%',term.toLowerCase()+'%'])
 		
 		
 		def list=rows.collect{ c->
@@ -75,8 +66,8 @@ class UsuarioController {
 	    		select u.clave as sucursal
 	    		,pu.clave as puesto
 	    		, e.id as empleadoId
-	    		, e.apellido_paterno as apellidoPaterno
-	    		,e.apellido_materno as apellidoMaterno
+	    		, ifnull(e.apellido_paterno,'') as apellidoPaterno
+	    		,ifnull(e.apellido_materno,'') as apellidoMaterno
 	    		,e.nombres as nombres
 	    		,p.numero_de_trabajador as numeroDeEmpleado
 	    		from empleado e
@@ -90,7 +81,10 @@ class UsuarioController {
 			
 			if(!found){
 				def usuario=new Usuario(row.toRowResult())
-				usuario.nombre="$usuario.nombres $usuario.apellidoPaterno?:'' $usuario.apellidoMaterno?:''"
+
+                
+
+				usuario.nombre="$usuario.nombres $usuario.apellidoPaterno $usuario.apellidoMaterno"
 				usuario.nip=RandomStringUtils.randomNumeric(4)
 				usuario.username=RandomStringUtils.random(6, true, true)
 				usuario.password='123'

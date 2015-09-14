@@ -49,6 +49,8 @@ class Usuario {
 	}
 
 	def beforeInsert() {
+
+	
 		encodePassword()
 		capitalizarNombre()
 		
@@ -72,8 +74,8 @@ class Usuario {
 	}
 
 	private capitalizarNombre(){
-		apellidoPaterno=apellidoPaterno.toUpperCase()
-		apellidoMaterno=apellidoMaterno.toUpperCase()
+		apellidoPaterno=apellidoPaterno?:''.toUpperCase()
+		apellidoMaterno=apellidoMaterno?:''.toUpperCase()
 		nombres=nombres.toUpperCase()
 		nombre="$nombres $apellidoPaterno $apellidoMaterno"
 	}
