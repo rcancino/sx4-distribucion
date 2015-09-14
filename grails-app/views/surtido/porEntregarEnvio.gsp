@@ -57,9 +57,10 @@
 								<td>${fieldValue(bean:row,field:"asignado")}</td>
 
 								<td>
-									<input class="seleccionMultiple" type="checkbox" name="surtidos" value="item1"
-											data-surtido="{row.id}" data-toggle="tooltip" title="Surtido: ${row.id} ">
-
+									<g:if test="${row.status=='POR ENTREGAR' && (row.entregado!=null)  }">
+										<input class="seleccionMultiple" type="checkbox" name="surtidos" value="item1"
+											data-surtido="${row.id}" data-toggle="tooltip" title="Surtido: ${row.id} ">
+									</g:if>
 								</td>
 
 								<td>
