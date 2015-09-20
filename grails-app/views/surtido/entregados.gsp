@@ -90,7 +90,7 @@
 								</td>
 								<td>
 									<g:if test="${row.cortes}">
-										<g:formatNumber number="${((row?.corteInicio?.getTime()-row.iniciado.getTime()) /1000)/60}" format="#### min"/>
+										<g:formatNumber number="${((row?.corte?.asignacion?.getTime()-row.iniciado.getTime()) /1000)/60}" format="#### min"/>
 										
 									</g:if>
 									%{-- <g:formatDate date="${row.iniciado}" format="HH:mm"/> --}%
