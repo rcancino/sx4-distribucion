@@ -21,6 +21,8 @@
         <g:layoutBody/>
         
         <g:render template="/_menu/footer"/>
+
+        
         
     <script type="text/javascript">
     /*

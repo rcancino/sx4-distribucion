@@ -13,6 +13,9 @@ class CoreFilters {
                 if(!session.periodoEmbarques){
                     session.periodoEmbarques=new Periodo(new Date()-5,new Date())
                 }
+                if(!session.periodoDeAnalisis){
+                    session.periodoDeAnalisis=new Periodo(new Date()-5,new Date())
+                }
                 
             }
             after = { Map model ->

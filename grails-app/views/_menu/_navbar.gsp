@@ -13,6 +13,9 @@
 		<sec:ifLoggedIn>
 			<div class="collapse navbar-collapse" id="mainMenu">
 				<nav:primary class="nav navbar-nav" scope="user"/>
+				<ul class="nav navbar-nav">
+					<li><a href="#searchSurtidoDialog" data-toggle="modal" data-target="#searchSurtidoDialog"> <i class="fa fa-search"></i> Buscar</a></li>
+				</ul>
 				<ul class="nav navbar-nav navbar-right">
 					<g:render template="/_menu/user"/> 
 				</ul>
@@ -21,3 +24,5 @@
 	</div>
 	
 </nav>
+
+<g:render template="/surtidoAnalisis/searchSurtidoDialog" />

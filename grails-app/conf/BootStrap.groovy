@@ -4,6 +4,32 @@ class BootStrap {
 
     def init = { servletContext ->
 
+    	Date.metaClass.inicioDeMes{ ->
+    		def d1=delegate.clone()
+    		d1.putAt(Calendar.DATE,1)
+    		return d1.clearTime()
+    	
+    	}
+    	
+    	Date.metaClass.finDeMes{ ->
+    		Calendar c2=delegate.clone().toCalendar()
+    		c2.putAt(Calendar.DATE,c2.getActualMaximum(Calendar.DATE))
+    		return c2.getTime().clearTime()
+    	}
+    	
+    	Date.metaClass.text{ ->
+    		return delegate.format('dd/MM/yyyy')
+    	}
+    	
+    	Date.metaClass.toMonth{ ->
+    		return delegate.getAt(Calendar.MONTH)+1
+    	}
+    	Date.metaClass.toYear{
+    		return delegate.getAt(Calendar.YEAR)
+    	}
+    	Date.metaClass.asPeriodoText{
+    		return delegate.format('MMMM - yyyy')
+    	}
 
     	def adminRole=Role.findOrSaveWhere(authority:'ADMIN')
 		def usuarioRole=Role.findOrSaveWhere(authority:'USER')
