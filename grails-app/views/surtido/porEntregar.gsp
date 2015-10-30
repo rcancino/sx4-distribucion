@@ -24,6 +24,7 @@
 				<table class="table table-striped table-bordered table-condensed ">
 					<thead>
 						<tr >
+							<th>D</th>
 							<th class="text-center">Pedido</th>
 							<th>T</th>
 							<th>Cliente</th>
@@ -35,13 +36,33 @@
 							<th>
 								Acción
 							</th>
-							<th>D</th>
+							
 							
 						</tr>
 					</thead>
 					<tbody>
 						<g:each in="${surtidoInstanceList}" var="row">
 							<tr class="text-center">
+
+								<td>
+									<g:if test="${row.status=='POR ENTREGAR' && (row.depurado==null)  }">
+										<a href="" data-toggle="modal" class="btn btn-danger btn-lg btn-block"
+											data-target="#depuracionDeSurtidoModal" 
+											data-whatever="${row.pedido}" 
+											data-surtido="${row.id}"
+											data-status="${row.status}">
+											<i class="fa fa-power-off"></i>
+										</a> 
+									</g:if>
+									<g:elseif test="${row.depurado}">
+										<i class="fa fa-lock"></i>
+									</g:elseif>
+								</td>
+
+
+
+
+
 								<td class="">
 									<a href="" class="btn btn-warning btn-lg btn-block">
 										<g:formatNumber number="${row.pedido}" format="####"/>
@@ -75,20 +96,7 @@
 									</g:elseif>
 								</td>
 								
-								<td>
-									<g:if test="${row.status=='POR ENTREGAR' && (row.depurado==null)  }">
-										<a href="" data-toggle="modal" class="btn btn-danger btn-lg btn-block"
-											data-target="#depuracionDeSurtidoModal" 
-											data-whatever="${row.pedido}" 
-											data-surtido="${row.id}"
-											data-status="${row.status}">
-											<i class="fa fa-power-off"></i>
-										</a> 
-									</g:if>
-									<g:elseif test="${row.depurado}">
-										<i class="fa fa-lock"></i>
-									</g:elseif>
-								</td>
+								
 
 							</tr>
 						</g:each>

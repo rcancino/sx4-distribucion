@@ -20,6 +20,7 @@ class ImportadorDeSurtidoJob {
     def execute(context) {
     	try {
             def counter = context.jobDetail.jobDataMap['counter'] ?: 0
+            println "Importando Surtidos"
             counter++
     		def fecha=new Date() 
     		def time=fecha.format('dd/MM/yyyy HH:mm:ss')

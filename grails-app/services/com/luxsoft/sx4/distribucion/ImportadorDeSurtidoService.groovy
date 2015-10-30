@@ -225,9 +225,32 @@ class ImportadorDeSurtidoService {
 						surtido.venta=row.venta
 						surtido.facturado=row.facturado
 						surtido.tipoDeVenta=row.tipoDeVenta  
-						surtido.formaDeEntrega=row.formaDeEntrega
 						surtido.save()
 					}
+
+					if(row.formaDeEntrega !=surtido.formaDeEntrega){
+						if(row.formaDeEntrega=='ENVIO'){
+							if(surtido.revision){
+								surtido.entrego=surtido.asignado
+								surtido.entregado=surtido.revision
+								surtido.revisionUsuario=null
+								surtido.revision=null
+							}
+						}
+						if(row.formaDeEntrega=='LOCAL'){
+							if(surtido.entregado){
+								surtido.entregado=null
+								surtido.entrego=null
+								surtido.revision=null
+								surtido.revisionUsuario=null
+							}
+
+						}
+						surtido.formaDeEntrega=row.formaDeEntrega	
+						
+
+					}
+
 					db.eachRow(SQL_DETALLE,[row.origen]){ det->
 						def sdet=new SurtidoDet(det.toRowResult())
 						if(!surtido.partidas.find{it.origen==sdet.origen}){
