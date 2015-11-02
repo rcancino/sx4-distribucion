@@ -70,10 +70,25 @@ class SurtidoAnalisisController {
     }
 
     def filtrar(SearchCommand command){
-    	println 'Params: '+params
-    	println 'Filtrando: '+command
+    	
         def q = Surtido.where {
             fecha >= command.fechaInicial && fecha <= command.fechaFinal
+        }
+        if(command.cliente){
+            q = Surtido.where{
+                cliente== command.cliente.clave
+            }
+        }
+        if(command.surtidor){
+            q = Surtido.where {
+                asignado =~ command.surtidor
+            }
+        }
+        //Ejemplo excluyente
+        if( command.pedido){
+           q = Surtido.where {
+                pedido==command.pedido
+           }
         }
         params.max = 40
         params.sort='fecha'
@@ -86,6 +101,7 @@ class SurtidoAnalisisController {
         def q=Corte.where {
             surtidoDet.surtido==surtido
         }
+
         respond surtido,model:[cortes:q.list()]
     }
 }
@@ -94,7 +110,9 @@ class SurtidoAnalisisController {
 @ToString(includeNames=true,includePackage=false)
 class SearchCommand {
 
-	//Long pedido
+	Long pedido
+
+    String surtidor
 
 	@BindingFormat('dd/MM/yyyy')
 	Date fechaInicial=new Date()-30
@@ -108,7 +126,8 @@ class SearchCommand {
 		fechaInicial nullable:false
 		fechaFinal nullable:false
 		cliente  nullable:true
-		//pedido nullable:true
+		pedido nullable:true
+        surtidor nullable:true
 	}
 
 	Periodo toPeriodo(){

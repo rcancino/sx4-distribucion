@@ -16,9 +16,9 @@
 				<div class="modal-body">
 
 					<div class="form-group">
-						<label for="folio" class="control-label col-sm-3">Folio</label>
+						<label for="pedido" class="control-label col-sm-3">Pedido</label>
 						<div class="col-sm-9">
-							<input name="folio" class="form-control" value="">
+							<input name="pedido" class="form-control" value="">
 						</div>
 					</div>
 
@@ -46,6 +46,17 @@
 								name="clienteNombre"  
 								class="form-control clienteField"  
 								placeholder="Seleccione al cliente">
+							</input>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label for="cliente" class="control-label col-sm-3">Surtidor</label>
+						<div class="col-sm-9">
+							<input  
+								type="text" 
+								name="surtidor"  
+								class="form-control">
 							</input>
 						</div>
 					</div>

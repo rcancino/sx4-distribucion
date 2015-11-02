@@ -41,6 +41,7 @@
 		    			<f:display property="iniciado" />
 		    			<f:display property="entrego" />
 		    			<f:display property="entregado"/>
+		    			<f:display property="analisis.tiempoAcumulado" label="T.Acu"/>
 					</f:with>
 				</form>
 			</div>

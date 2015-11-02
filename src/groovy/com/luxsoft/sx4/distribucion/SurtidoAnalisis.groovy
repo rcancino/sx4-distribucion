@@ -47,7 +47,11 @@ class SurtidoAnalisis {
 	def getTiempoAcumulado(){
 		
 		if(surtido.entregado){
-			return TimeCategory.minus(surtido.entregado, surtido.iniciado)
+			def duration =  TimeCategory.minus(surtido.entregado, surtido.iniciado)
+			def dias=duration.getDays()?duration.getDays()+' dias':''
+			def horas=duration.getHours()?duration.getHours()+ 'hrs':''
+			def minutos=duration.getMinutes()?duration.getMinutes()+ ' min':''
+			return "$dias $horas $minutos"
 		}
 
 		/*
