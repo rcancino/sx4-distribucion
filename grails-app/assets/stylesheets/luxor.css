@@ -105,3 +105,7 @@ span.summary.ng-valid {
 .ui-autocomplete-loading {
   background: url(../images/spinner.gif) right center no-repeat;
 }
+
+.datepicker{
+  z-index:1151 !important;
+}

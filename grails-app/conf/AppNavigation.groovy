@@ -31,7 +31,10 @@ navigation={
 				entregados(action:'entregados')
 				porSucursal()
 				traslados()
+				
 			}
+			
+
 		}
 		corte(controller:'corte',action:'index'){
 
@@ -52,6 +55,7 @@ navigation={
 			entregas(){}
 			embarques(){}
 		}
+		buscador(controller:'surtidoAnalisis', action:'filtrar')
 		
 	}
 

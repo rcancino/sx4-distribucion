@@ -63,23 +63,26 @@
 					<thead>
 						<tr >
 							<th class="text-center">Tipo</th>
+							<th>Entrega</th>
 							<th class="text-center">Cliente</th>
 							<th class="text-center">Pedido</th>
-							<th class="text-center">Fecha</th>
 							<th class="text-center">Venta</th>
-							<th>T</th>
+							<th class="text-center">Fecha</th>
 							<th>Part</th>
-							<th>C</th>
-							<th>Surtido</th>
 							<th>Surtio</th>
-
-							<th>T Corte</th>
+							<th>Surtido</th>
+							
+							<th>C</th>
 							<th>Cortador</th>
 							<th>Cortes</th>
+							<th>C Inicio</th>
+							<th>C Fin</th>
 
-							<th>Entregado</th>
 							<th>Entregó</th>
-							<th>T. Total</th>
+							<th>Entregado</th>
+
+							<th>Revisó</th>
+							<th>Revisión</th>
 
 							
 						</tr>
@@ -87,12 +90,10 @@
 					<tbody>
 						<g:each in="${surtidoInstanceList}" var="row">
 							<tr >
-								<td>
-									<g:link action="analisis" id="${row.id}">
-										${fieldValue(bean:row,field:"tipoDeVenta")}
-									</g:link>
-									
-								</td>
+								<td>${fieldValue(bean:row,field:"tipoDeVenta")}</td>
+
+								<td>${fieldValue(bean:row,field:"formaDeEntrega")}</td>
+
 								<td>
 									<g:link action="analisis" id="${row.id}">
 										<abbr title="${row.nombre}">
@@ -102,40 +103,59 @@
 									
 								</td>
 								<td><g:formatNumber number="${row.pedido}" format="####"/></td>
-								<td><g:formatDate date="${row.fecha}" format="dd/MM"/></td>
+								
 								<td>${fieldValue(bean:row,field:"venta")}</td>
-								<td>${fieldValue(bean:row,field:"tipo")[0..0]}</td>
+
+								<td><g:formatDate date="${row.fecha}" format="dd/MM"/></td>
+
 								<td><g:formatNumber number="${row.partidas.size()}" format="####"/></td>
+								
+								<td>${fieldValue(bean:row,field:"asignado")}</td>
+
+								<td><g:formatDate date="${row.iniciado}" format="HH:MM"/></td>
+
 								<td>
 									<g:if test="${row.cortes}"><i class="fa fa-scissors"></i></g:if>
 								</td>
 								<td>
-									<g:formatDate date="${row.iniciado}" format="HH:MM"/>
+									<g:if test="${row.cortes}">"${row.partidas.get(0).corte?row.partidas.get(0).corte.asignado:''}"</g:if>
 								</td>
-								<td>${fieldValue(bean:row,field:"asignado")}</td>
+								
+								<td><g:formatNumber number="${row.cortes}" format="####"/></td>
 
 								<td>
 									<g:if test="${row.cortes}">
-										<g:formatDate date="${row.corteInicio}" format="HH:MM"/>
+										<g:formatDate date="${row.corteInicio}" format="HH:MM (dd/MM)"/>
 									</g:if>
 									<g:else>
 										0
 									</g:else>
 								</td>
-								<td>PEND</td>
-								<td><g:formatNumber number="${row.cortes}" format="####"/></td>
+
+								<td>
+									<g:if test="${row.cortes}">
+										<g:formatDate date="${row.corteFin}" format="HH:MM (dd/MM)"/>
+									</g:if>
+									<g:else>
+										0
+									</g:else>
+								</td>
+								
+								
 
 								<td>${fieldValue(bean:row,field:"entrego")}</td>
 								<td><g:formatDate date="${row.entregado}" format="hh:MM (dd/MM)"/></td>
-								<td>PEND</td>
+								
+								<td>${fieldValue(bean:row,field:"revisionUsuario")}</td>
+								<td><g:formatDate date="${row.revision}" format="hh:MM (dd/MM)"/></td>
 								
 							</tr>
 						</g:each>
 					</tbody>
 				</table>
-				<div class="pagination">
+				%{-- <div class="pagination">
 					<g:paginate total="${surtidoInstanceCount ?: 0}" />
-				</div>
+				</div> --}%
 			</div>
 
 		</div> <!-- end .row 2-->

@@ -26,10 +26,12 @@
 				<form class="form-horizontal">
 					<f:with bean="${surtidoInstance}">
 		    			<f:display property="sucursal" />
-		    			<f:display property="fecha"/>
+		    			<f:display  property="fecha"></f:display>
 		    			<f:display property="pedido" />
 		    			<f:display property="venta" />
 		    			<f:display property="tipoDeVenta" label="Tipo"/>
+		    			<f:display property="asignado" label="Surtidor"/>
+
 					</f:with>
 				</form>
 			</div>
@@ -42,6 +44,7 @@
 		    			<f:display property="entrego" />
 		    			<f:display property="entregado"/>
 		    			<f:display property="analisis.tiempoAcumulado" label="T.Acu"/>
+		    			<f:display property="revisionUsuario" label="Revisó"/>
 					</f:with>
 				</form>
 			</div>
@@ -58,6 +61,7 @@
 							<tr>
 								<th>Producto</th>
 								<th>Descripción</th>
+								<th>Cantidad</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -65,6 +69,7 @@
 								<tr>
 									<td>${fieldValue(bean:row,field:"producto")}</td>
 									<td>${fieldValue(bean:row,field:"descripcion")}</td>
+									<td>${fieldValue(bean:row,field:"cantidad")}</td>
 								</tr>
 							</g:each>
 						</tbody>
@@ -87,8 +92,8 @@
 									<th>Descripción</th>
 									<th>Instrucción</th>
 									<th>Cant</th>
-									<th>Entregado</th>
-									<th>Pendiente</th>
+									<th>Cortador</th>
+									<th>Empacador</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -98,8 +103,9 @@
 										<td>${fieldValue(bean:row,field:"descripcion")}</td>
 										<td>${fieldValue(bean:row,field:"instruccion")}</td>
 										<td>${formatNumber(number:row.cantidad,format:'#,####.###')}</td>
-										<td>${formatNumber(number:row.entregado,format:'#,####.###')}</td>
-										<td>${formatNumber(number:row.pendiente,format:'#,####.###')}</td>
+										<td>${fieldValue(bean:row,field:"asignado")}</td>
+										<td>${fieldValue(bean:row,field:"empacador")}</td>
+
 									</tr>
 								</g:each>
 							</tbody>

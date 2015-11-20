@@ -74,9 +74,9 @@
 					<div class="form-group">
 						<label for="fechaFinal" class="col-sm-3 control-label ">Fecha final</label>
 						<div class="col-sm-9">
-							<input id="fechaFinal" name="fecha" type="text"  
+							<input id="fechaFinal" name="fechaFinal" type="text"  
 								value="${session.periodoDeAnalisis?.fechaFinal?.format('dd/MM/yyyy')}"
-								class="form-control fecha " autocomplete="off">
+								class="form-control fecha " >
 						</div>
 					</div>
 
@@ -98,7 +98,7 @@
 <script type="text/javascript">
 	$(document).ready(function(){
 		$(".fecha").datepicker({
-		     
+		         
 		 });
 		$(".clienteField").autocomplete({
 			source:'<g:createLink controller="surtidoAnalisis" action="buscarClientes"/>',

@@ -70,22 +70,31 @@ class SurtidoAnalisisController {
     }
 
     def filtrar(SearchCommand command){
+
+        if(!command.fechaInicial)
+            command.fechaInicial=new Date()
+         if(!command.fechaFinal)   
+            command.fechaFinal=new Date()
     	
         def q = Surtido.where {
+            println "Buscando solo por fecha"
             fecha >= command.fechaInicial && fecha <= command.fechaFinal
         }
         if(command.cliente){
             q = Surtido.where{
-                cliente== command.cliente.clave
+                println "buscando por cliente y fecha"
+                cliente== command.cliente.clave && fecha >= command.fechaInicial && fecha <= command.fechaFinal
             }
         }
         if(command.surtidor){
             q = Surtido.where {
-                asignado =~ command.surtidor
+                println "Buscando por surtidor y fecha"
+                asignado == command.surtidor &&  fecha >= command.fechaInicial && fecha <= command.fechaFinal
             }
         }
         //Ejemplo excluyente
         if( command.pedido){
+            println "Buscando por pedido"
            q = Surtido.where {
                 pedido==command.pedido
            }
@@ -115,16 +124,16 @@ class SearchCommand {
     String surtidor
 
 	@BindingFormat('dd/MM/yyyy')
-	Date fechaInicial=new Date()-30
+	Date fechaInicial //= new Date()-30
 	
 	@BindingFormat('dd/MM/yyyy')
-	Date fechaFinal=new Date()
+	Date fechaFinal //=new Date()
 
 	Cliente cliente
 
 	static constraints={
-		fechaInicial nullable:false
-		fechaFinal nullable:false
+		fechaInicial nullable:true
+		fechaFinal nullable:true
 		cliente  nullable:true
 		pedido nullable:true
         surtidor nullable:true

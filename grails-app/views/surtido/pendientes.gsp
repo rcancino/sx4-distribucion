@@ -31,7 +31,7 @@
 							<th>S</th>
 							<th>T</th>
 							
-							<th>Cliente</th>
+							<th class="text-center">Cliente</th>
 							<th>Org</th>
 							<th>Entrega</th>
 							<th>Solicitó</th>
@@ -69,6 +69,8 @@
 									</g:if>
 								</td>
 								<td>${fieldValue(bean:row,field:"tipo")[0..0]}</td>
+
+								<td>${fieldValue(bean:row,field:"nombre")}</td>
 								<td>
 									<g:if test="${row.status=='PENDIENTE'}">
 										<a href="" 
@@ -77,13 +79,15 @@
 											data-target="#asignacionManualDialog" 
 											data-pedido="${row.pedido}" 
 											data-surtido="${row.id}">
-											${fieldValue(bean:row,field:"cliente")}
+											${row.forma}
+
 										</a>
 									</g:if>
 								</td>
-								<td>${fieldValue(bean:row,field:"forma")}</td>
+								
 								<td>${fieldValue(bean:row,field:"formaDeEntrega")}</td>
 								<td>${fieldValue(bean:row,field:"comentario")}</td>
+
 								<td>${fieldValue(bean:row,field:"clasificacion")}</td>
 								<td><g:formatDate date="${row.pedidoCreado}" format="HH:mm (dd/MM)"/></td>
 								<td><g:formatNumber number="${row.partidas.size()}" format="####"/></td>
