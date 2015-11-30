@@ -89,7 +89,8 @@
 								</td>
 								<td>${fieldValue(bean:row,field:"tiempoAcumulado")}</td>
 								
-								<td>${fieldValue(bean:row,field:"status")}</td>
+								<!--<td>${fieldValue(bean:row,field:"status")}</td>-->
+								<td> ${row.surtido.estado}</td>
 								
 							</tr>
 						</g:each>

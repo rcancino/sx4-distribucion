@@ -91,4 +91,12 @@ class CorteService {
 		  surtido.save(flush:true)
 		}
 	}
+
+	def registrarAsignacionDeCorteEnSurtido(Corte corte){
+		def surtido=corte.surtidoDet.surtido
+		if(surtido.asignacionCorte==null){
+		  surtido.asignacionCorte=corte.asignacion
+		  surtido.save(flush:true)
+		}
+	}
 }

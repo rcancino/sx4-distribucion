@@ -9,7 +9,7 @@ import com.luxsoft.sx4.sec.*
 @Secured(["hasAnyRole('CORTADOR')"])
 class CorteController {
 
-	def importacionService
+  def importacionService
 
   def corteService
 
@@ -18,7 +18,7 @@ class CorteController {
     }
 
     def pendientes(int max){
-    	params.max = Math.min(max ?: 10, 100)
+      params.max = Math.min(max ?: 10, 100)
         params.sort='pedido'
         params.order='asc'
         /*
@@ -31,15 +31,15 @@ class CorteController {
 
     @Transactional
     def importar(ImportarCorteCommand cmd){
-    	//def fecha=params.toDate('yyyy-mm-dd')
-    	if(cmd.validate()){
-			importacionService.importarCortes(fecha)
-    	}else{
-    		flash.message="Se requiere una fecha valida para la importacion de cortes"
-    	}
-    	log.info 'Importando cortes :'+fecha?.format('dd/MM/yyyy')
+      //def fecha=params.toDate('yyyy-mm-dd')
+      if(cmd.validate()){
+      importacionService.importarCortes(fecha)
+      }else{
+        flash.message="Se requiere una fecha valida para la importacion de cortes"
+      }
+      log.info 'Importando cortes :'+fecha?.format('dd/MM/yyyy')
         log.info 'Params: '+params
-    	redirect action:'pendientes'
+      redirect action:'pendientes'
     }
 
     @Transactional
@@ -52,7 +52,7 @@ class CorteController {
 
       String nip=params.nip
       if(!nip){
-        flash.error="Digite su NIP para proceder con operación"
+        flash.error="Digite su NIP para proceder con operacin"
         redirect action:'pendientes'
         return
       }
@@ -71,6 +71,8 @@ class CorteController {
 
       corte.asignado=cortador.username
       corte.asignacion=new Date()
+     corteService.registrarAsignacionDeCorteEnSurtido corte
+
       corte.save(flush:true)
       event('surtidoEntregadoACorte', corte)
 
@@ -100,9 +102,9 @@ class CorteController {
       assert validarOperacionDeCortado(),'El sistema esta registrado sin rol de CORTADOR'
       assert corte.statusCorte=='PENDIENTE'
 
-    	String nip=params.nip
+      String nip=params.nip
       if(!nip){
-        flash.error="Digite su NIP para proceder con operación"
+        flash.error="Digite su NIP para proceder con operacin"
         redirect action:'pendientes'
         return
       }
@@ -259,7 +261,7 @@ class CorteController {
       assert !corte.empacador,'Corte ya asignado para empaque'
       String nip=params.nip
       if(!nip){
-        flash.error="Digite su NIP para proceder con operación"
+        flash.error="Digite su NIP para proceder con operacin"
         redirect action:'pendientes'
         return
       }
@@ -296,7 +298,7 @@ class CorteController {
 
       String nip=params.nip
       if(!nip){
-        flash.error="Digite su NIP para proceder con operación"
+        flash.error="Digite su NIP para proceder con operacin"
          redirect action:'enProceso',params:[id:cortador.id]
         return
       }
@@ -426,5 +428,5 @@ class CorteController {
 }
 
 class ImportarCorteCommand{
-	Date fecha
+  Date fecha
 }

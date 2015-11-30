@@ -65,7 +65,7 @@ class SurtidoController {
         params.sort='pedidoCreado'
         params.order='asc'
         def list=Surtido.where{asignado!=null && formaDeEntrega=='LOCAL' && depurado==null}.list(params)
-        def res=list.findAll{it.getStatus()=='POR ENTREGAR'}
+        def res=list.findAll{it.getStatus()=='POR ENTREGAR' }
         respond res, model:[surtidoInstanceCount:res.size()]
         //respond Surtido.list(params), model:[surtidoInstanceCount:Surtido.count()]
     }
@@ -184,7 +184,7 @@ class SurtidoController {
       assert surtido.status=='POR ENTREGAR','El surtido no esta listo para entregar Status: '+surtido.getStatus()
       String nip=params.nip
       if(!nip){
-        flash.error="Digite su NIP para proceder con operación"
+        flash.error="Digite su NIP para proceder con operacin"
          if(surtido.formaDeEntrega=='ENVIO'){
               redirect action:'porEntregarEnvio'    
           }else{
@@ -251,7 +251,7 @@ class SurtidoController {
           assert surtido.revision==null,'Surtido ya revizado para su entrega'
           String nip=params.nip
           if(!nip){
-            flash.error="Digite su NIP para proceder con operación"
+            flash.error="Digite su NIP para proceder con operacin"
              if(surtido.formaDeEntrega=='ENVIO'){
                   redirect action:'porEntregarEnvio'    
               }else{
@@ -418,7 +418,7 @@ class SurtidoController {
       params.max = Math.min(max ?: 10, 100)
       params.sort='pedidoCreado'
       params.order='asc'
-      def query=Surtido.where{asignado!=null && entregado==null}
+      def query=Surtido.where{cancelado == null && asignado!=null && depurado==null && ((formaDeEntrega=='LOCAL' && entregado==null) || (formaDeEntrega=='ENVIO' && revision==null) )}
       [surtidoInstanceList:query.list(params),surtidoInstanceCount:query.count()]
       //respond query.list(params), model:[surtidoInstanceCount:query.count(params)]
 
@@ -525,7 +525,7 @@ class SurtidoController {
         return 
       }
       if(!user.getAuthorities().find{it.authority=='SUPERVISOR_SURTIDO'}){
-        flash.error="No tiene tiene autorización para esta operación "
+        flash.error="No tiene tiene autorizacin para esta operacin "
         redirect(uri: request.getHeader('referer') )
         return 
       }

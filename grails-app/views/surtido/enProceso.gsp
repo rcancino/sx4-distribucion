@@ -77,7 +77,7 @@
 									</g:each>
 								</td>
 								<td class="${row.status=='EN SURTIDO'?'success':'warning'}">
-									${fieldValue(bean:row,field:"status")}
+									${fieldValue(bean:row,field:"estado")}
 								</td>
 								<td>
 									<a href="" data-toggle="modal" class="btn btn-default btn-lg btn-block"

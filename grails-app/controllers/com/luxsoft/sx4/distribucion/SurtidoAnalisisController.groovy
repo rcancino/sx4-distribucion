@@ -99,7 +99,7 @@ class SurtidoAnalisisController {
                 pedido==command.pedido
            }
         }
-        params.max = 40
+        
         params.sort='fecha'
         params.order='desc'
         [surtidoInstanceList:q.list(params),surtidoInstanceCount:q.count(),searchCommand:command]

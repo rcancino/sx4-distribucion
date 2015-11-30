@@ -33,8 +33,9 @@
 							<th>Partidas</th>
 							<th>Cortes</th>
 							<th>Surtidor</th>
+						
 							<th>
-								Acción
+								Accin
 							</th>
 							
 							
@@ -75,6 +76,7 @@
 								<td><g:formatNumber number="${row.partidas.size()}" format="####"/></td>
 								<td><g:formatNumber number="${row.cortes}" format="####"/></td>
 								<td>${fieldValue(bean:row,field:"asignado")}</td>
+								
 								<td>
 									<g:if test="${row.status=='POR ENTREGAR' && (row.revision==null)  }">
 										<a href="" data-toggle="modal" class="btn btn-primary btn-lg btn-block"

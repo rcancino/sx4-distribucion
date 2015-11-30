@@ -67,22 +67,24 @@
 							<th class="text-center">Cliente</th>
 							<th class="text-center">Pedido</th>
 							<th class="text-center">Venta</th>
-							<th class="text-center">Fecha</th>
-							<th>Part</th>
-							<th>Surtio</th>
+							<th class="text-center">Fecha     </th>
+							<!--<th>Part</th>-->
+							<th>Surtió</th>
 							<th>Surtido</th>
-							
+							<th>Entregado  a Corte</th>
 							<th>C</th>
 							<th>Cortador</th>
-							<th>Cortes</th>
+							<!--<th>Cortes</th>-->
 							<th>C Inicio</th>
 							<th>C Fin</th>
 
-							<th>Entregó</th>
+							<!--<th>Entreg</th>-->
 							<th>Entregado</th>
 
-							<th>Revisó</th>
+						
 							<th>Revisión</th>
+							
+							<th>Status</th>
 
 							
 						</tr>
@@ -106,48 +108,59 @@
 								
 								<td>${fieldValue(bean:row,field:"venta")}</td>
 
-								<td><g:formatDate date="${row.fecha}" format="dd/MM"/></td>
+								<!--<td><g:formatDate date="${row.fecha}" format="dd/MM"/></td>-->
+								<td>${fieldValue(bean:row,field:"fecha")}</td>
 
-								<td><g:formatNumber number="${row.partidas.size()}" format="####"/></td>
+							<!--	<td><g:formatNumber number="${row.partidas.size()}" format="####"/></td>-->
 								
 								<td>${fieldValue(bean:row,field:"asignado")}</td>
 
-								<td><g:formatDate date="${row.iniciado}" format="HH:MM"/></td>
+								<!--<td><g:formatDate date="${row.iniciado}" format="HH:MM"/></td>-->
+								<td>${fieldValue(bean:row,field:"iniciado")}</td>
+
+								<td>${fieldValue(bean:row,field:"asignacionCorte")}</td>
 
 								<td>
 									<g:if test="${row.cortes}"><i class="fa fa-scissors"></i></g:if>
 								</td>
+								
 								<td>
 									<g:if test="${row.cortes}">"${row.partidas.get(0).corte?row.partidas.get(0).corte.asignado:''}"</g:if>
 								</td>
 								
-								<td><g:formatNumber number="${row.cortes}" format="####"/></td>
+								<!--<td><g:formatNumber number="${row.cortes}" format="####"/></td>-->
 
-								<td>
+								<!--<td>
 									<g:if test="${row.cortes}">
 										<g:formatDate date="${row.corteInicio}" format="HH:MM (dd/MM)"/>
 									</g:if>
 									<g:else>
 										0
 									</g:else>
-								</td>
+								</td> -->
+								<td>${fieldValue(bean:row,field:"corteInicio")}</td>
 
-								<td>
+								<!--<td>
 									<g:if test="${row.cortes}">
 										<g:formatDate date="${row.corteFin}" format="HH:MM (dd/MM)"/>
 									</g:if>
 									<g:else>
 										0
 									</g:else>
-								</td>
+								</td>-->
+								<td>${fieldValue(bean:row,field:"corteFin")}</td>
 								
 								
 
-								<td>${fieldValue(bean:row,field:"entrego")}</td>
-								<td><g:formatDate date="${row.entregado}" format="hh:MM (dd/MM)"/></td>
+								<!--<td>${fieldValue(bean:row,field:"entrego")}</td>-->
 								
-								<td>${fieldValue(bean:row,field:"revisionUsuario")}</td>
-								<td><g:formatDate date="${row.revision}" format="hh:MM (dd/MM)"/></td>
+								<!--<td><g:formatDate date="${row.entregado}" format="hh:MM (dd/MM)"/></td>-->
+								<td>${fieldValue(bean:row,field:"entregado")}</td>
+								
+								<!--<td><g:formatDate date="${row.revision}" format="hh:MM (dd/MM)"/></td>-->
+								<td>${fieldValue(bean:row,field:"revision")}</td>
+								
+								<td>${fieldValue(bean:row,field:"estado")}</td>
 								
 							</tr>
 						</g:each>

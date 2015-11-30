@@ -8,48 +8,48 @@ import org.grails.databinding.BindingFormat
 @EqualsAndHashCode(includes='sucursal,pedido')
 class Surtido {
 
-	String sucursal
-	
-	Long pedido
+    String sucursal
+    
+    Long pedido
 
-	String cliente
+    String cliente
 
-	String nombre
-	
-	String tipo
-	
-	@BindingFormat('dd/MM/yyyy')
-	Date fecha
+    String nombre
+    
+    String tipo
+    
+    @BindingFormat('dd/MM/yyyy')
+    Date fecha
 
-	String asignado
+    String asignado
 
-	Date iniciado
+    Date iniciado
 
-	Date corteInicio
+    Date corteInicio
 
-	Date corteFin
+    Date corteFin
 
-	String entrego
+    String entrego
 
-	Date entregado
+    Date entregado
 
-	String vendedor
+    String vendedor
 
-	Date pedidoCreado
+    Date pedidoCreado
 
-	Date facturado
+    Date facturado
     String venta
     String tipoDeVenta
     String formaDeEntrega
 
-	String origen
+    String origen
 
-	Integer cortes
+    Integer cortes
 
-	List partidas
+    List partidas
 
-	Date dateCreated
-	Date lastUpdated
+    Date dateCreated
+    Date lastUpdated
 
     Boolean empacadoTerminado
 
@@ -75,21 +75,22 @@ class Surtido {
     Date depurado
     String depuradoUser
 
+    Date asignacionCorte
 
-	static hasMany = [partidas: SurtidoDet,auxiliares:AuxiliarDeSurtido]
+    static hasMany = [partidas: SurtidoDet,auxiliares:AuxiliarDeSurtido]
 
 
     static constraints = {
-    	cliente maxSize:20
-    	nombre()
-    	sucursal maxSize:20
-    	tipo inList:['ORDINARIO','PARCIAL','TRASLADO']
-    	asignado nullable:true,maxSize:50
-    	iniciado nullable:true
-    	corteInicio nullable:true
-    	corteFin nullable:true
-    	entrego nullable:true
-    	entregado nullable:true
+        cliente maxSize:20
+        nombre()
+        sucursal maxSize:20
+        tipo inList:['ORDINARIO','PARCIAL','TRASLADO']
+        asignado nullable:true,maxSize:50
+        iniciado nullable:true
+        corteInicio nullable:true
+        corteFin nullable:true
+        entrego nullable:true
+        entregado nullable:true
         venta nullable:true,maxSize:20
         tipoDeVenta nullable:true,maxSize:10
         forma nullable:true,maxSize:10
@@ -104,12 +105,13 @@ class Surtido {
         canceladoUser nullable:true,maxSize:50
         depurado nullable:true
         depuradoUser nullable:true,maxSize:50
+        asignacionCorte nullable:true
 
     }
 
     static mapping = {
         //id generator:'guid'
-    	fecha type:'date'
+        fecha type:'date'
         cancelado type:'date'
         partidas cascade: "all-delete-orphan"
         auxiliares cascade: "all-delete-orphan"
@@ -119,10 +121,10 @@ class Surtido {
     static transients = ['cortes','status','empacadoTerminado','analisis']
 
     def getCortes(){
-    	return partidas.sum{return it.corte?1:0}
+        return partidas.sum{return it.corte?1:0}
     }
 
-    def getStatus(){
+   def getStatus(){
         if(entregado && formaDeEntrega=='LOCAL'){
             return 'ENTREGADO'
         }
@@ -143,6 +145,72 @@ class Surtido {
         }
     }
 
+    def getEstado(){
+         if(!iniciado){
+            return 'PENDIENTE'
+        }
+
+        if(formaDeEntrega=='LOCAL'){
+            if(iniciado){
+                if(cancelado){
+                    return 'CANCELADO'
+                }else if(depurado){
+                    return 'DEPURADO'
+                }else if(entregado){
+                    return 'ENTREGADO'
+                }else if(iniciado && getCortes()==0 && revision ==null){
+                return 'POR REVISAR'
+                }else if(iniciado && getCortes()==0 && revision !=null){
+                    return 'POR ENTREGAR'
+                }else if(iniciado && getCortes()>0 && asignacionCorte==null){
+                    return 'EN SURTIDO'
+                }else if(iniciado && getCortes()>0 && asignacionCorte!=null && corteInicio== null){
+                    return 'POR CORTAR'
+                }else if(corteInicio!=null && corteFin==null && revision== null){
+                    return 'EN CORTE'
+                }else if(corteInicio!=null && corteFin!=null && !empacadoFinEstado && revision== null){
+                    return 'EN EMPAQUE'
+                }else if(corteInicio!=null && corteFin!=null && empacadoFinEstado && revision== null){
+                    return 'POR REVISAR'
+                }else if(corteInicio!=null && corteFin!=null && empacadoFinEstado && revision!= null){
+                    return 'POR ENTREGAR'
+                }
+                return 'EN SURTIDO'
+            }
+           
+        }
+        if(formaDeEntrega=='ENVIO'){
+            if(iniciado){
+                if(cancelado){
+                    return 'CANCELADO'
+                }else if(depurado){
+                    return 'DEPURADO'
+                }else if(revision){
+                    return 'REVISADO'
+                }else if(iniciado && getCortes()==0 && entregado ==null){
+                return 'POR ENTREGAR'
+                }else if(iniciado && getCortes()==0 && entregado !=null){
+                    return 'POR REVISAR'
+                }else if(iniciado && getCortes()>0 && asignacionCorte==null){
+                    return 'EN SURTIDO'
+                }else if(iniciado && getCortes()>0 && asignacionCorte!=null && corteInicio== null){
+                    return 'POR CORTAR'
+                }else if(corteInicio!=null && corteFin==null && entregado== null){
+                    return 'EN CORTE'
+                }else if(corteInicio!=null && corteFin!=null && !empacadoFinEstado && entregado== null){
+                    return 'EN EMPAQUE'
+                }else if(corteInicio!=null && corteFin!=null && empacadoFinEstado && entregado== null){
+                    return 'POR REVISAR'
+                }else if(corteInicio!=null && corteFin!=null && empacadoFinEstado && revision!= null){
+                    return 'POR ENTREGAR'
+                }
+                return 'EN SURTIDO'
+            }
+        }
+    }
+
+
+
     def getEmpacadoTerminado(){
         if(cortes){
             def cortes=partidas.findAll{it.corte!=null}
@@ -155,6 +223,22 @@ class Surtido {
             return true
         }
         return true
+        
+    }
+
+
+    def getEmpacadoFinEstado(){
+        if(getCortes()>0){
+            def cortes=partidas.findAll{it.corte!=null}
+            def found=cortes.find{
+                it.corte.empacadoFin==null
+            }
+            if(found==null){
+                return true
+            }
+            return false
+        }
+        return false
         
     }
 
