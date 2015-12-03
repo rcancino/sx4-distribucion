@@ -77,6 +77,16 @@ class Surtido {
 
     Date asignacionCorte
 
+    Date cierreSurtido
+
+    
+    Date dateIniciado 
+    
+
+    
+
+
+
     static hasMany = [partidas: SurtidoDet,auxiliares:AuxiliarDeSurtido]
 
 
@@ -106,8 +116,10 @@ class Surtido {
         depurado nullable:true
         depuradoUser nullable:true,maxSize:50
         asignacionCorte nullable:true
+        cierreSurtido nullable:true
 
     }
+
 
     static mapping = {
         //id generator:'guid'
@@ -115,10 +127,13 @@ class Surtido {
         cancelado type:'date'
         partidas cascade: "all-delete-orphan"
         auxiliares cascade: "all-delete-orphan"
+        dateIniciado formula:'DATE(iniciado)'
     }
 
 
     static transients = ['cortes','status','empacadoTerminado','analisis']
+
+  
 
     def getCortes(){
         return partidas.sum{return it.corte?1:0}

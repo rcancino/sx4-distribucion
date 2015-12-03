@@ -35,9 +35,11 @@
 							<th>Surtidor</th>
 						
 							<th>
-								Accin
+								Acción
 							</th>
-							
+							<th>
+								Cerrar
+							</th>
 							
 						</tr>
 					</thead>
@@ -97,6 +99,18 @@
 										</a> 
 									</g:elseif>
 								</td>
+
+								<td>
+									<g:if test="${row.status=='POR ENTREGAR' && row.revision==null && row.cortes==0 && row.cierreSurtido==null }">
+										<a href="" data-toggle="modal" class="btn btn-info btn-lg btn-block"
+											data-target="#cierreDeSurtidoModal" 
+											data-whatever="${row.pedido}" 
+											data-surtido="${row.id}"
+											data-status="${row.status}">
+											CIERRE
+										</a> 
+									</g:if>
+								</td>
 								
 								
 
@@ -110,6 +124,8 @@
 		<g:render template="entregarSurtidoDialog"/>
 		<g:render template="revizarSurtidoDialog"/>
 		<g:render template="depurarSurtidoDialog"/>
+		<g:render template="cerrarSurtidoDialog"/>
+
 		
 
 	</div><!-- end .container-->
@@ -124,8 +140,9 @@
 					var modal1=$('#entregaDeSurtidoModal');
 					var modal2=$('#revisionDeSurtidoModal');
 					var modal3=$('#depuracionDeSurtidoModal');
+					var modal4=$('#cierreDeSurtidoModal');
 
-					if (!modal1.is(':visible') && !modal2.is(':visible')  && !modal3.is(':visible')) {
+					if (!modal1.is(':visible') && !modal2.is(':visible')  && !modal3.is(':visible') && !modal4.is(':visible')) {
 	    				console.log('Actualizar consulta...'+count);
 	    				window.location.reload();
 					}

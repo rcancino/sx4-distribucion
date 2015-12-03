@@ -65,7 +65,7 @@
 						<label for="fechaInicial" class="col-sm-3 control-label ">Fecha inicial</label>
 						<div class="col-sm-9">
 							<input id="fechaInicial" 
-								value="${session.periodoDeAnalisis?.fechaInicial?.format('dd/MM/yyyy')}"
+								value="${session.periodoDeAnalisis?.fechaFinal?.format('dd/MM/yyyy')}"
 								name="fechaInicial" type="text"  
 								class="form-control fecha " autocomplete="off">
 						</div>

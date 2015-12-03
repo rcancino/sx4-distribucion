@@ -67,6 +67,8 @@
 							<th class="text-center">Cliente</th>
 							<th class="text-center">Pedido</th>
 							<th class="text-center">Venta</th>
+							<th class="text-center">Fecha Pedido</th>
+							<th class="text-center">Importado</th>
 							<th class="text-center">Fecha     </th>
 							<!--<th>Part</th>-->
 							<th>Surtió</th>
@@ -107,6 +109,10 @@
 								<td><g:formatNumber number="${row.pedido}" format="####"/></td>
 								
 								<td>${fieldValue(bean:row,field:"venta")}</td>
+								
+								<td>${fieldValue(bean:row,field:"pedidoCreado")}</td>
+
+								<td>${fieldValue(bean:row,field:"dateCreated")}</td>
 
 								<!--<td><g:formatDate date="${row.fecha}" format="dd/MM"/></td>-->
 								<td>${fieldValue(bean:row,field:"fecha")}</td>
@@ -124,8 +130,14 @@
 									<g:if test="${row.cortes}"><i class="fa fa-scissors"></i></g:if>
 								</td>
 								
-								<td>
+								<!--<td>
 									<g:if test="${row.cortes}">"${row.partidas.get(0).corte?row.partidas.get(0).corte.asignado:''}"</g:if>
+								</td>-->
+
+								<td>
+									<g:if test="${row.cortes}">
+										${row.partidas.findAll{it.corte!=null}.first().corte.asignado}
+									</g:if>
 								</td>
 								
 								<!--<td><g:formatNumber number="${row.cortes}" format="####"/></td>-->

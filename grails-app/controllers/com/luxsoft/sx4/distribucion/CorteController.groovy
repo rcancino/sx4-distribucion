@@ -252,6 +252,18 @@ class CorteController {
         }
             //print 'Surtidos adicionales: '+adicionales
       }
+      def surt=corte.surtidoDet.surtido
+      def cortesPend= surt.partidas.findAll{it.corte!=null && it.corte.fin==null}
+       cortesPend.each{
+         println"Corte"+it
+       }
+      if(!cortesPend){
+        println "Ya  no hay mas cortes pendientes"
+        corteService.registrarFinDeCorteEnSurtido(corte)
+      }else
+      {
+        println "Todavia hay cortes pendientes"
+      }
       redirect action:'pendientes'
     }
 
@@ -345,7 +357,7 @@ class CorteController {
             //print 'Surtidos adicionales: '+adicionales
       }
 
-      corteService.registrarFinDeCorteEnSurtido(corte)
+      //corteService.registrarFinDeCorteEnSurtido(corte)
       flash.success= "Empacado terminado para $corte.producto  "
       redirect action:'enProceso',params:[id:cortador.id]
 

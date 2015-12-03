@@ -64,7 +64,7 @@ class SurtidoController {
     def porEntregar() {
         params.sort='pedidoCreado'
         params.order='asc'
-        def list=Surtido.where{asignado!=null && formaDeEntrega=='LOCAL' && depurado==null}.list(params)
+        def list=Surtido.where{asignado!=null && formaDeEntrega=='LOCAL' && depurado==null && cancelado==null}.list(params)
         def res=list.findAll{it.getStatus()=='POR ENTREGAR' }
         respond res, model:[surtidoInstanceCount:res.size()]
         //respond Surtido.list(params), model:[surtidoInstanceCount:Surtido.count()]
@@ -74,7 +74,7 @@ class SurtidoController {
     def porEntregarEnvio() {
         params.sort='pedidoCreado'
         params.order='asc'
-        def list=Surtido.where{asignado!=null && (formaDeEntrega=='ENVIO' || formaDeEntrega=='ENVIO_FORANEO') && depurado==null }.list(params)
+        def list=Surtido.where{asignado!=null && (formaDeEntrega=='ENVIO' || formaDeEntrega=='ENVIO_FORANEO') && depurado==null  && cancelado==null}.list(params)
         def res=list.findAll{it.getStatus()=='POR ENTREGAR'}
         respond res, model:[surtidoInstanceCount:res.size()]
         //respond Surtido.list(params), model:[surtidoInstanceCount:Surtido.count()]
@@ -240,6 +240,71 @@ class SurtidoController {
           }
 
     }
+
+    @Secured(['permitAll'])
+    @Transactional
+    def cerrarSurtido(Surtido surtido){
+      assert surtido.status=='POR ENTREGAR','El surtido no esta listo para Cerrar Status: '+surtido.getStatus()
+      String nip=params.nip
+      if(!nip){
+        flash.error="Digite su NIP para proceder con operacin"
+         if(surtido.formaDeEntrega=='ENVIO'){
+              redirect action:'porEntregarEnvio'    
+          }else{
+            redirect action:'porEntregar'    
+          }
+        return
+      }
+      def surtidor=Usuario.findByNip(nip)
+      if(!surtidor){
+        flash.error="Operador no encontrado verifique su NIP "
+         if(surtido.formaDeEntrega=='ENVIO'){
+              redirect action:'porEntregarEnvio'    
+          }else{
+            redirect action:'porEntregar'    
+          }
+        return 
+      }
+      if(!surtidor.getAuthorities().find{it.authority=='SURTIDOR'}){
+        flash.error="No tiene el ROL de SURTIDOR verifique su NIP "
+        if(surtido.formaDeEntrega=='ENVIO'){
+              redirect action:'porEntregarEnvio'    
+          }else{
+            redirect action:'porEntregar'    
+          }
+        return 
+      }
+      //surtido.entrego=surtidor.username
+      //surtido.entregado=new Date()
+      surtido.cierreSurtido=new Date()
+      surtido.save(flush:true)
+      //event('surtidoEntregado',surtido.id)
+      log.info "Surtido de pedido: $surtido.pedido entregado por  $surtidor.nombre "
+      flash.success="Surtido de pedido: $surtido.pedido entregado por  $surtidor.nombre "
+
+      if(params.surtidos){
+        println 'Estoy dentro de la Seleccion Multiple'
+            def adicionales=params.surtidos.findAll({it.toLong()!=surtido.id})
+              adicionales.each{
+
+              def ca=Surtido.get(it)
+              println 'Seleccion Multiple'+it
+                //  surtido.entrego=surtidor.username
+                  surtido.cierreSurtido=new Date()
+                  ca.save(flush:true)
+                
+            }
+      }
+
+
+      if(surtido.formaDeEntrega=='ENVIO'){
+              redirect action:'porEntregarEnvio'    
+          }else{
+            redirect action:'porEntregar'    
+          }
+
+    }
+
 
 
     @Secured(['permitAll'])

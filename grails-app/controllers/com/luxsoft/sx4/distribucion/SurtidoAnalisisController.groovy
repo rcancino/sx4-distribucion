@@ -42,31 +42,31 @@ class SurtidoAnalisisController {
     }
 
     def buscarClientes(){
-    	
-    	def clientes=Cliente.findAllByNombreIlike(params.term+"%",[max:50,sort:"nombre",order:"desc"])
-    	def clientesList=clientes.collect { cliente ->
-    		[id:cliente.id,label:cliente.nombre,value:cliente.nombre]
-    	}
-    	def res = clientesList as JSON
-    	render res
+        
+        def clientes=Cliente.findAllByNombreIlike(params.term+"%",[max:50,sort:"nombre",order:"desc"])
+        def clientesList=clientes.collect { cliente ->
+            [id:cliente.id,label:cliente.nombre,value:cliente.nombre]
+        }
+        def res = clientesList as JSON
+        render res
     }
 
     def buscarPedido(){
-    	
-    	//def pedidos=Surtido.findAllByPedidoIlike(params.term+"%",[max:50,sort:"pedido",order:"desc"])
-    	def term=params.long('term')
-    	def query=Surtido.where{
+        
+        //def pedidos=Surtido.findAllByPedidoIlike(params.term+"%",[max:50,sort:"pedido",order:"desc"])
+        def term=params.long('term')
+        def query=Surtido.where{
             (pedido>=term) 
         }
         
         def pedidos=query.list(max:30, sort:"pedido",order:'asc')
 
-    	def pedidosList=pedidos.collect { surtido ->
-    		def label="Surtido $surtido.id Pedido: $surtido.pedido"
-    		[id:surtido.pedido,label:label,value:label]
-    	}
-    	def res = pedidosList as JSON
-    	render res
+        def pedidosList=pedidos.collect { surtido ->
+            def label="Surtido $surtido.id Pedido: $surtido.pedido"
+            [id:surtido.pedido,label:label,value:label]
+        }
+        def res = pedidosList as JSON
+        render res
     }
 
     def filtrar(SearchCommand command){
@@ -75,10 +75,13 @@ class SurtidoAnalisisController {
             command.fechaInicial=new Date()
          if(!command.fechaFinal)   
             command.fechaFinal=new Date()
-    	
+
+
+        
         def q = Surtido.where {
-            println "Buscando solo por fecha"
-            fecha >= command.fechaInicial && fecha <= command.fechaFinal
+            
+
+            (fecha >= command.fechaInicial && fecha <= command.fechaFinal) || (dateIniciado >= command.fechaInicial && dateIniciado<= command.fechaFinal)
         }
         if(command.cliente){
             q = Surtido.where{
@@ -119,29 +122,29 @@ class SurtidoAnalisisController {
 @ToString(includeNames=true,includePackage=false)
 class SearchCommand {
 
-	Long pedido
+    Long pedido
 
     String surtidor
 
-	@BindingFormat('dd/MM/yyyy')
-	Date fechaInicial //= new Date()-30
-	
-	@BindingFormat('dd/MM/yyyy')
-	Date fechaFinal //=new Date()
+    @BindingFormat('dd/MM/yyyy')
+    Date fechaInicial //= new Date()-30
+    
+    @BindingFormat('dd/MM/yyyy')
+    Date fechaFinal //=new Date()
 
-	Cliente cliente
+    Cliente cliente
 
-	static constraints={
-		fechaInicial nullable:true
-		fechaFinal nullable:true
-		cliente  nullable:true
-		pedido nullable:true
+    static constraints={
+        fechaInicial nullable:true
+        fechaFinal nullable:true
+        cliente  nullable:true
+        pedido nullable:true
         surtidor nullable:true
-	}
+    }
 
-	Periodo toPeriodo(){
-	 	return new Periodo(fechaInicial,fechaFinal)
-	}
+    Periodo toPeriodo(){
+        return new Periodo(fechaInicial,fechaFinal)
+    }
 
 
 }

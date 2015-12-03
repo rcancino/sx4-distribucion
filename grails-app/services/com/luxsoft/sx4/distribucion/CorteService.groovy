@@ -68,7 +68,7 @@ class CorteService {
 	* al terminar el empacado
 	**/
 	def registrarFinDeCorteEnSurtido(Corte corte){
-		def surtido=corte.surtidoDet.surtido
+		/*def surtido=corte.surtidoDet.surtido
 		//println 'Actualizando fin de corte en surtido: '+surtido.id
 		def cortes=surtido.partidas.findAll{it.corte!=null && it.corte!=corte}
 		//println 'Partidas de corte: '+cortes.size()
@@ -81,7 +81,11 @@ class CorteService {
 			log.info 'Actualizando  fin del proceso de corte en el surtido '+surtido.id
 			surtido.corteFin=new Date()
 			surtido.save(flush:true)
-		}
+		}*/
+		def surtido=corte.surtidoDet.surtido
+		log.info 'Actualizando  fin del proceso de corte en el surtido '+surtido.id
+		surtido.corteFin=new Date()
+		surtido.save(flush:true)
 	}
 
 	def registrarInicioDeCorteEnSurtido(Corte corte){
