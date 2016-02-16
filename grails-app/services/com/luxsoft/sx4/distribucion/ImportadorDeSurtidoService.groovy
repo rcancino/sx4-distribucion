@@ -108,13 +108,13 @@ class ImportadorDeSurtidoService {
 	*/
 
     def SQL_CANCELADOS="""
-    	SELECT 'FAC' as tipo,v.pedido_id as origen,c.creado_userid as cancelado_user,c.creado as cancelado FROM sx_cxc_cargos_cancelados c join sx_ventas v on (v.CARGO_ID=c.CARGO_ID) where date(c.fecha)=CURRENT_DATE 
+    	SELECT 'FAC' as tipo,v.pedido_id as origen,c.creado_userid as cancelado_user,c.creado as cancelado,v.docto as venta FROM sx_cxc_cargos_cancelados c join sx_ventas v on (v.CARGO_ID=c.CARGO_ID) where date(c.fecha)=CURRENT_DATE 
 		union
 		SELECT 'SOL' as tipo,s.sol_id as origen,s.cancelacion_usr as cancelado_user,s.modificado as cancelado 
-		FROM sx_solicitud_traslados s where date(s.modificado)=CURRENT_DATE 
+		,s.documento as venta FROM sx_solicitud_traslados s where date(s.modificado)=CURRENT_DATE 
 		and comentario  like 'CANCELACION AUTOMATICA'
 		union
-		SELECT 'PED' as tipo,c.pedido_id as origen,c.modificado_usr as cancelado_user,c.creado as cancelado FROM sx_pedidos_borrados c where date(c.CREADO)=CURRENT_DATE and c.puesto is true
+		SELECT 'PED' as tipo,c.pedido_id as origen,c.modificado_usr as cancelado_user,c.creado as cancelado,c.folio as venta FROM sx_pedidos_borrados c where date(c.CREADO)=CURRENT_DATE and c.puesto is true
     """
 
 
@@ -133,9 +133,20 @@ class ImportadorDeSurtidoService {
 		def sucursal=findSucursal()
 		assert sucursal,'No hay sucursal registrada'
 		def db = new Sql(dataSource_importacion)
+		
 		db.eachRow( [sucursal:sucursal,fecha:Sql.DATE(fecha)],SQL_FACTURADOS) { row->
-			def surtido=Surtido.findByOrigen(row.origen)
-			if(!surtido){
+
+			
+			def surtido=Surtido.findByOrigenAndVenta(row.origen,row.venta)
+			if(!surtido ||(surtido && surtido.cancelado && surtido.venta!=row.venta.toString() && !surtido.reimportado)){
+				//if(!surtido ){
+					if (surtido && surtido.cancelado){
+					surtido.reimportado=true
+					surtido.save(flush:true,failOnError:true)
+
+				}
+				
+
 				surtido=new Surtido(row.toRowResult())
 
 				db.eachRow(SQL_DETALLE,[row.origen]){ det->
@@ -277,8 +288,9 @@ class ImportadorDeSurtidoService {
 		assert sucursal,'No hay sucursal registrada'
 		def db = new Sql(dataSource_importacion)
 		db.eachRow( SQL_CANCELADOS) { row->
-			
-			def surtido=Surtido.findByOrigen(row.origen)
+			println "cancelados"+row.origen+"---"+row.venta
+
+			def surtido=Surtido.findByOrigenAndVenta(row.origen,row.venta)
 
 			if(surtido){
 

@@ -81,7 +81,10 @@ class Surtido {
 
     
     Date dateIniciado 
-    
+
+    Boolean reimportado=false
+
+   
 
     
 
@@ -117,7 +120,7 @@ class Surtido {
         depuradoUser nullable:true,maxSize:50
         asignacionCorte nullable:true
         cierreSurtido nullable:true
-
+        reimportado nullable:false
     }
 
 
@@ -160,12 +163,18 @@ class Surtido {
         }
     }
 
-    def getEstado(){
+def getEstado(){
          if(!iniciado){
-            return 'PENDIENTE'
+             if(cancelado)
+                return 'CANCELADO'
+            if(depurado)
+                return 'DEPURADO'
+        return 'PENDIENTE'
         }
 
         if(formaDeEntrega=='LOCAL'){
+           
+
             if(iniciado){
                 if(cancelado){
                     return 'CANCELADO'
@@ -195,6 +204,7 @@ class Surtido {
            
         }
         if(formaDeEntrega=='ENVIO'){
+           
             if(iniciado){
                 if(cancelado){
                     return 'CANCELADO'
@@ -202,9 +212,9 @@ class Surtido {
                     return 'DEPURADO'
                 }else if(revision){
                     return 'REVISADO'
-                }else if(iniciado && getCortes()==0 && entregado ==null){
+                }else /*if(iniciado && getCortes()==0 && entregado ==null){
                 return 'POR ENTREGAR'
-                }else if(iniciado && getCortes()==0 && entregado !=null){
+                }else*/ if(iniciado && getCortes()==0 && entregado !=null){
                     return 'POR REVISAR'
                 }else if(iniciado && getCortes()>0 && asignacionCorte==null){
                     return 'EN SURTIDO'
@@ -214,10 +224,10 @@ class Surtido {
                     return 'EN CORTE'
                 }else if(corteInicio!=null && corteFin!=null && !empacadoFinEstado && entregado== null){
                     return 'EN EMPAQUE'
-                }else if(corteInicio!=null && corteFin!=null && empacadoFinEstado && entregado== null){
-                    return 'POR REVISAR'
-                }else if(corteInicio!=null && corteFin!=null && empacadoFinEstado && revision!= null){
+                }else  if(corteInicio!=null && corteFin!=null && empacadoFinEstado  && entregado== null){
                     return 'POR ENTREGAR'
+                }else if(corteInicio!=null && corteFin!=null && empacadoFinEstado && revision== null){
+                    return 'POR REVISAR'
                 }
                 return 'EN SURTIDO'
             }

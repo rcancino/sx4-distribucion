@@ -103,8 +103,8 @@ class SurtidoAnalisisController {
            }
         }
         
-        params.sort='fecha'
-        params.order='desc'
+        params.sort='iniciado'
+        params.order='asc'
         [surtidoInstanceList:q.list(params),surtidoInstanceCount:q.count(),searchCommand:command]
     }
 

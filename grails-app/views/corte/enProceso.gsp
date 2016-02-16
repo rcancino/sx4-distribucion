@@ -43,6 +43,7 @@
 							<th>Empacadores</th>
 							<th>S</th>
 							<th class="text-center">Empacado</th>
+							<th class="text-center">Empacado G</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -128,7 +129,36 @@
 										<g:formatDate date="${row.empacadoFin}" format="hh:mm (dd-MM)"/>
 										${row.statusEmpaque}
 									</g:else>
+
 								</td>
+								<td class="text-center">
+									<g:if test="${row.fin && !row.empacadoFin}">
+										<a href="" data-toggle="modal" class="btn btn-success btn-lg btn-seleccion	"
+											data-target="#empaqueGlobalModal"
+											data-pedido="${row.pedido}" 
+											data-descripcion="${row.descripcion}"
+											data-corte="${row.id}"
+											data-producto="${row.producto}" 
+											data-cantidad="${row.cantidad}"
+											data-cortes="${row.cortes}" 
+											data-surtidor="${row.surtidor}"
+											data-instruccion="${row.instruccion}"
+											data-cortador="${row.asignado}"
+											data-empacador="${row.empacador}"
+											data-statusEmpaque="${row.status}"
+											data-empacadoInicio="${row.empacadoInicio}"
+											data-empacadoFin="${row.empacadoFin}"
+											data-status="${row.statusEmpaque}">
+											${row.status} G
+										</a>
+									</g:if>
+									<g:else>
+										<g:formatDate date="${row.empacadoFin}" format="hh:mm (dd-MM)"/>
+										${row.statusEmpaque}
+									</g:else>
+
+								</td>
+
 								
 							</tr>
 						</g:each>
@@ -141,6 +171,7 @@
 		<g:render template="agregarAuxiliarDeCorteDialog"/>
 
 		<g:render template="empaqueDialog"/>
+		<g:render template="empaqueGlobalDialog"/>
 
 	</div><!-- end .container-->
 
@@ -153,8 +184,9 @@
 
 				var empaqueModal=$('#empaqueModal');
 				var auxiliarModal=$('#agregarAuxiliarModal');
+				var empaqueGlobalModal=$('#empaqueGlobalModal');
 
-				if (!empaqueModal.is(':visible') && !auxiliarModal.is(':visible')) {
+				if (!empaqueModal.is(':visible') && !auxiliarModal.is(':visible') && !empaqueGlobalModal.is(':visible')) {
 					//var loc=window.location
     				console.log('Actualizar consulta...'+count);
     				//console.log('Location: '+loc);

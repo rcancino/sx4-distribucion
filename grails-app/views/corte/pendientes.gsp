@@ -37,8 +37,7 @@
 							<th>S</th>
 							<th class="text-center">Surtido</th>
 							<th class="text-center">Corte</th>
-							%{-- <th class="text-center">Empacado</th> --}%
-							%{-- <th>Liberacion</th> --}%
+							<th class="text-center">Corte Global</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -92,24 +91,7 @@
 								</td>
 								<td class="text-center">
 									<g:if test="${row.asignado}">
-										<%--
-										<a href="" data-toggle="modal" 
-											class="btn btn-warning btn-lg btn-block"
-											data-target="#corteModal"
-											data-pedido="${row.pedido}" 
-											data-descripcion="${row.descripcion}"
-											data-corte="${row.id}"
-											data-producto="${row.producto}" 
-											data-cantidad="${row.cantidad}"
-											data-cortes="${row.cortes}" 
-											data-surtidor="${row.surtidor}"
-											data-instruccion="${row.instruccion}"
-											data-cortador="${row.asignado}"
-											data-empacador="${row.empacador}"
-											data-status="${row.statusCorte}">
-											${row.statusCorte=='PENDIENTE'?'INICIAR':row.statusCorte}
-										</a>
-										--%>
+										
 										<g:if test="${row.statusCorte=='PENDIENTE'}">
 											<g:link 
 												action="iniciarCorte2" id="${row.id}" 
@@ -127,6 +109,33 @@
 											</g:if>
 											<g:else>
 												${sec.loggedInUserInfo(field:"username")}
+											</g:else>
+										</g:elseif>
+									</g:if>
+								</td>
+
+
+								<td class="text-center">
+									<g:if test="${row.asignado}">
+										
+										<g:if test="${row.statusCorte=='PENDIENTE'}">
+											<g:link 
+												action="iniciarCorteGlobal" id="${row.id}" 
+												class="btn btn-info btn-lg btn-block"
+												class="btn ${sec.loggedInUserInfo(field:"username")==row.asignado?'btn-info btn-lg btn-block':'btn-warning'}  btn-lg btn-block seleccion">
+												INICIAR G
+											</g:link>
+										</g:if>
+										<g:elseif test="${row.statusCorte=='EN CORTE'}">
+											<g:if test="${sec.loggedInUserInfo(field:"username")==row.asignado}">
+												<g:link 
+													action="terminarCorteGlobal" id="${row.id}" 
+													class="btn ${sec.loggedInUserInfo(field:"username")==row.asignado?'btn-info btn-lg btn-block':'btn-warning'}  btn-lg btn-block seleccion">
+													${row.statusCorte=='PENDIENTE G'?'INICIAR G':row.statusCorte+' G'}
+												</g:link>
+											</g:if>
+											<g:else>
+												
 											</g:else>
 										</g:elseif>
 									</g:if>

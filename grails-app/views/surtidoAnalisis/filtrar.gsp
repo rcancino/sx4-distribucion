@@ -5,8 +5,8 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="layout" content="application"/>
 	<title>Surtido de pedidos</title>
-	<asset:stylesheet src="datatables/dataTables.css"/>
-	<asset:javascript src="datatables/dataTables.js"/>
+	<asset:stylesheet src="datatables/datatables.css"/>
+	<asset:javascript src="datatables/datatables.js"/>
 	<asset:stylesheet src="jquery-ui.css"/>
 	<asset:javascript src="jquery-ui/autocomplete.js"/> 
 </head>
@@ -63,11 +63,13 @@
 					<thead>
 						<tr >
 							<th class="text-center">Tipo</th>
+							<th class="text-center">Forma</th>
 							<th>Entrega</th>
 							<th class="text-center">Cliente</th>
 							<th class="text-center">Pedido</th>
 							<th class="text-center">Venta</th>
 							<th class="text-center">Fecha Pedido</th>
+							<th class="text-center">Fecha Puesto</th>
 							<th class="text-center">Importado</th>
 							<th class="text-center">Fecha     </th>
 							<!--<th>Part</th>-->
@@ -81,6 +83,7 @@
 							<th>C Fin</th>
 
 							<!--<th>Entreg</th>-->
+							<th>Cierre</th>
 							<th>Entregado</th>
 
 						
@@ -95,7 +98,7 @@
 						<g:each in="${surtidoInstanceList}" var="row">
 							<tr >
 								<td>${fieldValue(bean:row,field:"tipoDeVenta")}</td>
-
+								<td>${fieldValue(bean:row,field:"forma")}</td>
 								<td>${fieldValue(bean:row,field:"formaDeEntrega")}</td>
 
 								<td>
@@ -111,6 +114,7 @@
 								<td>${fieldValue(bean:row,field:"venta")}</td>
 								
 								<td>${fieldValue(bean:row,field:"pedidoCreado")}</td>
+								<td>${fieldValue(bean:row,field:"fechaPuesto")}</td>
 
 								<td>${fieldValue(bean:row,field:"dateCreated")}</td>
 
@@ -167,6 +171,8 @@
 								<!--<td>${fieldValue(bean:row,field:"entrego")}</td>-->
 								
 								<!--<td><g:formatDate date="${row.entregado}" format="hh:MM (dd/MM)"/></td>-->
+
+								<td>${fieldValue(bean:row,field:"cierreSurtido")}</td>
 								<td>${fieldValue(bean:row,field:"entregado")}</td>
 								
 								<!--<td><g:formatDate date="${row.revision}" format="hh:MM (dd/MM)"/></td>-->

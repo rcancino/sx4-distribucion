@@ -267,6 +267,73 @@ class CorteController {
       redirect action:'pendientes'
     }
 
+
+ @Transactional
+    def iniciarCorteGlobal(Corte corte){
+      //println 'Inicinado corte: '+params
+      
+      def cortador=getAuthenticatedUser()
+      assert cortador,'No esta firmado al sistema'
+      assert validarOperacionDeCortado(),'El sistema esta registrado sin rol de CORTADOR'
+      assert corte.statusCorte=='PENDIENTE'
+      
+      
+      def surt=corte.surtidoDet.surtido
+      def parts= surt.partidas.findAll{it.corte!=null && it.corte.inicio==null}
+       parts.each{
+          it.corte.inicio=new Date()
+          it.corte.empacadoInicio=corte.inicio
+          
+          if(!it.corte.asignado){
+            it.corte.asignado=cortador.username
+            it.corte.asignacion=new Date()
+          }
+          it.corte.asignado=cortador.username
+
+          it.corte.save(flush:true)
+
+       }
+    
+      //Actualizando el inicio del corte en surtido
+
+      corteService.registrarAsignacionDeCorteEnSurtido corte
+      corteService.registrarInicioDeCorteEnSurtido corte
+
+      
+      
+      log.info " Corte de producto  $corte.producto iniciado por:$cortador.username "
+      flash.success=  " Corte de producto  $corte.producto iniciado por:$cortador.username " 
+      
+      redirect action:'pendientes'
+    }
+
+     @Transactional
+    def terminarCorteGlobal(Corte corte){
+      assert corte, 'Corte nulo no puede ser terminado'
+      assert corte.statusCorte=='EN CORTE','Corte con estatus incorrecto'
+      def cortador=getAuthenticatedUser()
+     
+
+
+      def surt=corte.surtidoDet.surtido
+      def parts= surt.partidas.findAll{it.corte!=null && it.corte.fin==null}
+       parts.each{
+         it.corte.fin=new Date()
+          //corte.asignado=cortador.username
+          it.corte.save(flush:true)
+       }
+
+      corteService.registrarFinDeCorteEnSurtido(corte)
+
+      log.info "Corte terminado para  $corte.producto entregado por:  $cortador.nombre "
+      flash.success= "Corte terminado para  $corte.producto. Entregado por:  $cortador.nombre " 
+
+      
+     
+      redirect action:'pendientes'
+    }
+    
+
     @Transactional
     def iniciarEmpacado(Corte corte){
 
@@ -363,6 +430,63 @@ class CorteController {
 
     }
 
+
+    @Transactional
+    @Secured(['permitAll'])
+    def terminarEmpacadoGlobal(Corte corte){
+        println "Terminando empaque global para:  "+corte.surtidoDet.surtido.pedido
+      def cortador=Usuario.findByUsername(corte.asignado)
+      assert corte.surtidoDet.surtido.corteFin,'No se ha terminado de cortar por lo que no se puede terminar el empacado'
+
+      String nip=params.nip
+      if(!nip){
+        flash.error="Digite su NIP para proceder con operacin"
+         redirect action:'enProceso',params:[id:cortador.id]
+        return
+      }
+      def empacador=Usuario.findByNip(nip)
+      if(!empacador){
+        flash.error="Empacador no encontrado verifique su NIP "
+         redirect action:'enProceso',params:[id:cortador.id]
+        return 
+      }
+      if(!empacador.getAuthorities().find{it.authority=='EMPACADOR'}){
+        flash.error="No tiene el ROL de EMPACADOR verifique su NIP "
+         redirect action:'enProceso',params:[id:cortador.id]
+        return 
+      }
+    
+
+      def surt=corte.surtidoDet.surtido
+      def parts= surt.partidas.findAll{it.corte!=null && it.corte.fin!=null && it.corte.empacadoFin==null}
+      if(parts){
+        parts.each{
+          println "actualizando partida del corte:  " +corte.id
+        it.corte.empacador=empacador.username
+        it.corte.empacadoFin=new Date()
+        it.corte.save(flush:true)
+        flash.success= "Empacado terminado para $corte.surtidoDet.surtido.pedido "
+       }
+        }else{
+            log.info "El surtido no tiene partidas con corte  "  
+            flash.success= "No se cerro el empaque  "        
+        }
+       
+
+      /*corte.empacador=empacador.username
+      corte.empacadoFin=new Date()
+      println "Corte salvado"
+      corte.save(flush:true)*/
+      
+      
+
+      log.info "Empacado terminado para $corte.producto  "
+
+      //flash.success= "Empacado terminado para $corte.producto  "
+      redirect action:'enProceso',params:[id:cortador.id]
+
+    }
+
     @Secured(['permitAll'])
     def enProceso(Integer max,Usuario cortador){
       //params.max = Math.min(max ?: 10, 100)
@@ -376,13 +500,27 @@ class CorteController {
         [corteInstanceList:[],corteInstanceCount:0,cortadores:cortadores]
         return
       }
-      def query=Corte.where{asignado==cortador.username }
-      query=query.where{surtidoDet.surtido.entregado==null }
-      [corteInstanceList:query.list(params)
-        ,corteInstanceCount:query.count(),cortadores:cortadores
+      //def query=Corte.where{asignado==cortador.username }
+
+/*
+def list=Vacaciones.findAll("from Vacaciones i  where year(i.lastUpdated)=? order by i.lastUpdated desc"
+      ,[ejercicio])
+*/
+        def query=Corte.where{asignado==cortador.username  }
+
+        query=query.where{surtidoDet.surtido.entregado==null  }
+       // query=query.where{surtidoDet.surtido.cancelado==null }
+        
+     //def query=Corte.findAll("from Corte c where asignado=? and c.surtidoDet.surtido.entregado is null",[cortador.username])
+
+        def list = query.list(params).findAll{!it.surtidoDet.surtido.cancelado && !it.surtidoDet.surtido.depurado}
+      
+   
+      [corteInstanceList:list
+     // [corteInstanceList:query(params)
+        ,corteInstanceCount:list.size(),cortadores:cortadores
         ,cortador:cortador]
-      //def list=Corte.findAll("from Corte c where c.empacadoFin=null and c.surtidoDet.surtido.asignado!=null")
-      //respond list, model:[corteInstanceCount:list.size()]
+   
     }
 
     @Transactional
