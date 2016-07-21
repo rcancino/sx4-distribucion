@@ -9,7 +9,7 @@ class ImportadorDeVentasJob {
 
     static triggers = {
       //cron cronExpression:"0 1 8-19 ? * MON-SAT"
-      cron cronExpression:"0/30 * 8-19 ? * MON-SAT"
+      cron cronExpression:"0/15 * 8-19 ? * MON-SAT"
     }
 
     def description = "Importador de Ventas desde el Siipap SW2"

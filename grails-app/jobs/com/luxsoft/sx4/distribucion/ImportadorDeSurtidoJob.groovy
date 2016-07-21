@@ -8,7 +8,7 @@ class ImportadorDeSurtidoJob {
     
     static triggers = {
       //simple name: 'normalTrigger', startDelay: 60000, repeatInterval: 30000
-      cron cronExpression:"0/30 * 8-19 ? * MON-SAT"
+      cron cronExpression:"0/15 * 8-19 ? * MON-SAT"
     }
 
     def group = "sx4-importadores"

@@ -7,7 +7,9 @@ class ActualizarSurtidosCanceladosJob {
       def importadorDeSurtidoService
       
       static triggers = {
+        //cron cronExpression:"0 0/1 8-19 ? * MON-SAT"
         cron cronExpression:"0 0/1 8-19 ? * MON-SAT"
+
       }
 
       def group = "sx4-importadores"
