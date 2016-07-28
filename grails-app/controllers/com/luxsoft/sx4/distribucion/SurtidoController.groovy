@@ -100,7 +100,7 @@ class SurtidoController {
         redirect action:'pendientes'
         return
       }
-      def user=Usuario.findByNip(nip)
+      def user=Usuario.findByNipAndEnabled(nip,true)
       if(!user){
         flash.error="Operador no encontrado verifique su NIP "
         redirect action:'pendientes'
@@ -192,7 +192,7 @@ class SurtidoController {
           }
         return
       }
-      def surtidor=Usuario.findByNip(nip)
+      def surtidor=Usuario.findByNipAndEnabled(nip,true)
       if(!surtidor){
         flash.error="Operador no encontrado verifique su NIP "
          if(surtido.formaDeEntrega=='ENVIO'){
@@ -213,6 +213,10 @@ class SurtidoController {
       }
       surtido.entrego=surtidor.username
       surtido.entregado=new Date()
+      if (surtido.formaDeEntrega=='ENVIO') {
+          surtido.cierreSurtido=surtido.entregado
+        }
+
       surtido.save(flush:true)
       event('surtidoEntregado',surtido.id)
       log.info "Surtido de pedido: $surtido.pedido entregado por  $surtidor.nombre "
@@ -255,7 +259,7 @@ class SurtidoController {
           }
         return
       }
-      def surtidor=Usuario.findByNip(nip)
+      def surtidor=Usuario.findByNipAndEnabled(nip,true)
       if(!surtidor){
         flash.error="Operador no encontrado verifique su NIP "
          if(surtido.formaDeEntrega=='ENVIO'){

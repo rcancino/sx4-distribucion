@@ -117,6 +117,28 @@ class ImportadorDeSurtidoService {
 		SELECT 'PED' as tipo,c.pedido_id as origen,c.modificado_usr as cancelado_user,c.creado as cancelado,c.folio as venta FROM sx_pedidos_borrados c where date(c.CREADO)=CURRENT_DATE and c.puesto is true
     """
 
+    def SQL_TRANSFORMACIONES="""
+    	SELECT 'TRS' AS forma,'Transformacion' as sucursal,p.documento as pedido
+        ,ifnull((SELECT u.username FROM sx_usuarios u where concat(RTRIM(u.first_name),' ',u.last_name)=p.creado_userid),'INVENTARIOS' ) as cliente
+        ,'INVENTARIOS' as nombre,date(p.fecha) as fecha
+		,'INVENTARIOS' as vendedor,CURRENT_TIMESTAMP as facturado,CURRENT_TIMESTAMP as pedidoCreado,p.TRANSFORMACION_ID as origen
+		,'TRANSFORMACION' as tipo,'LOCAL' as  formaDeEntrega,p.fecha as tpuesto,false as parcial
+		,p.DOCUMENTO as venta,'TRS' as tipoDeVenta,'SIN_VALE'
+		,P.COMENTARIO as comentario
+		FROM 
+		sx_transformaciones p join sw_sucursales s on (p.sucursal_id=s.SUCURSAL_ID)
+		where s.nombre=:sucursal and date(P.fecha)=:fecha AND CLASE ='Transformacion'
+    """
+
+    def SQL_TRANSFORMACIONES_DET="""
+    	select p.INVENTARIO_ID as origen 
+    	,(P.cantidad*-1) as cantidad,u.factor
+    	,((p.cantidad*-1)/u.factor*x.kilos) as kilos
+    	,X.clave as producto,X.descripcion
+    	from sx_inventario_trs p JOIN sx_productos X ON(X.PRODUCTO_ID=P.PRODUCTO_ID) join sx_unidades u on(u.UNIDAD=x.UNIDAD)
+    	where P.TRANSFORMACION_ID=?  and DESTINO_ID is not null
+    """
+
 
     def importar(Date fecha){
 
@@ -124,6 +146,7 @@ class ImportadorDeSurtidoService {
     	importarFacturados fecha
     	importarPuestos fecha
     	importarTraslados fecha
+    	importarTransformaciones fecha
 
 
 	}
@@ -138,6 +161,7 @@ class ImportadorDeSurtidoService {
 
 			
 			def surtido=Surtido.findByOrigenAndVenta(row.origen,row.venta)
+			//def surtido=Surtido.findByOrigen(row.origen)
 			if(!surtido ||(surtido && surtido.cancelado && surtido.venta!=row.venta.toString() && !surtido.reimportado)){
 				//if(!surtido ){
 					if (surtido && surtido.cancelado){
@@ -224,6 +248,41 @@ class ImportadorDeSurtidoService {
 		}
 
 	}
+
+
+
+	def importarTransformaciones(Date fecha){
+		println "Importando surtido de transformaciones fecha:"+fecha.format('dd/MM/yyyy')
+		def sucursal=findSucursal()
+		assert sucursal,'No hay sucursal registrada'
+		def db = new Sql(dataSource_importacion)
+		db.eachRow( [sucursal:sucursal,fecha:Sql.DATE(fecha)],SQL_TRANSFORMACIONES) { row->
+
+			def surtido=Surtido.findByOrigen(row.origen)
+			if(!surtido){
+				surtido=new Surtido(row.toRowResult())
+				surtido.puesto=true
+				
+				db.eachRow(SQL_TRANSFORMACIONES_DET,[row.origen]){ det->
+					def sdet=new SurtidoDet(det.toRowResult())
+					surtido.addToPartidas(sdet)
+				}
+				surtido.partidas.each{ sdet->
+					def sectores=db.rows(SQL_SECTORES,[sdet.producto])
+					sdet.sectores=sectores.collect{it.sector}.join(',')
+
+				}
+				surtido.save(flush:true,failOnError:true)
+				importadorDeCorteService.importar(surtido)
+				event('registroDeSurtido', surtido)
+			}
+		}
+
+	}
+
+
+
+
 
 	def actualizarSurtidosPuestos(Date fecha){
 		def surtidos=Surtido.findAll("from Surtido s where  s.forma=? and s.venta=null",['PST'])

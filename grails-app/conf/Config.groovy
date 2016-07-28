@@ -187,7 +187,7 @@ environments{
   development{
     luxor{
         sx4{
-          sucursal="TACUBA"
+          sucursal="CALLE 4"
         }
         empleadosDb{
           url = 'jdbc:mysql://10.10.1.228:3306/rh'
@@ -200,7 +200,7 @@ environments{
   production{
     luxor{
         sx4{
-          sucursal="BOLIVAR"
+          sucursal="CF5FEBRERO"
         }
         empleadosDb{
           url = 'jdbc:mysql://10.10.1.228:3306/rh'

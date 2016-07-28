@@ -47,7 +47,7 @@ class Corte {
     	producto maxSize:20
     	descripcion maxSize:250
     	sucursal maxSize:20
-    	tipo inList:['ORDINARIO','PARCIAL','TRASLADO']
+    	tipo inList:['ORDINARIO','PARCIAL','TRASLADO','TRANSFORMACION']
     	asignado nullable:true
     	inicio nullable:true
     	fin nullable:true

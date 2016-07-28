@@ -97,7 +97,7 @@ class Surtido {
         cliente maxSize:20
         nombre()
         sucursal maxSize:20
-        tipo inList:['ORDINARIO','PARCIAL','TRASLADO']
+        tipo inList:['ORDINARIO','PARCIAL','TRASLADO','TRANSFORMACION']
         asignado nullable:true,maxSize:50
         iniciado nullable:true
         corteInicio nullable:true

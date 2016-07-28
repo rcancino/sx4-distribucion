@@ -27,6 +27,7 @@ class ImportadorDeCorteService {
 		,ped.puesto
 		,ped.FACTURAR
 		,p.pedidodet_id as origen
+		,case when p.convale is true and ped.clasificacion_vale  in('RECOGE_CLIENTE','PASA_CAMIONETA','ENVIA_SUCURSAL') THEN true else false end as conVale
 		from sx_pedidosdet p 
 		join sx_pedidos ped on p.pedido_id=ped.pedido_id
 		join sw_sucursales s on ped.SUCURSAL_ID=s.SUCURSAL_ID
@@ -39,12 +40,25 @@ class ImportadorDeCorteService {
         ,s.nombre as sucursal,X.clave as producto,X.descripcion,p.solicitado as cantidad,p.cortes
 		,p.CORTES_INSTRUCCION as instruccion,0 as precioCorte,ped.documento as pedido,s.nombre
 		,ped.documento,false as puesto,true  as FACTURAR 
+		,false as conVale
 		from sx_solicitud_trasladosdet p 
 		join sx_solicitud_traslados ped on p.sol_id=ped.sol_id
 		 JOIN sx_productos X ON(X.PRODUCTO_ID=P.PRODUCTO_ID) join sx_unidades u on(u.UNIDAD=x.UNIDAD)
 		join sw_sucursales s on PED.ORIGEN_ID=s.SUCURSAL_ID
 		where p.CORTES_INSTRUCCION is not null and p.CORTES_INSTRUCCION <>'' and ped.CLASIFICACION NOT IN('EXISTENCIA_VENTA','EXISTENCIA')
 		 and concat(p.sol_id,'-',convert(p.renglon,char))=:origen
+    """
+
+    def SQL_CORTES_TRANS="""
+			select
+			p.INVENTARIO_ID as origen
+			,s.nombre as sucursal,X.clave as producto,X.descripcion,(p.cantidad*-1) as cantidad,1 as cortes
+			,'' as instruccion,0 as precioCorte,p.documento as pedido,s.nombre
+			,p.documento,false as puesto,true  as FACTURAR 
+			,false as conVale
+			from sx_inventario_trs p JOIN sx_productos X ON(X.PRODUCTO_ID=P.PRODUCTO_ID) join sx_unidades u on(u.UNIDAD=x.UNIDAD)
+			join sw_sucursales s on p.SUCURSAL_ID=s.SUCURSAL_ID
+			where P.INVENTARIO_ID=:origen  and DESTINO_ID is not null
     """
 
     def importar(Surtido surtido){
@@ -56,16 +70,21 @@ class ImportadorDeCorteService {
 			def select=SQL_MESTREO
 			if(surtido.forma=='SOL')
 				select=SQL_CORTES_TRS
+			if(surtido.forma=='TRS')
+				select=SQL_CORTES_TRANS
 			db.eachRow( [pedido:surtido.origen,origen:det.origen],select) { row->
 				
 				
 				def corte=Corte.findByOrigen(det.origen)
-				if(corte){
+				//if(!surtido ||(surtido && surtido.cancelado && surtido.venta!=row.venta.toString() && !surtido.reimportado)){
+				/*if(corte){
 					log.debug 'Corte ya importado'
 					
 					
-				}else{
+				}else{*/
 
+					if((!corte || (corte && corte.cancelado)) && !row.conVale){
+				println "Importando Cortes "+ corte
 					
 					corte=new Corte(row.toRowResult())
 					corte.tipo=det.surtido.tipo
@@ -81,6 +100,8 @@ class ImportadorDeCorteService {
 					}
 					det.save(failOnError:true)
 					
+				}else{
+						println "El corte no ha sido importado"
 				}
 				
 			}
