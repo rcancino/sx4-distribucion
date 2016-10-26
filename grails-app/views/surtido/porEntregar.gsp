@@ -80,7 +80,7 @@
 								<td>${fieldValue(bean:row,field:"asignado")}</td>
 								
 								<td>
-									<g:if test="${row.status=='POR ENTREGAR' && (row.revision==null) && (row.cierreSurtido != null)  }">
+									<g:if test="${row.status=='POR ENTREGAR' && (row.revision==null)}">
 										<a href="" data-toggle="modal" class="btn btn-primary btn-lg btn-block"
 											data-target="#revisionDeSurtidoModal" 
 											data-whatever="${row.pedido}" 

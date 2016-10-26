@@ -349,6 +349,9 @@ class SurtidoController {
           }
           surtido.revisionUsuario=supervisor.username
           surtido.revision=new Date()
+          if(surtido.cierreSurtido==null){
+              surtido.cierreSurtido=new Date()
+          }
           surtido.save(flush:true)
           event('surtidoRevizado',surtido.id)
 

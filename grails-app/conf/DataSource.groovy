@@ -16,7 +16,7 @@ hibernate {
 
 dataSource_importacion{
   
- url = 'jdbc:mysql://localhost/produccion'
+ url = 'jdbc:mysql://10.10.9.1/produccion'
   dialect = org.hibernate.dialect.MySQL5InnoDBDialect
   driverClassName = 'com.mysql.jdbc.Driver'
   username = 'root'
@@ -67,7 +67,7 @@ environments {
     production {
        dataSource {
               pooled = true
-              dbCreate=""
+              dbCreate="update"
             //  url="jdbc:mysql://10.10.1.228/sx4?autoReconnect=true"
               url="jdbc:mysql://localhost/sx4?autoReconnect=true"
               driverClassName = "com.mysql.jdbc.Driver"

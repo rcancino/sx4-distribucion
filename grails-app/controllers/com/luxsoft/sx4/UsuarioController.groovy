@@ -273,7 +273,7 @@ class UsuarioCommand{
 
     Usuario toUsuario(){
         def u=new Usuario(properties)
-        u.nip=RandomStringUtils.randomNumeric(6)
+        u.nip=RandomStringUtils.randomNumeric(4)
         u.capitalizarNombre()
 
         return u
