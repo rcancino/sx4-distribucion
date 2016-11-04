@@ -32,6 +32,7 @@ class BootStrap {
     	}
 
     	def adminRole=Role.findOrSaveWhere(authority:'ADMIN')
+    	def usuariAdminRole=Role.findOrSaveWhere(authority:'USUARIOS_ADMIN')
 		def usuarioRole=Role.findOrSaveWhere(authority:'USER')
 		def surtidorRole=Role.findOrSaveWhere(authority:'SURTIDOR')
 		def empacadorRole=Role.findOrSaveWhere(authority:'EMPACADOR')

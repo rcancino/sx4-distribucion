@@ -30,12 +30,12 @@
 							<th class="text-center">Pedido</th>
 							<th>S</th>
 							<th>T</th>
+							
+							<th class="text-center">Cliente</th>
 							<th>Org</th>
 							<th>Entrega</th>
-							<th class="text-center">Cliente</th>
-							
-							<th>Solicit</th>
-							<th>Clasificacin</th>
+							<th>Solicitó</th>
+							<th>Clasificación</th>
 							<th>Hora</th>
 							<th>Partidas</th>
 							<th>Cortes</th>
@@ -45,9 +45,9 @@
 					<tbody >
 						<g:each in="${surtidoInstanceList}" var="row">
 							<tr class="text-center">
-								<td>  
+								<td>
 									<g:if test="${row.status=='PENDIENTE'}">
-										<a href="" data-toggle="modal" class="btn btn-warning btn-lg btn-block"
+										<a href="" data-toggle="modal" class="btn btn-info btn-lg btn-block"
 											data-target="#exampleModal" 
 											data-whatever="${row.pedido}" 
 											data-surtido="${row.id}">
@@ -69,29 +69,26 @@
 									</g:if>
 								</td>
 								<td>${fieldValue(bean:row,field:"tipo")[0..0]}</td>
-								<td>
-										${row.forma}
-								</td>
-								
-								<td>${fieldValue(bean:row,field:"formaDeEntrega")}</td>
 
 								<td>${fieldValue(bean:row,field:"nombre")}</td>
-								
-								<td>${fieldValue(bean:row,field:"comentario")}</td>
-
 								<td>
-										<g:if test="${row.status=='PENDIENTE'}">
+									<g:if test="${row.status=='PENDIENTE'}">
 										<a href="" 
-											class="btn btn-info	 btn-lg btn-block"
+											class="btn btn-warning	 btn-lg btn-block"
 											data-toggle="modal" 
 											data-target="#asignacionManualDialog" 
 											data-pedido="${row.pedido}" 
 											data-surtido="${row.id}">
-											
-												${fieldValue(bean:row,field:"clasificacion")}
+											${row.forma}
+
 										</a>
-										</g:if>
+									</g:if>
 								</td>
+								
+								<td>${fieldValue(bean:row,field:"formaDeEntrega")}</td>
+								<td>${fieldValue(bean:row,field:"comentario")}</td>
+
+								<td>${fieldValue(bean:row,field:"clasificacion")}</td>
 								<td><g:formatDate date="${row.pedidoCreado}" format="HH:mm (dd/MM)"/></td>
 								<td><g:formatNumber number="${row.partidas.size()}" format="####"/></td>
 								<td><g:formatNumber number="${row.cortes}" format="####"/></td>
@@ -127,7 +124,7 @@
 					}
 					count++;
 
-				},15000);
+				},20000);
 				
 			});
 		</script>	

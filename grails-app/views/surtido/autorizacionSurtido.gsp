@@ -47,7 +47,7 @@
 							<tr class="text-center">
 								<td>  
 									<g:if test="${row.status=='PENDIENTE'}">
-										<a href="" data-toggle="modal" class="btn btn-warning btn-lg btn-block"
+										<a href="" data-toggle="modal" class="btn btn-info btn-lg btn-block"
 											data-target="#exampleModal" 
 											data-whatever="${row.pedido}" 
 											data-surtido="${row.id}">
@@ -70,7 +70,20 @@
 								</td>
 								<td>${fieldValue(bean:row,field:"tipo")[0..0]}</td>
 								<td>
+								<!--	<g:if test="${row.status=='PENDIENTE'}">
+										<a href="" 
+											class="btn btn-warning	 btn-lg btn-block"
+											data-toggle="modal" 
+											data-target="#asignacionManualDialog" 
+											data-pedido="${row.pedido}" 
+											data-surtido="${row.id}">
+											
+												${row.forma}
+										</a>
+											</g:if>
+										-->
 										${row.forma}
+									
 								</td>
 								
 								<td>${fieldValue(bean:row,field:"formaDeEntrega")}</td>
@@ -82,7 +95,7 @@
 								<td>
 										<g:if test="${row.status=='PENDIENTE'}">
 										<a href="" 
-											class="btn btn-info	 btn-lg btn-block"
+											class="btn btn-warning	 btn-lg btn-block"
 											data-toggle="modal" 
 											data-target="#asignacionManualDialog" 
 											data-pedido="${row.pedido}" 
@@ -131,7 +144,5 @@
 				
 			});
 		</script>	
-	
-
 </body>
 

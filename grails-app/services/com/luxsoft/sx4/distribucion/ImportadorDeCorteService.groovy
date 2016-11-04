@@ -84,7 +84,7 @@ class ImportadorDeCorteService {
 				}else{*/
 
 					if((!corte || (corte && corte.cancelado)) && !row.conVale){
-				println "Importando Cortes "+ corte
+				
 					
 					corte=new Corte(row.toRowResult())
 					corte.tipo=det.surtido.tipo
@@ -101,7 +101,7 @@ class ImportadorDeCorteService {
 					det.save(failOnError:true)
 					
 				}else{
-						println "El corte no ha sido importado"
+						
 				}
 				
 			}

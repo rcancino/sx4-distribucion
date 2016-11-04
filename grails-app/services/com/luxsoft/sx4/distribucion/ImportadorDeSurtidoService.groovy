@@ -141,14 +141,15 @@ class ImportadorDeSurtidoService {
 
 
     def importar(Date fecha){
-
-    	actualizarSurtidosPuestos fecha
     	importarFacturados fecha
-    	importarPuestos fecha
+	}
+
+	def importarOtros(Date fecha){
+
+		actualizarSurtidosPuestos fecha
+		importarPuestos fecha
     	importarTraslados fecha
     	importarTransformaciones fecha
-
-
 	}
 
 	def importarFacturados(Date fecha){
@@ -172,7 +173,10 @@ class ImportadorDeSurtidoService {
 				
 
 				surtido=new Surtido(row.toRowResult())
+					surtido.autorizacionSurtido=new Date()
+     				surtido.autorizoSurtir='FAC'
 
+    
 				db.eachRow(SQL_DETALLE,[row.origen]){ det->
 					def sdet=new SurtidoDet(det.toRowResult())
 					surtido.addToPartidas(sdet)
@@ -201,7 +205,15 @@ class ImportadorDeSurtidoService {
 		def db = new Sql(dataSource_importacion)
 		db.eachRow( [sucursal:sucursal,fecha:Sql.DATE(fecha)],SQL_PUESTOS) { row->
 			def surtido=Surtido.findByOrigen(row.origen)
-			if(!surtido){
+			if(!surtido ||(surtido && surtido.cancelado && surtido.venta!=row.venta.toString() && !surtido.reimportado)){
+			//if(!surtido){
+
+				if (surtido && surtido.cancelado){
+					surtido.reimportado=true
+					surtido.save(flush:true,failOnError:true)
+
+				}
+
 				surtido=new Surtido(row.toRowResult())
 
 				db.eachRow(SQL_DETALLE,[row.origen]){ det->
@@ -317,7 +329,7 @@ class ImportadorDeSurtidoService {
 
 						}
 						surtido.formaDeEntrega=row.formaDeEntrega	
-						
+						surtido.nombre=row.nombre
 
 					}
 
@@ -347,7 +359,7 @@ class ImportadorDeSurtidoService {
 		assert sucursal,'No hay sucursal registrada'
 		def db = new Sql(dataSource_importacion)
 		db.eachRow( SQL_CANCELADOS) { row->
-			println "cancelados"+row.origen+"---"+row.venta
+		
 
 			def surtido=Surtido.findByOrigenAndVenta(row.origen,row.venta)
 

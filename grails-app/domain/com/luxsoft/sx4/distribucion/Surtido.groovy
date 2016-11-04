@@ -84,7 +84,10 @@ class Surtido {
 
     Boolean reimportado=false
 
-   
+    String autorizoSurtir
+
+    Date autorizacionSurtido
+
 
     
 
@@ -121,6 +124,9 @@ class Surtido {
         asignacionCorte nullable:true
         cierreSurtido nullable:true
         reimportado nullable:false
+        autorizoSurtir nullable:true
+        autorizacionSurtido nullable:true
+
     }
 
 

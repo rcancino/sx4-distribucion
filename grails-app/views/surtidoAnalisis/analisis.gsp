@@ -12,7 +12,10 @@
 		<div class="row">
 			<br>
 			<div class="alert alert-info">
-			  	<h2>Cliente: ${surtidoInstance.nombre} Pedido: ${surtidoInstance.pedido} </h2>
+				<a href="javascript:history.go(-1)">
+					<h2>Cliente: ${surtidoInstance.nombre} Pedido: ${surtidoInstance.pedido} </h2>
+				</a>
+			  	
 			</div>
 			<g:if test="${flash.message}">
 				<div class="alert alert-info">

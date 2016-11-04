@@ -55,12 +55,16 @@ navigation={
 			entregas(){}
 			embarques(){}
 		}
+
+		actividades(controller:'actividad', action:'index')
+
 		buscador(controller:'surtidoAnalisis', action:'filtrar')
 		
 	}
 
 	surtidor{
 		pendientes(controller:'surtido'){}
+		autorizacionSurtido(controller:'surtido'){}
 		//traslados(controller:'surtido')
 		enProceso(controller:'surtido')
 		porEntregar(controller:'surtido'){}

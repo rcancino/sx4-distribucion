@@ -12,7 +12,7 @@ import com.luxsoft.sx4.sec.*
 import grails.validation.Validateable
 
 @Transactional
-@Secured(["hasAnyRole('ADMIN')"])
+@Secured(["hasAnyRole('USUARIOS_ADMIN')"])
 class UsuarioController {
 
     def index(Integer max) {

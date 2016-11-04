@@ -8,7 +8,7 @@ class ActualizarSurtidosPuestosJob {
     
     static triggers = {
       //cron cronExpression:"0 0/5 8-19 ? * MON-SAT"
-       cron cronExpression:"0/30 * 8-19 ? * MON-SAT"
+       cron cronExpression:"0 0/3 8-19 ? * MON-SAT"
     }
 
     def group = "sx4-importadores"

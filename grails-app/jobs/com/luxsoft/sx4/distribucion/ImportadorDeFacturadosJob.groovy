@@ -2,13 +2,12 @@ package com.luxsoft.sx4.distribucion
 
 
 
-class ImportadorDeSurtidoJob {
-
-	def importadorDeSurtidoService
+class ImportadorDeFacturadosJob {
+   def importadorDeSurtidoService
     
     static triggers = {
       //simple name: 'normalTrigger', startDelay: 60000, repeatInterval: 30000
-      cron cronExpression:"0 0/3 8-19 ? * MON-SAT"
+      cron cronExpression:"0/10 * 8-19 ? * MON-SAT"
     }
 
     def group = "sx4-importadores"
@@ -20,13 +19,13 @@ class ImportadorDeSurtidoJob {
     def execute(context) {
     	try {
             def counter = context.jobDetail.jobDataMap['counter'] ?: 0
-            println "Importando Surtidos desde surtidos Job"
+            println "Importando Facturados desde Importador de facturados Job"
             counter++
     		def fecha=new Date() 
     		def time=fecha.format('dd/MM/yyyy HH:mm:ss')
     		log.debug "Importando surtidos ($counter)  $time las time: "+context.jobDetail.jobDataMap['lastJob']
             //print "Importando surtidos ($counter)  $time las time: "+context.jobDetail.jobDataMap['lastJob']
-    		importadorDeSurtidoService.importarOtros(fecha)
+    		importadorDeSurtidoService.importar(fecha)
             context.jobDetail.jobDataMap['counter'] = counter
             def end=new Date()
             context.jobDetail.jobDataMap['lastJob'] = end

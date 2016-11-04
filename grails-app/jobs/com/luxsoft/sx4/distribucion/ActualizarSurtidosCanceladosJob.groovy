@@ -8,7 +8,7 @@ class ActualizarSurtidosCanceladosJob {
       
       static triggers = {
         //cron cronExpression:"0 0/1 8-19 ? * MON-SAT"
-        cron cronExpression:"0 0/1 8-19 ? * MON-SAT"
+        cron cronExpression:"0 0/2 8-19 ? * MON-SAT"
 
       }
 

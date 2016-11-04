@@ -52,7 +52,19 @@ class SurtidoController {
         //params.max = 100
         params.sort='pedidoCreado'
         params.order='asc'
-        def query=Surtido.where{ (asignado==null && cancelado==null)}
+        def query=Surtido.where{ (asignado==null && cancelado==null && (forma=='FAC' || autorizacionSurtido!=null))}
+       
+        respond query.list(params), model:[surtidoInstanceCount:query.count()]
+        //respond Surtido.list(params), model:[surtidoInstanceCount:Surtido.count()]
+    }
+
+
+     @Secured(['permitAll'])
+    def autorizacionSurtido() {
+        //params.max = 100
+        params.sort='pedidoCreado'
+        params.order='asc'
+        def query=Surtido.where{ (asignado==null && cancelado==null && forma!='FAC' && autorizacionSurtido==null)}
        
         respond query.list(params), model:[surtidoInstanceCount:query.count()]
         //respond Surtido.list(params), model:[surtidoInstanceCount:Surtido.count()]
@@ -114,6 +126,10 @@ class SurtidoController {
       
       surtido.asignado=user.username
       surtido.iniciado=new Date()
+      if(!surtido.autorizacionSurtido){
+         surtido.autorizacionSurtido=new Date()
+         surtido.autorizoSurtir=user.username
+      }
       surtido.save(flush:true,failOnError:true)
       
       if(params.surtidos){
@@ -122,6 +138,12 @@ class SurtidoController {
           def s2=Surtido.get(it.toLong())
           s2.asignado=user.username
           s2.iniciado=new Date()
+
+           if(!s2.autorizacionSurtido){
+             s2.autorizacionSurtido=new Date()
+             s2.autorizoSurtir=user.username
+            }
+
           s2.save(flush:true,failOnError:true)
 
         }
@@ -158,6 +180,8 @@ class SurtidoController {
       
       surtido.asignado=surtidor.username
       surtido.iniciado=new Date()
+      surtido.autorizacionSurtido=new Date()
+      surtido.autorizoSurtir='FAC'
       surtido.save(flush:true,failOnError:true)
       
       if(params.surtidos){
@@ -174,6 +198,38 @@ class SurtidoController {
       log.info "Surtido de pedido: $surtido.pedido asignado a  $surtidor.nombre "
       flash.success="Surtido de pedido: $surtido.pedido asignado a  $surtidor.nombre "
       redirect action:'pendientes'
+
+    }
+
+     @Secured(['permitAll']) 
+    @Transactional
+    def autorizacion(Surtido surtido){
+      String nip=params.nip
+      if(!nip){
+        flash.error="Digite su NIP para asignar pedido $surtido.pedido"
+        redirect action:'autorizacionSurtido'
+        return
+      }
+      def user=Usuario.findByNipAndEnabled(nip,true)
+      if(!user){
+        flash.error="Operador no encontrado verifique su NIP "
+        redirect action:'autorizacionSurtido'
+        return 
+      }
+      if(!user.getAuthorities().find{it.authority=='SUPERVISOR_SURTIDO'}){
+        flash.error="No tiene el ROL de SUPERVISOR_SURTIDO  "
+        redirect action:'autorizacionSurtido'
+        return 
+      }
+      
+      surtido.autorizoSurtir=user.username
+      surtido.autorizacionSurtido=new Date()
+      surtido.save(flush:true,failOnError:true)
+      
+      
+      log.info "Surtido de pedido: $surtido.pedido asignado a  $user.nombre "
+      flash.success="Surtido Autorizado para su atencion"
+      redirect action:'autorizacionSurtido'
 
     }
 

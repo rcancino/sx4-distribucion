@@ -9,7 +9,7 @@ class ImportadorDeVentasJob {
 
     static triggers = {
       //cron cronExpression:"0 1 8-19 ? * MON-SAT"
-      cron cronExpression:"0/15 * 8-19 ? * MON-SAT"
+      cron cronExpression:"30 * 8-19 ? * MON-SAT"
     }
 
     def description = "Importador de Ventas desde el Siipap SW2"
@@ -18,6 +18,7 @@ class ImportadorDeVentasJob {
 
     def execute(context) {
     	try {
+            println "Importando Ventas desde ventas Job"
             def counter = context.jobDetail.jobDataMap['counter'] ?: 0
             counter++
     		def fecha=new Date() 

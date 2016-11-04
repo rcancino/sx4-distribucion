@@ -500,12 +500,7 @@ class CorteController {
         [corteInstanceList:[],corteInstanceCount:0,cortadores:cortadores]
         return
       }
-      //def query=Corte.where{asignado==cortador.username }
 
-/*
-def list=Vacaciones.findAll("from Vacaciones i  where year(i.lastUpdated)=? order by i.lastUpdated desc"
-      ,[ejercicio])
-*/
         def query=Corte.where{asignado==cortador.username  }
 
         query=query.where{surtidoDet.surtido.entregado==null  }

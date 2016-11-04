@@ -45,21 +45,11 @@
 						<g:each in="${surtidoInstanceList}" var="row">
 							<tr class="text-center">
 								<td>
-									<g:if test="${row.status=='PENDIENTE'}">
-										<a href="" data-toggle="modal" class="btn btn-info btn-lg btn-block"
-											data-target="#exampleModal" 
-											data-whatever="${row.pedido}" 
-											data-surtido="${row.id}">
-											<g:formatNumber number="${row.pedido}" format="####"/>
-										</a>
-									</g:if>
-									<g:else>
-										<a href="" data-toggle="modal" class="btn btn-success btn-lg btn-block">
-											<g:formatNumber number="${row.pedido}" format="####"/>
-										</a>
-									</g:else>
-									%{-- <g:link action="show" id="${row.id}" class="btn btn-info btn-lg btn-block">
-									</g:link> --}%
+
+									<g:link controller="surtidoAnalisis"action="analisis" id="${row.id}" class="btn btn-info btn-lg btn-block">
+										<g:formatNumber number="${row.pedido}" format="####"/>
+									</g:link>
+									
 								</td>
 								<td>${fieldValue(bean:row,field:"tipo")[0..0]}</td>
 								<td>${fieldValue(bean:row,field:"cliente")}</td>
@@ -76,7 +66,7 @@
 										%{-- <ul class="text-center">${aux.nombre}</ul> --}%
 									</g:each>
 								</td>
-								<td class="${row.status=='EN SURTIDO'?'success':'warning'}">
+								<td class="${row.status=='EN SURTIDO'?'success':'danger'}">
 									${fieldValue(bean:row,field:"estado")}
 								</td>
 								<td>

@@ -108,6 +108,7 @@ class SurtidoAnalisisController {
         [surtidoInstanceList:q.list(params),surtidoInstanceCount:q.count(),searchCommand:command]
     }
 
+    @Secured(['permitAll'])
     def analisis(Surtido surtido){
         //def cortes=Corte.findAll("from Corte c where c.surtidoDet.surtido=?",surtido)
         def q=Corte.where {
