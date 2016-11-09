@@ -112,7 +112,7 @@ class ImportadorDeSurtidoService {
 		union
 		SELECT 'SOL' as tipo,s.sol_id as origen,s.cancelacion_usr as cancelado_user,s.modificado as cancelado 
 		,s.documento as venta FROM sx_solicitud_traslados s where date(s.modificado)=CURRENT_DATE 
-		and comentario  like 'CANCELACION AUTOMATICA'
+		and no_atender is true
 		union
 		SELECT 'PED' as tipo,c.pedido_id as origen,c.modificado_usr as cancelado_user,c.creado as cancelado,c.folio as venta FROM sx_pedidos_borrados c where date(c.CREADO)=CURRENT_DATE and c.puesto is true
     """
