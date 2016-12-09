@@ -3,6 +3,8 @@ package com.luxsoft.sx4.distribucion
 import grails.transaction.Transactional
 import grails.transaction.NotTransactional
 import groovy.sql.Sql
+import groovy.time.TimeCategory
+import groovy.time.TimeDuration
 //import org.springframework.jdbc.core.BeanPropertyRowMapper
 //import org.springframework.jdbc.core.JdbcTemplate
 //import org.springframework.jdbc.core.SqlParameterValue
@@ -22,7 +24,9 @@ class ImportadorDeSurtidoService {
 	def importadorDeCorteService
 	
     String SQL_DETALLE="""
-		select clave as producto,descripcion,cantidad,factoru as factor,kilos,pedidodet_id as origen from sx_pedidosdet p
+		select clave as producto,descripcion,cantidad,factoru as factor,kilos,pedidodet_id as origen 
+		,p.convale  as conVale
+		from sx_pedidosdet p
     	where p.pedido_id=? 
     """
 
@@ -141,15 +145,15 @@ class ImportadorDeSurtidoService {
 
 
     def importar(Date fecha){
+    	
     	importarFacturados fecha
 	}
 
 	def importarOtros(Date fecha){
 
-		actualizarSurtidosPuestos fecha
-		importarPuestos fecha
-    	importarTraslados fecha
+		importarTraslados fecha
     	importarTransformaciones fecha
+    	importarPuestos fecha
 	}
 
 	def importarFacturados(Date fecha){
@@ -178,17 +182,25 @@ class ImportadorDeSurtidoService {
 
     
 				db.eachRow(SQL_DETALLE,[row.origen]){ det->
-					def sdet=new SurtidoDet(det.toRowResult())
-					surtido.addToPartidas(sdet)
+					if(!det.conVale || (det.conVale && surtido.clasificacion=='EXISTENCIA_VENTA')){
+						def sdet=new SurtidoDet(det.toRowResult())
+						surtido.addToPartidas(sdet)	
+					}
 				}
-				surtido.partidas.each{ sdet->
+
+				
+				if(surtido.partidas){
+
+					surtido.partidas.each{ sdet->
 					def sectores=db.rows(SQL_SECTORES,[sdet.producto])
 					sdet.sectores=sectores.collect{it.sector}.join(',')
 
 				}
-				surtido.save(flush:true,failOnError:true)
-				importadorDeCorteService.importar(surtido)
-				event('registroDeSurtido', surtido)
+
+					surtido.save(flush:true,failOnError:true)
+					importadorDeCorteService.importar(surtido)
+					event('registroDeSurtido', surtido)
+				}
 			}
 			if(!surtido.facturado && row.facturado){
 				surtido.facturado=row.facturado
@@ -216,18 +228,35 @@ class ImportadorDeSurtidoService {
 
 				surtido=new Surtido(row.toRowResult())
 
+
 				db.eachRow(SQL_DETALLE,[row.origen]){ det->
-					def sdet=new SurtidoDet(det.toRowResult())
-					surtido.addToPartidas(sdet)
+					if(!det.conVale || (det.conVale && surtido.clasificacion=='EXISTENCIA_VENTA')){
+
+						def sdet=SurtidoDet.findByOrigen(det.origen)
+
+						if(!sdet){
+
+							 sdet=new SurtidoDet(det.toRowResult())
+							surtido.addToPartidas(sdet)	
+						}
+
+						
+					}
 				}
-				surtido.partidas.each{ sdet->
+
+				
+				if(surtido.partidas){
+
+					surtido.partidas.each{ sdet->
 					def sectores=db.rows(SQL_SECTORES,[sdet.producto])
 					sdet.sectores=sectores.collect{it.sector}.join(',')
 
 				}
-				surtido.save(flush:true,failOnError:true)
-				importadorDeCorteService.importar(surtido)
-				event('registroDeSurtido', surtido)
+
+					surtido.save(flush:true,failOnError:true)
+					importadorDeCorteService.importar(surtido)
+					event('registroDeSurtido', surtido)
+				}
 			}
 		}
 	}
@@ -297,6 +326,7 @@ class ImportadorDeSurtidoService {
 
 
 	def actualizarSurtidosPuestos(Date fecha){
+		println "Actualizando surtidos Puestos fecha:"+fecha.format('dd/MM/yyyy')
 		def surtidos=Surtido.findAll("from Surtido s where  s.forma=? and s.venta=null",['PST'])
 		if(surtidos){
 			def db = new Sql(dataSource_importacion)
@@ -334,18 +364,29 @@ class ImportadorDeSurtidoService {
 					}
 
 					db.eachRow(SQL_DETALLE,[row.origen]){ det->
-						def sdet=new SurtidoDet(det.toRowResult())
-						if(!surtido.partidas.find{it.origen==sdet.origen}){
-							surtido.addToPartidas(sdet)
+					if(!det.conVale  || (det.conVale && surtido.clasificacion=='EXISTENCIA_VENTA')){
+
+						def sdet=SurtidoDet.findByOrigen(det.origen)
+
+							if(!sdet){
+							sdet=new SurtidoDet(det.toRowResult())
+	    					surtido.addToPartidas(sdet)	
+							}	
 						}
 					}
-					surtido.partidas.each{ sdet->
+
+					if(surtido.partidas){
+
+						surtido.partidas.each{ sdet->
 						def sectores=db.rows(SQL_SECTORES,[sdet.producto])
 						sdet.sectores=sectores.collect{it.sector}.join(',')
+
 					}
-					surtido.save(flush:true,failOnError:true)
-					importadorDeCorteService.importar(surtido)
-					event('registroDeSurtido', surtido)
+
+						surtido.save(flush:true,failOnError:true)
+						importadorDeCorteService.importar(surtido)
+						event('registroDeSurtido', surtido)
+					}
 				}
 				
 
@@ -379,6 +420,23 @@ class ImportadorDeSurtidoService {
 				surtido.save(flush:true,failOnError:true)
 				event('surtidoCancelado', surtido)
 			}
+		}
+	}
+
+	def cancelarSurtidosNoAtendidos(Date fecha){
+		log.debug "Cancelando Surtidos no atendidos"
+
+		def surtidos=Surtido.where{(forma=='SOL' || forma=='PST' || forma == 'TRS') && iniciado==null && depurado==null && cancelado== null}.list().each{ surtido ->
+
+			TimeDuration tiempo= TimeCategory.minus(fecha,surtido.fecha)
+
+			if(tiempo.days>=7){
+				surtido.cancelado=new Date()
+				surtido.canceladoUser='sx4'
+
+				surtido.save(flush:true , failOnError : true)
+			}
+
 		}
 	}
 
